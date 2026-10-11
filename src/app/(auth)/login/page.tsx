@@ -25,8 +25,22 @@ function LoginFormContent() {
     setLoading(true);
     setError(null);
 
+    const timeoutPromise = new Promise<{ timeout: true }>((resolve) =>
+      setTimeout(() => resolve({ timeout: true }), 15000)
+    );
+
     try {
-      const res = await loginWithCredentials(email, password);
+      const res = await Promise.race([
+        loginWithCredentials(email, password),
+        timeoutPromise,
+      ]);
+
+      if ('timeout' in res) {
+        setError('Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
+        setLoading(false);
+        return;
+      }
+
       if (res?.error) {
         setError(res.error);
         setLoading(false);
@@ -35,7 +49,8 @@ function LoginFormContent() {
         router.refresh();
       }
     } catch {
-      // If a NEXT_REDIRECT occurred, Next.js handles it
+      setError('Terjadi kesalahan saat masuk. Silakan coba lagi.');
+      setLoading(false);
     }
   };
 
@@ -44,8 +59,23 @@ function LoginFormContent() {
     setPassword('Password123!');
     setError(null);
     setLoading(true);
+
+    const timeoutPromise = new Promise<{ timeout: true }>((resolve) =>
+      setTimeout(() => resolve({ timeout: true }), 15000)
+    );
+
     try {
-      const res = await loginWithCredentials(demoEmail, 'Password123!');
+      const res = await Promise.race([
+        loginWithCredentials(demoEmail, 'Password123!'),
+        timeoutPromise,
+      ]);
+
+      if ('timeout' in res) {
+        setError('Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
+        setLoading(false);
+        return;
+      }
+
       if (res?.error) {
         setError(res.error);
         setLoading(false);
@@ -54,7 +84,8 @@ function LoginFormContent() {
         router.refresh();
       }
     } catch {
-      // If a NEXT_REDIRECT occurred, Next.js handles it
+      setError('Terjadi kesalahan saat masuk akun demo. Silakan coba lagi.');
+      setLoading(false);
     }
   };
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans, Playfair_Display, JetBrains_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
+import { NavigationProgressBar } from '@/components/ui/navigation-progress-bar';
 import './globals.css';
 
 const inter = Inter({
@@ -47,6 +48,7 @@ export default function RootLayout({
       className={`h-full ${inter.variable} ${plusJakarta.variable} ${playfair.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-full flex flex-col font-sans antialiased text-zinc-900 dark:text-zinc-50 bg-white dark:bg-zinc-950">
+        <NavigationProgressBar />
         {children}
         <Toaster position="top-right" richColors />
       </body>

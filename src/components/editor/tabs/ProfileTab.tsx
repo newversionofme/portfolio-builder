@@ -28,11 +28,16 @@ export function ProfileTab() {
     const formData = new FormData();
     formData.append('file', file);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       const data = await res.json();
       if (!res.ok || data.error) {
@@ -41,9 +46,14 @@ export function ProfileTab() {
         updateProfile({ avatarUrl: data.data.url });
         toast.success('Foto profil berhasil diperbarui!');
       }
-    } catch {
-      toast.error('Terjadi kesalahan saat mengunggah foto');
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        toast.error('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.');
+      } else {
+        toast.error('Terjadi kesalahan saat mengunggah foto');
+      }
     } finally {
+      clearTimeout(timeoutId);
       setUploading(false);
     }
   };

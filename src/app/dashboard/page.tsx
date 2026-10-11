@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/auth';
 import { getCurrentUserPortfolio } from '@/lib/data/portfolio';
 import { logoutUser } from '@/actions/auth';
+import { LogoutButton } from '@/components/dashboard/LogoutButton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +13,6 @@ import {
   Edit3,
   ExternalLink,
   Globe,
-  LogOut,
   FolderGit2,
   Briefcase,
   Cpu,
@@ -75,10 +75,7 @@ export default async function DashboardPage() {
                 await logoutUser();
               }}
             >
-              <Button variant="ghost" size="sm" type="submit" className="text-xs gap-1.5 text-zinc-600 hover:text-red-600 px-2 sm:px-3">
-                <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Keluar</span>
-              </Button>
+              <LogoutButton />
             </form>
           </div>
         </div>

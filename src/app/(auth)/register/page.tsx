@@ -41,8 +41,22 @@ export default function RegisterPage() {
     formData.append('password', password);
     formData.append('slug', slug);
 
+    const timeoutPromise = new Promise<{ timeout: true }>((resolve) =>
+      setTimeout(() => resolve({ timeout: true }), 15000)
+    );
+
     try {
-      const res = await registerUser(formData);
+      const res = await Promise.race([
+        registerUser(formData),
+        timeoutPromise,
+      ]);
+
+      if ('timeout' in res) {
+        setError('Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
+        setLoading(false);
+        return;
+      }
+
       if (res?.error) {
         setError(res.error);
         setLoading(false);

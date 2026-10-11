@@ -587,7 +587,7 @@ export function CvPdfDocument({
             {testimonials.map((testi, idx) => (
               <View key={testi.id || idx} style={styles.itemBlock} wrap={false}>
                 <Text style={[styles.itemDescription, { fontStyle: 'italic' }]}>
-                  "{sanitizePdfText(testi.quote)}"
+                  {`"${sanitizePdfText(testi.quote)}"`}
                 </Text>
                 <Text style={styles.itemSubtitle}>
                   - {sanitizePdfText(testi.name)}
@@ -669,6 +669,7 @@ export function CvPdfDocument({
           {/* AVATAR (Optional) */}
           {avatarDataUri ? (
             <View style={styles.avatarContainer}>
+              {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <Image src={avatarDataUri} style={styles.avatar} />
             </View>
           ) : null}

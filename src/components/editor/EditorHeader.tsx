@@ -38,11 +38,25 @@ export function EditorHeader() {
   const isPublished = portfolio.status === 'PUBLISHED';
 
   const handleTogglePublish = async () => {
+    if (publishing) return;
     setPublishing(true);
     const newStatus = isPublished ? 'DRAFT' : 'PUBLISHED';
 
+    const timeoutPromise = new Promise<{ timeout: true }>((resolve) =>
+      setTimeout(() => resolve({ timeout: true }), 15000)
+    );
+
     try {
-      const res = await togglePublishPortfolio(newStatus);
+      const res = await Promise.race([
+        togglePublishPortfolio(newStatus),
+        timeoutPromise,
+      ]);
+
+      if ('timeout' in res) {
+        toast.error('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.');
+        return;
+      }
+
       if (res?.error) {
         toast.error(res.error);
       } else {
@@ -59,7 +73,7 @@ export function EditorHeader() {
         }
       }
     } catch {
-      toast.error('Gagal mengubah status publikasi.');
+      toast.error('Gagal mengubah status publikasi. Silakan periksa koneksi Anda.');
     } finally {
       setPublishing(false);
     }
@@ -205,7 +219,10 @@ export function EditorHeader() {
           }`}
         >
           {publishing ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <>
+              <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+              <span>{isPublished ? 'Mengubah...' : 'Mempublikasikan...'}</span>
+            </>
           ) : isPublished ? (
             <>
               <Globe className="w-3.5 h-3.5 text-emerald-400" />

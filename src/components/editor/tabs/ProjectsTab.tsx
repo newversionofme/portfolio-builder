@@ -94,11 +94,16 @@ export function ProjectsTab() {
     const formData = new FormData();
     formData.append('file', file);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       const data = await res.json();
       if (!res.ok || data.error) {
@@ -111,9 +116,14 @@ export function ProjectsTab() {
         setLocalProject((prev) => ({ ...prev, imageUrl: data.data.url }));
         toast.success('Gambar proyek berhasil diunggah!');
       }
-    } catch {
-      toast.error('Terjadi kesalahan saat mengunggah gambar');
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        toast.error('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.');
+      } else {
+        toast.error('Terjadi kesalahan saat mengunggah gambar');
+      }
     } finally {
+      clearTimeout(timeoutId);
       setUploading(false);
     }
   };
