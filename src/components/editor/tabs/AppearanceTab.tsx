@@ -4,7 +4,8 @@ import React from 'react';
 import { usePortfolioStore } from '@/lib/store/portfolio-store';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Check, Layout, Palette, Terminal, Briefcase } from 'lucide-react';
+import { Check, Layout, Palette, Terminal, Briefcase, FileText } from 'lucide-react';
+import { ExportCvModal } from '@/components/export/ExportCvModal';
 
 export function AppearanceTab() {
   const { portfolio, updateTheme } = usePortfolioStore();
@@ -200,6 +201,36 @@ export function AppearanceTab() {
             </div>
             {portfolio.language === 'en' && <Check className="w-4 h-4 text-blue-600" />}
           </div>
+        </div>
+      </div>
+
+      {/* Ekspor Dokumen & CV */}
+      <div className="space-y-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+        <div>
+          <Label className="text-sm font-semibold text-zinc-900 dark:text-white">
+            {portfolio.language === 'en' ? 'Export & Documents' : 'Ekspor & Dokumen'}
+          </Label>
+          <p className="text-xs text-zinc-500 mt-0.5">
+            {portfolio.language === 'en'
+              ? 'Download your curriculum vitae generated directly from your portfolio data.'
+              : 'Unduh kurikulum vitae Anda yang disusun langsung dari data portofolio ini.'}
+          </p>
+        </div>
+
+        <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
+              <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span>Curriculum Vitae (PDF)</span>
+            </h4>
+            <p className="text-[11px] text-zinc-500">
+              {portfolio.language === 'en'
+                ? 'Standard ATS-friendly A4 format with selectable vector text.'
+                : 'Format standar A4 ramah ATS dengan teks vektor yang dapat disalin.'}
+            </p>
+          </div>
+
+          <ExportCvModal />
         </div>
       </div>
     </div>

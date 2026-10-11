@@ -65,6 +65,19 @@ export interface Dictionary {
     inquirySubject: string;
   };
 
+  // CV & Export Labels
+  cvExport: {
+    downloadCv: string;
+    downloading: string;
+    includeAvatar: string;
+    includeAvatarHelp: string;
+    curatedPortfolio: string;
+    page: string;
+    of: string;
+    role: string;
+    technologies: string;
+  };
+
   // Footer & Colophon
   footer: {
     allRightsReserved: string;
@@ -133,6 +146,18 @@ export const dictionaries: Record<SupportedLanguage, Dictionary> = {
       inquirySubject: 'Inquiry Portofolio',
     },
 
+    cvExport: {
+      downloadCv: 'Unduh CV (PDF)',
+      downloading: 'Menyiapkan CV...',
+      includeAvatar: 'Sertakan foto profil',
+      includeAvatarHelp: 'Format standar ramah ATS disarankan tanpa foto.',
+      curatedPortfolio: 'Portofolio Online',
+      page: 'Halaman',
+      of: 'dari',
+      role: 'Peran',
+      technologies: 'Teknologi',
+    },
+
     footer: {
       allRightsReserved: 'Hak cipta dilindungi undang-undang.',
       curatedWith: 'Dibuat dengan Portfolio Builder',
@@ -197,6 +222,18 @@ export const dictionaries: Record<SupportedLanguage, Dictionary> = {
       sendDirectMessage: 'Send Direct Message',
       initiateInquiry: 'Initiate Inquiry',
       inquirySubject: 'Portfolio Inquiry',
+    },
+
+    cvExport: {
+      downloadCv: 'Download CV (PDF)',
+      downloading: 'Generating CV...',
+      includeAvatar: 'Include profile photo',
+      includeAvatarHelp: 'ATS-friendly standard format recommends excluding photos.',
+      curatedPortfolio: 'Online Portfolio',
+      page: 'Page',
+      of: 'of',
+      role: 'Role',
+      technologies: 'Technologies',
     },
 
     footer: {

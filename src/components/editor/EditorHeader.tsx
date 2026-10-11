@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
+import { ExportCvModal } from '@/components/export/ExportCvModal';
 
 export function EditorHeader() {
   const {
@@ -162,6 +163,8 @@ export function EditorHeader() {
 
       {/* Right Section: Publish & Share */}
       <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <ExportCvModal />
+
         {isPublished && (
           <Button
             variant="outline"
