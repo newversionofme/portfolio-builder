@@ -41,3 +41,40 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized. Harap login terlebih dahulu.' },
+        { status: 401 }
+      );
+    }
+
+    const body = await req.json();
+    const fileUrl = body?.url;
+
+    if (!fileUrl || typeof fileUrl !== 'string') {
+      return NextResponse.json(
+        { error: 'URL file tidak valid.' },
+        { status: 400 }
+      );
+    }
+
+    // Attempt deletion
+    const deleted = await storage.delete(fileUrl);
+    return NextResponse.json({
+      success: true,
+      deleted,
+    });
+  } catch (err: unknown) {
+    console.warn('[Upload DELETE Warning]: Gagal menghapus file lama:', err);
+    // Return gracefully so caller doesn't fail primary save workflow
+    return NextResponse.json({
+      success: false,
+      error: err instanceof Error ? err.message : 'Gagal menghapus file.',
+    });
+  }
+}
+

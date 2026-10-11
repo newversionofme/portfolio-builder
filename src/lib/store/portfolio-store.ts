@@ -100,6 +100,13 @@ interface PortfolioState {
   updateTestimonial: (index: number, test: Partial<TestimonialData>) => void;
   removeTestimonial: (index: number) => void;
 
+  // Reordering
+  moveItem: (
+    section: 'projects' | 'experiences' | 'educations' | 'skills' | 'certifications' | 'testimonials' | 'socialLinks',
+    fromIndex: number,
+    direction: 'up' | 'down'
+  ) => void;
+
   // Theme & Appearance
   updateTheme: (theme: Partial<ThemeConfigData>) => void;
   updateSlug: (slug: string) => void;
@@ -262,7 +269,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        experiences: [exp, ...state.portfolio.experiences],
+        experiences: [exp, ...state.portfolio.experiences].map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -279,7 +286,9 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        experiences: state.portfolio.experiences.filter((_, i) => i !== index),
+        experiences: state.portfolio.experiences
+          .filter((_, i) => i !== index)
+          .map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -287,7 +296,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        educations: [edu, ...state.portfolio.educations],
+        educations: [edu, ...state.portfolio.educations].map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -304,7 +313,9 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        educations: state.portfolio.educations.filter((_, i) => i !== index),
+        educations: state.portfolio.educations
+          .filter((_, i) => i !== index)
+          .map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -312,7 +323,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        skills: [...state.portfolio.skills, skill],
+        skills: [...state.portfolio.skills, skill].map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -329,7 +340,9 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        skills: state.portfolio.skills.filter((_, i) => i !== index),
+        skills: state.portfolio.skills
+          .filter((_, i) => i !== index)
+          .map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -337,7 +350,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        projects: [project, ...state.portfolio.projects],
+        projects: [project, ...state.portfolio.projects].map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -354,7 +367,9 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        projects: state.portfolio.projects.filter((_, i) => i !== index),
+        projects: state.portfolio.projects
+          .filter((_, i) => i !== index)
+          .map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -362,7 +377,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        certifications: [cert, ...state.portfolio.certifications],
+        certifications: [cert, ...state.portfolio.certifications].map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -379,7 +394,9 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        certifications: state.portfolio.certifications.filter((_, i) => i !== index),
+        certifications: state.portfolio.certifications
+          .filter((_, i) => i !== index)
+          .map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -387,7 +404,7 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        testimonials: [test, ...state.portfolio.testimonials],
+        testimonials: [test, ...state.portfolio.testimonials].map((item, idx) => ({ ...item, order: idx })),
       },
     })),
 
@@ -404,9 +421,33 @@ export const usePortfolioStore = create<PortfolioState>((set) => ({
     set((state) => ({
       portfolio: {
         ...state.portfolio,
-        testimonials: state.portfolio.testimonials.filter((_, i) => i !== index),
+        testimonials: state.portfolio.testimonials
+          .filter((_, i) => i !== index)
+          .map((item, idx) => ({ ...item, order: idx })),
       },
     })),
+
+  moveItem: (section, fromIndex, direction) =>
+    set((state) => {
+      const list = [...((state.portfolio[section] as Array<{ order?: number }>) || [])];
+      const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
+      if (toIndex < 0 || toIndex >= list.length) return state;
+
+      const [movedItem] = list.splice(fromIndex, 1);
+      list.splice(toIndex, 0, movedItem);
+
+      const updatedList = list.map((item, idx) => ({
+        ...item,
+        order: idx,
+      }));
+
+      return {
+        portfolio: {
+          ...state.portfolio,
+          [section]: updatedList,
+        },
+      };
+    }),
 
   updateTheme: (theme) =>
     set((state) => ({

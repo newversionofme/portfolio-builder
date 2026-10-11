@@ -2,52 +2,127 @@
 
 import React, { useState } from 'react';
 import { usePortfolioStore } from '@/lib/store/portfolio-store';
-import { EducationData } from '@/lib/validations/portfolio';
+import { EducationData, educationSchema } from '@/lib/validations/portfolio';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Trash2, GraduationCap, Calendar } from 'lucide-react';
+import { Plus, GraduationCap, Calendar } from 'lucide-react';
+import { toast } from 'sonner';
+import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
+import { ListItemActions } from '../common/ListItemActions';
+
+const emptyEducation: EducationData = {
+  institution: '',
+  degree: '',
+  fieldOfStudy: '',
+  startDate: '',
+  endDate: '',
+  isCurrent: false,
+  gpa: '',
+  description: '',
+  order: 0,
+};
 
 export function EducationTab() {
-  const { portfolio, addEducation, removeEducation } = usePortfolioStore();
+  const { portfolio, addEducation, updateEducation, removeEducation, moveItem } =
+    usePortfolioStore();
   const educations = portfolio.educations || [];
 
   const [isAdding, setIsAdding] = useState(false);
-  const [newEdu, setNewEdu] = useState<EducationData>({
-    institution: '',
-    degree: '',
-    fieldOfStudy: '',
-    startDate: '',
-    endDate: '',
-    isCurrent: false,
-    gpa: '',
-    description: '',
-    order: educations.length,
-  });
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [localEdu, setLocalEdu] = useState<EducationData>(emptyEducation);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleCreate = () => {
-    if (!newEdu.institution || !newEdu.degree || !newEdu.startDate) return;
-    addEducation(newEdu);
-    setNewEdu({
-      institution: '',
-      degree: '',
-      fieldOfStudy: '',
-      startDate: '',
-      endDate: '',
-      isCurrent: false,
-      gpa: '',
-      description: '',
-      order: educations.length + 1,
+  const [deleteTarget, setDeleteTarget] = useState<{
+    index: number;
+    title: string;
+  } | null>(null);
+
+  const startAdd = () => {
+    setEditingIndex(null);
+    setIsAdding(true);
+    setLocalEdu({
+      ...emptyEducation,
+      order: educations.length,
     });
-    setIsAdding(false);
+    setErrors({});
   };
+
+  const startEdit = (index: number) => {
+    setIsAdding(false);
+    setEditingIndex(index);
+    setLocalEdu({ ...educations[index] });
+    setErrors({});
+  };
+
+  const handleCancel = () => {
+    setIsAdding(false);
+    setEditingIndex(null);
+    setLocalEdu(emptyEducation);
+    setErrors({});
+  };
+
+  const handleSave = () => {
+    const validation = educationSchema.safeParse(localEdu);
+    const newErrors: Record<string, string> = {};
+
+    if (!localEdu.institution.trim()) {
+      newErrors.institution = 'Nama institusi / universitas wajib diisi';
+    }
+    if (!localEdu.degree.trim()) {
+      newErrors.degree = 'Gelar / jenjang studi wajib diisi';
+    }
+    if (!localEdu.startDate.trim()) {
+      newErrors.startDate = 'Bulan & tahun mulai wajib diisi';
+    }
+
+    if (!validation.success) {
+      validation.error.issues.forEach((issue) => {
+        const fieldName = String(issue.path[0] || 'institution');
+        newErrors[fieldName] = issue.message;
+      });
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      toast.error('Silakan lengkapi kolom yang wajib diisi');
+      return;
+    }
+
+    if (editingIndex !== null) {
+      updateEducation(editingIndex, localEdu);
+      toast.success(`Riwayat pendidikan di ${localEdu.institution} berhasil diperbarui!`);
+    } else {
+      addEducation(localEdu);
+      toast.success(`Pendidikan di ${localEdu.institution} berhasil ditambahkan!`);
+    }
+
+    handleCancel();
+  };
+
+  const handleDeleteConfirmed = () => {
+    if (!deleteTarget) return;
+    const { index, title } = deleteTarget;
+
+    if (editingIndex === index) {
+      handleCancel();
+    } else if (editingIndex !== null && editingIndex > index) {
+      setEditingIndex(editingIndex - 1);
+    }
+
+    removeEducation(index);
+    toast.success(`Pendidikan di "${title}" berhasil dihapus.`);
+    setDeleteTarget(null);
+  };
+
+  const isFormOpen = isAdding || editingIndex !== null;
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
             Pendidikan (Education)
@@ -57,11 +132,11 @@ export function EducationTab() {
           </p>
         </div>
 
-        {!isAdding && (
+        {!isFormOpen && (
           <Button
             size="sm"
-            onClick={() => setIsAdding(true)}
-            className="gap-1.5 h-8 text-xs bg-blue-600 hover:bg-blue-700"
+            onClick={startAdd}
+            className="gap-1.5 h-9 min-h-[38px] text-xs bg-blue-600 hover:bg-blue-700"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Tambah Pendidikan</span>
@@ -69,52 +144,71 @@ export function EducationTab() {
         )}
       </div>
 
-      {isAdding && (
-        <Card className="border-blue-200 dark:border-blue-900 bg-blue-50/20 dark:bg-blue-950/20">
+      {isFormOpen && (
+        <Card className="border-blue-200 dark:border-blue-900 bg-blue-50/20 dark:bg-blue-950/20 shadow-xs">
           <CardContent className="p-4 sm:p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
-                Tambah Riwayat Pendidikan
+            <div className="flex items-center justify-between pb-2 border-b border-zinc-200/60 dark:border-zinc-800">
+              <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                {editingIndex !== null ? 'Edit Riwayat Pendidikan' : 'Tambah Riwayat Pendidikan'}
               </span>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 text-xs"
-                onClick={() => setIsAdding(false)}
+                className="h-8 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
+                onClick={handleCancel}
               >
                 Batal
               </Button>
             </div>
 
             <div className="space-y-1.5">
-              <Label>Nama Institusi / Universitas *</Label>
+              <Label htmlFor="edu-institution" className="text-xs">
+                Nama Institusi / Universitas *
+              </Label>
               <Input
+                id="edu-institution"
                 placeholder="e.g. Universitas Indonesia"
-                value={newEdu.institution}
-                onChange={(e) =>
-                  setNewEdu({ ...newEdu, institution: e.target.value })
-                }
+                value={localEdu.institution}
+                onChange={(e) => {
+                  setLocalEdu({ ...localEdu, institution: e.target.value });
+                  if (errors.institution) setErrors((prev) => ({ ...prev, institution: '' }));
+                }}
+                className={errors.institution ? 'border-red-500 focus-visible:ring-red-500' : ''}
               />
+              {errors.institution && (
+                <p className="text-[11px] text-red-500">{errors.institution}</p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label>Gelar / Tingkat Studi *</Label>
+                <Label htmlFor="edu-degree" className="text-xs">
+                  Gelar / Tingkat Studi *
+                </Label>
                 <Input
+                  id="edu-degree"
                   placeholder="e.g. Sarjana Komputer (S.Kom)"
-                  value={newEdu.degree}
-                  onChange={(e) =>
-                    setNewEdu({ ...newEdu, degree: e.target.value })
-                  }
+                  value={localEdu.degree}
+                  onChange={(e) => {
+                    setLocalEdu({ ...localEdu, degree: e.target.value });
+                    if (errors.degree) setErrors((prev) => ({ ...prev, degree: '' }));
+                  }}
+                  className={errors.degree ? 'border-red-500 focus-visible:ring-red-500' : ''}
                 />
+                {errors.degree && (
+                  <p className="text-[11px] text-red-500">{errors.degree}</p>
+                )}
               </div>
               <div className="space-y-1.5">
-                <Label>Jurusan / Bidang Studi</Label>
+                <Label htmlFor="edu-field" className="text-xs">
+                  Jurusan / Bidang Studi
+                </Label>
                 <Input
+                  id="edu-field"
                   placeholder="e.g. Teknik Informatika"
-                  value={newEdu.fieldOfStudy || ''}
+                  value={localEdu.fieldOfStudy || ''}
                   onChange={(e) =>
-                    setNewEdu({ ...newEdu, fieldOfStudy: e.target.value })
+                    setLocalEdu({ ...localEdu, fieldOfStudy: e.target.value })
                   }
                 />
               </div>
@@ -122,115 +216,170 @@ export function EducationTab() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="space-y-1.5">
-                <Label>Tahun / Bulan Mulai *</Label>
+                <Label htmlFor="edu-start" className="text-xs">
+                  Tahun / Bulan Mulai *
+                </Label>
                 <Input
+                  id="edu-start"
                   type="month"
-                  value={newEdu.startDate}
+                  value={localEdu.startDate}
+                  onChange={(e) => {
+                    setLocalEdu({ ...localEdu, startDate: e.target.value });
+                    if (errors.startDate) setErrors((prev) => ({ ...prev, startDate: '' }));
+                  }}
+                  className={errors.startDate ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                />
+                {errors.startDate && (
+                  <p className="text-[11px] text-red-500">{errors.startDate}</p>
+                )}
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edu-end" className="text-xs">
+                  Tahun / Bulan Selesai
+                </Label>
+                <Input
+                  id="edu-end"
+                  type="month"
+                  disabled={localEdu.isCurrent}
+                  value={localEdu.isCurrent ? '' : localEdu.endDate || ''}
                   onChange={(e) =>
-                    setNewEdu({ ...newEdu, startDate: e.target.value })
+                    setLocalEdu({ ...localEdu, endDate: e.target.value })
                   }
                 />
               </div>
               <div className="space-y-1.5">
-                <Label>Tahun / Bulan Selesai</Label>
+                <Label htmlFor="edu-gpa" className="text-xs">
+                  IPK / Nilai (Opsional)
+                </Label>
                 <Input
-                  type="month"
-                  disabled={newEdu.isCurrent}
-                  value={newEdu.isCurrent ? '' : newEdu.endDate || ''}
-                  onChange={(e) =>
-                    setNewEdu({ ...newEdu, endDate: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label>IPK / Nilai (Opsional)</Label>
-                <Input
+                  id="edu-gpa"
                   placeholder="e.g. 3.85 / 4.00"
-                  value={newEdu.gpa || ''}
+                  value={localEdu.gpa || ''}
                   onChange={(e) =>
-                    setNewEdu({ ...newEdu, gpa: e.target.value })
+                    setLocalEdu({ ...localEdu, gpa: e.target.value })
                   }
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pt-1">
               <Switch
-                checked={newEdu.isCurrent}
+                id="edu-current"
+                checked={localEdu.isCurrent}
                 onCheckedChange={(val) =>
-                  setNewEdu({ ...newEdu, isCurrent: val, endDate: null })
+                  setLocalEdu({ ...localEdu, isCurrent: val, endDate: null })
                 }
               />
-              <Label className="text-xs">Masih menempuh studi saat ini</Label>
+              <Label htmlFor="edu-current" className="text-xs cursor-pointer">
+                Masih menempuh studi saat ini
+              </Label>
             </div>
 
             <div className="space-y-1.5">
-              <Label>Aktivitas, Prestasi, atau Catatan</Label>
+              <Label htmlFor="edu-desc" className="text-xs">
+                Aktivitas, Prestasi, atau Catatan
+              </Label>
               <Textarea
+                id="edu-desc"
                 rows={2}
                 placeholder="Penghargaan akademik, organisasi mahasiswa, judul skripsi..."
-                value={newEdu.description || ''}
+                value={localEdu.description || ''}
                 onChange={(e) =>
-                  setNewEdu({ ...newEdu, description: e.target.value })
+                  setLocalEdu({ ...localEdu, description: e.target.value })
                 }
               />
             </div>
 
-            <Button
-              size="sm"
-              className="w-full bg-blue-600 hover:bg-blue-700"
-              onClick={handleCreate}
-              disabled={!newEdu.institution || !newEdu.degree || !newEdu.startDate}
-            >
-              Simpan Pendidikan
-            </Button>
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 min-h-[38px] text-xs"
+                onClick={handleCancel}
+              >
+                Batal
+              </Button>
+              <Button
+                size="sm"
+                className="h-9 min-h-[38px] bg-blue-600 hover:bg-blue-700 text-xs px-5"
+                onClick={handleSave}
+              >
+                {editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Pendidikan'}
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
 
       {/* List of educations */}
       <div className="space-y-3">
-        {educations.length === 0 && !isAdding && (
-          <div className="p-8 text-center rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 text-xs">
-            Belum ada riwayat pendidikan.
+        {educations.length === 0 && !isFormOpen && (
+          <div className="p-8 text-center rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 text-xs space-y-2">
+            <p>Belum ada riwayat pendidikan yang ditambahkan.</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={startAdd}
+              className="gap-1.5 h-8 text-xs"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Tambah Pendidikan Pertama</span>
+            </Button>
           </div>
         )}
 
         {educations.map((edu, idx) => (
           <div
             key={edu.id || idx}
-            className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2 shadow-2xs"
+            className={`p-4 rounded-xl border bg-white dark:bg-zinc-900 space-y-2 shadow-2xs transition-all ${
+              editingIndex === idx
+                ? 'border-blue-500 ring-2 ring-blue-500/20'
+                : 'border-zinc-200 dark:border-zinc-800'
+            }`}
           >
-            <div className="flex items-start justify-between gap-2">
-              <div className="space-y-1">
-                <h4 className="text-sm font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
-                  <GraduationCap className="w-4 h-4 text-zinc-400" />
-                  {edu.institution}
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-1 min-w-0 flex-1">
+                <h4 className="text-sm font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5 truncate">
+                  <GraduationCap className="w-4 h-4 text-blue-500 shrink-0" />
+                  <span className="truncate">{edu.institution}</span>
                 </h4>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 truncate">
                   {edu.degree} {edu.fieldOfStudy && `in ${edu.fieldOfStudy}`}
                   {edu.gpa && ` • IPK: ${edu.gpa}`}
                 </p>
                 <div className="flex items-center gap-1 text-[11px] text-zinc-400">
-                  <Calendar className="w-3 h-3" />
+                  <Calendar className="w-3 h-3 shrink-0" />
                   <span>
-                    {edu.startDate} — {edu.isCurrent ? 'Present' : edu.endDate || 'Present'}
+                    {edu.startDate} — {edu.isCurrent ? 'Sekarang' : edu.endDate || 'Sekarang'}
                   </span>
                 </div>
               </div>
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-zinc-400 hover:text-red-600"
-                onClick={() => removeEducation(idx)}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <ListItemActions
+                onMoveUp={() => moveItem('educations', idx, 'up')}
+                onMoveDown={() => moveItem('educations', idx, 'down')}
+                isFirst={idx === 0}
+                isLast={idx === educations.length - 1}
+                onEdit={() => startEdit(idx)}
+                onDelete={() =>
+                  setDeleteTarget({
+                    index: idx,
+                    title: `${edu.degree} di ${edu.institution}`,
+                  })
+                }
+              />
             </div>
           </div>
         ))}
       </div>
+
+      <ConfirmDeleteDialog
+        isOpen={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        itemName={deleteTarget?.title || ''}
+        itemType="pendidikan"
+        onConfirm={handleDeleteConfirmed}
+      />
     </div>
   );
 }

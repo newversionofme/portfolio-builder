@@ -58,17 +58,28 @@ export function PortfolioRenderer({ data }: PortfolioRendererProps) {
 
   const pairing = getFontPairing(activeFont);
 
+  const sortedData: FullPortfolioData = {
+    ...data,
+    projects: [...(data.projects || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    experiences: [...(data.experiences || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    educations: [...(data.educations || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    skills: [...(data.skills || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    certifications: [...(data.certifications || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    testimonials: [...(data.testimonials || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    socialLinks: [...(data.socialLinks || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+  };
+
   const renderTemplate = () => {
-    switch (data.templateId) {
+    switch (sortedData.templateId) {
       case 'developer':
-        return <DeveloperTemplate data={data} />;
+        return <DeveloperTemplate data={sortedData} />;
       case 'bold':
-        return <BoldTemplate data={data} />;
+        return <BoldTemplate data={sortedData} />;
       case 'elegant':
-        return <ElegantTemplate data={data} />;
+        return <ElegantTemplate data={sortedData} />;
       case 'minimalist':
       default:
-        return <MinimalistTemplate data={data} />;
+        return <MinimalistTemplate data={sortedData} />;
     }
   };
 
