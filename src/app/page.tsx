@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { LandingHeroCta } from '@/components/landing/LandingHeroCta';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import {
   Sparkles,
   ArrowRight,
@@ -30,7 +31,8 @@ export default function HomePage() {
             <span className="truncate">Portfolio<span className="text-blue-600">Builder</span></span>
           </Link>
 
-          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <ThemeToggle />
             <Button variant="ghost" size="sm" className="h-8 px-2.5 text-xs sm:text-sm" asChild>
               <Link href="/login">Masuk</Link>
             </Button>

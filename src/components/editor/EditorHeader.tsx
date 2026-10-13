@@ -33,6 +33,7 @@ import {
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { useExportModalStore } from '@/lib/store/export-modal-store';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export function EditorHeader() {
   const {
@@ -283,10 +284,14 @@ export function EditorHeader() {
               <span className="hidden xl:inline">Buka Web</span>
             </a>
           </Button>
+
+          {/* Theme Toggle Desktop */}
+          <ThemeToggle />
         </div>
 
         {/* MOBILE & TABLET OVERFLOW MENU (< 1024px) - Hosts Ekspor, Salin Link, Buka Web, Viewport Switch */}
-        <div className="lg:hidden">
+        <div className="lg:hidden flex items-center gap-1 sm:gap-1.5">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

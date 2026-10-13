@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth/auth';
 import { getCurrentUserPortfolio } from '@/lib/data/portfolio';
 import { logoutUser } from '@/actions/auth';
 import { LogoutButton } from '@/components/dashboard/LogoutButton';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -69,6 +70,7 @@ export default async function DashboardPage() {
             <span className="text-xs text-zinc-500 hidden sm:inline truncate max-w-[150px]">
               Halo, <strong className="text-zinc-800 dark:text-zinc-200">{session.user.name}</strong>
             </span>
+            <ThemeToggle />
             <form
               action={async () => {
                 'use server';

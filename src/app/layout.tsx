@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans, Playfair_Display, JetBrains_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { NavigationProgressBar } from '@/components/ui/navigation-progress-bar';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import './globals.css';
 
 const inter = Inter({
@@ -45,12 +46,34 @@ export default function RootLayout({
   return (
     <html
       lang="id"
+      suppressHydrationWarning
       className={`h-full ${inter.variable} ${plusJakarta.variable} ${playfair.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('theme');
+                  var isDark = t === 'dark' || ((!t || t === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  if (isDark) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans antialiased text-zinc-900 dark:text-zinc-50 bg-white dark:bg-zinc-950">
-        <NavigationProgressBar />
-        {children}
-        <Toaster position="top-right" richColors />
+        <ThemeProvider>
+          <NavigationProgressBar />
+          {children}
+          <Toaster position="top-right" richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

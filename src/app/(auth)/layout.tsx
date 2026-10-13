@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export default function AuthLayout({
   children,
@@ -20,6 +21,7 @@ export default function AuthLayout({
           </div>
           <span>Portfolio<span className="text-blue-600">Builder</span></span>
         </Link>
+        <ThemeToggle />
       </header>
 
       {/* Main Form Content */}
