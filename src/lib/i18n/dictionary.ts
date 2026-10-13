@@ -78,6 +78,36 @@ export interface Dictionary {
     technologies: string;
   };
 
+  shareCardExport: {
+    downloadShareCard: string;
+    downloading: string;
+    shareCardTitle: string;
+    shareCardDesc: string;
+    cardFormat: string;
+    dimensions: string;
+    readyToDownload: string;
+    downloadButton: string;
+    retry: string;
+  };
+
+  fullPageExport: {
+    downloadFullPage: string;
+    downloading: string;
+    title: string;
+    desc: string;
+    dimensions: string;
+    downloadButton: string;
+    downloadPartButton: string;
+    retry: string;
+  };
+
+  exportMenu: {
+    export: string;
+    downloadCv: string;
+    downloadPng: string;
+    downloadFullPagePng: string;
+  };
+
   // Footer & Colophon
   footer: {
     allRightsReserved: string;
@@ -158,6 +188,36 @@ export const dictionaries: Record<SupportedLanguage, Dictionary> = {
       technologies: 'Teknologi',
     },
 
+    shareCardExport: {
+      downloadShareCard: 'Unduh Kartu Bagikan (PNG)',
+      downloading: 'Memproses Gambar...',
+      shareCardTitle: 'Kartu Bagikan Portofolio',
+      shareCardDesc: 'Format gambar 1200 × 630 px beresolusi tinggi, sesuai tema dan warna aksen untuk dibagikan di media sosial atau perpesanan.',
+      cardFormat: 'Format Gambar:',
+      dimensions: '1200 × 630 px (Standar OpenGraph / Media Sosial)',
+      readyToDownload: 'Gambar siap diunduh.',
+      downloadButton: 'Unduh PNG (1200×630)',
+      retry: 'Coba lagi',
+    },
+
+    fullPageExport: {
+      downloadFullPage: 'Unduh Gambar Halaman Penuh',
+      downloading: 'Memproses Halaman Penuh...',
+      title: 'Tangkapan Halaman Penuh (PNG)',
+      desc: 'Tangkapan gambar beresolusi tinggi seluruh bagian portofolio dengan lebar 1280 px sesuai tema dan tata letak aktif.',
+      dimensions: 'Lebar 1280 px (Tinggi disesuaikan otomatis dengan panjang konten)',
+      downloadButton: 'Unduh Gambar Halaman Penuh',
+      downloadPartButton: 'Unduh Bagian',
+      retry: 'Coba lagi',
+    },
+
+    exportMenu: {
+      export: 'Ekspor',
+      downloadCv: 'Unduh CV (PDF)',
+      downloadPng: 'Unduh Kartu Bagikan (1200×630)',
+      downloadFullPagePng: 'Unduh Gambar Halaman Penuh',
+    },
+
     footer: {
       allRightsReserved: 'Hak cipta dilindungi undang-undang.',
       curatedWith: 'Dibuat dengan Portfolio Builder',
@@ -234,6 +294,36 @@ export const dictionaries: Record<SupportedLanguage, Dictionary> = {
       of: 'of',
       role: 'Role',
       technologies: 'Technologies',
+    },
+
+    shareCardExport: {
+      downloadShareCard: 'Download Share Card (PNG)',
+      downloading: 'Generating Image...',
+      shareCardTitle: 'Portfolio Social Share Card',
+      shareCardDesc: 'High-resolution 1200 × 630 px image styled to match your chosen template and accent color, ready for social media or messaging previews.',
+      cardFormat: 'Image Format:',
+      dimensions: '1200 × 630 px (OpenGraph / Social Media Standard)',
+      readyToDownload: 'Image ready to download.',
+      downloadButton: 'Download PNG (1200×630)',
+      retry: 'Try again',
+    },
+
+    fullPageExport: {
+      downloadFullPage: 'Download Full Page (PNG)',
+      downloading: 'Generating Full Page...',
+      title: 'Full-Page Screenshot (PNG)',
+      desc: 'High-resolution 1280 px wide full-page capture of all portfolio sections styled to match your active template and design system.',
+      dimensions: 'Width 1280 px (Height adapts to full content length)',
+      downloadButton: 'Download Full-Page Image',
+      downloadPartButton: 'Download Part',
+      retry: 'Try again',
+    },
+
+    exportMenu: {
+      export: 'Export',
+      downloadCv: 'Download CV (PDF)',
+      downloadPng: 'Download Share Card (1200×630)',
+      downloadFullPagePng: 'Download Full Page Image',
     },
 
     footer: {

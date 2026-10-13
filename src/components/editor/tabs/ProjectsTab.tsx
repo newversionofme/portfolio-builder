@@ -533,7 +533,7 @@ export function ProjectsTab() {
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-              <div className="flex items-start gap-3 min-w-0">
+              <div className="flex items-start gap-3 min-w-0 flex-1">
                 {proj.imageUrl ? (
                   <div className="relative w-16 h-12 rounded-lg overflow-hidden shrink-0 border border-zinc-100 dark:border-zinc-800">
                     <Image

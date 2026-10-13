@@ -22,11 +22,19 @@ import { toast } from 'sonner';
 
 interface ExportCvModalProps {
   trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function ExportCvModal({ trigger }: ExportCvModalProps) {
+export function ExportCvModal({
+  trigger,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+}: ExportCvModalProps) {
   const { portfolio } = usePortfolioStore();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = controlledOnOpenChange || setInternalOpen;
   const [includeAvatar, setIncludeAvatar] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -99,20 +107,22 @@ export function ExportCvModal({ trigger }: ExportCvModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {trigger || (
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 px-2.5 sm:px-3 text-xs gap-1.5 cursor-pointer font-medium"
-          >
-            <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            <span>{t.cvExport.downloadCv}</span>
-          </Button>
-        )}
-      </DialogTrigger>
+      {(trigger || controlledOpen === undefined) && (
+        <DialogTrigger asChild>
+          {trigger || (
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px]"
+            >
+              <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{t.cvExport.downloadCv}</span>
+            </Button>
+          )}
+        </DialogTrigger>
+      )}
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2">
             <FileText className="w-5 h-5" />
@@ -187,14 +197,14 @@ export function ExportCvModal({ trigger }: ExportCvModalProps) {
           </div>
         </div>
 
-        <DialogFooter className="gap-2 sm:gap-0">
+        <DialogFooter className="gap-2 sm:gap-2">
           <Button
             type="button"
             variant="ghost"
             size="sm"
             onClick={() => setOpen(false)}
             disabled={isGenerating}
-            className="text-xs"
+            className="text-xs min-h-[40px] sm:min-h-[36px]"
           >
             {language === 'en' ? 'Cancel' : 'Batal'}
           </Button>
@@ -204,7 +214,7 @@ export function ExportCvModal({ trigger }: ExportCvModalProps) {
             size="sm"
             onClick={handleDownload}
             disabled={isGenerating}
-            className="text-xs bg-blue-600 hover:bg-blue-700 text-white gap-1.5"
+            className="text-xs bg-blue-600 hover:bg-blue-700 text-white gap-1.5 min-h-[40px] sm:min-h-[36px]"
           >
             {isGenerating ? (
               <>

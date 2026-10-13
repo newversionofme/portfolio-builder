@@ -7,11 +7,22 @@ import { DeveloperTemplate } from './DeveloperTemplate';
 import { BoldTemplate } from './BoldTemplate';
 import { ElegantTemplate } from './ElegantTemplate';
 
+import { MotionConfig } from 'framer-motion';
+import { ShareCardRenderer } from '@/components/export/ShareCardRenderer';
+
 interface PortfolioRendererProps {
   data: FullPortfolioData;
+  exportMode?: 'share-card' | 'full-page' | 'none';
+  avatarDataUri?: string | null;
+  optimizedImages?: Record<string, string>;
 }
 
-export function PortfolioRenderer({ data }: PortfolioRendererProps) {
+export function PortfolioRenderer({
+  data,
+  exportMode = 'none',
+  avatarDataUri,
+  optimizedImages,
+}: PortfolioRendererProps) {
   // Determine template default font if not set
   const getDefaultFontForTemplate = (tpl?: string) => {
     switch (tpl) {
@@ -58,9 +69,23 @@ export function PortfolioRenderer({ data }: PortfolioRendererProps) {
 
   const pairing = getFontPairing(activeFont);
 
+  // Apply mapped avatar and optimized images in export mode
+  const resolvedProfile = data.profile
+    ? {
+        ...data.profile,
+        avatarUrl: avatarDataUri !== undefined ? avatarDataUri : data.profile.avatarUrl,
+      }
+    : undefined;
+
   const sortedData: FullPortfolioData = {
     ...data,
-    projects: [...(data.projects || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    profile: resolvedProfile,
+    projects: [...(data.projects || [])]
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map((proj) => ({
+        ...proj,
+        imageUrl: (proj.imageUrl && optimizedImages?.[proj.imageUrl]) || proj.imageUrl,
+      })),
     experiences: [...(data.experiences || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     educations: [...(data.educations || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     skills: [...(data.skills || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
@@ -82,6 +107,81 @@ export function PortfolioRenderer({ data }: PortfolioRendererProps) {
         return <MinimalistTemplate data={sortedData} />;
     }
   };
+
+  if (exportMode === 'share-card') {
+    return (
+      <ShareCardRenderer
+        data={sortedData}
+        pairing={pairing}
+        avatarDataUri={avatarDataUri}
+      />
+    );
+  }
+
+  if (exportMode === 'full-page') {
+    return (
+      <MotionConfig reducedMotion="always">
+        <div
+          className="export-full-page w-[1280px] min-w-[1280px] max-w-[1280px] font-[family-name:var(--font-body)] text-zinc-900 dark:text-zinc-100 overflow-visible relative"
+          style={
+            {
+              '--font-heading': pairing.heading,
+              '--font-body': pairing.body,
+              '--primary': data.accentColor || '#2563eb',
+            } as React.CSSProperties
+          }
+        >
+          <style>{`
+            .export-full-page {
+              width: 1280px !important;
+              max-width: 1280px !important;
+              min-width: 1280px !important;
+            }
+            .export-full-page *,
+            .export-full-page *::before,
+            .export-full-page *::after {
+              animation-duration: 0.001ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.001ms !important;
+              transition-delay: 0s !important;
+              scroll-behavior: auto !important;
+            }
+            .export-full-page nav,
+            .export-full-page header {
+              position: static !important;
+              top: auto !important;
+            }
+            .export-full-page aside {
+              position: static !important;
+              top: auto !important;
+            }
+            .export-full-page .fixed {
+              position: absolute !important;
+            }
+            .export-full-page .min-h-screen {
+              min-height: auto !important;
+            }
+            /* Fallback solid backgrounds for backdrop-filter across templates */
+            .export-full-page .backdrop-blur-md,
+            .export-full-page .backdrop-blur-xl {
+              backdrop-filter: none !important;
+              -webkit-backdrop-filter: none !important;
+            }
+            .export-full-page nav.bg-\\[\\#0d1117\\]\\/95 {
+              background-color: #0d1117 !important;
+            }
+            .export-full-page nav.bg-zinc-900\\/80 {
+              background-color: #18181b !important;
+            }
+            .export-full-page header.bg-\\[\\#FDFCF7\\]\\/90 {
+              background-color: #FDFCF7 !important;
+            }
+          `}</style>
+          {renderTemplate()}
+        </div>
+      </MotionConfig>
+    );
+  }
 
   return (
     <div

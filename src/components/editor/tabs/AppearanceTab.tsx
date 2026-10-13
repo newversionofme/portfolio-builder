@@ -4,11 +4,13 @@ import React from 'react';
 import { usePortfolioStore } from '@/lib/store/portfolio-store';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Check, Layout, Palette, Terminal, Briefcase, FileText } from 'lucide-react';
-import { ExportCvModal } from '@/components/export/ExportCvModal';
+import { Check, Layout, Palette, Terminal, Briefcase, FileText, ImageIcon, Monitor } from 'lucide-react';
+import { useExportModalStore } from '@/lib/store/export-modal-store';
+import { Button } from '@/components/ui/button';
 
 export function AppearanceTab() {
   const { portfolio, updateTheme } = usePortfolioStore();
+  const { openCvModal, openShareCardModal, openFullPageModal } = useExportModalStore();
 
   const templates = [
     {
@@ -204,7 +206,7 @@ export function AppearanceTab() {
         </div>
       </div>
 
-      {/* Ekspor Dokumen & CV */}
+      {/* Ekspor Dokumen & Media */}
       <div className="space-y-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
         <div>
           <Label className="text-sm font-semibold text-zinc-900 dark:text-white">
@@ -212,25 +214,89 @@ export function AppearanceTab() {
           </Label>
           <p className="text-xs text-zinc-500 mt-0.5">
             {portfolio.language === 'en'
-              ? 'Download your curriculum vitae generated directly from your portfolio data.'
-              : 'Unduh kurikulum vitae Anda yang disusun langsung dari data portofolio ini.'}
+              ? 'Download your curriculum vitae (PDF) and social share card (PNG) generated directly from your portfolio.'
+              : 'Unduh kurikulum vitae (PDF) dan kartu gambar bagikan (PNG) yang disusun langsung dari data portofolio ini.'}
           </p>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>Curriculum Vitae (PDF)</span>
-            </h4>
-            <p className="text-[11px] text-zinc-500">
-              {portfolio.language === 'en'
-                ? 'Standard ATS-friendly A4 format with selectable vector text.'
-                : 'Format standar A4 ramah ATS dengan teks vektor yang dapat disalin.'}
-            </p>
+        <div className="space-y-3">
+          {/* Card 1: CV PDF */}
+          <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                <span className="truncate">Curriculum Vitae (PDF)</span>
+              </h4>
+              <p className="text-[11px] text-zinc-500">
+                {portfolio.language === 'en'
+                  ? 'Standard ATS-friendly A4 format with selectable vector text.'
+                  : 'Format standar A4 ramah ATS dengan teks vektor yang dapat disalin.'}
+              </p>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={openCvModal}
+              className="w-full sm:w-auto h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px] justify-center shrink-0"
+            >
+              <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{portfolio.language === 'en' ? 'Download CV (PDF)' : 'Unduh CV (PDF)'}</span>
+            </Button>
           </div>
 
-          <ExportCvModal />
+          {/* Card 2: Share Card PNG */}
+          <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
+                <ImageIcon className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                <span className="truncate">Kartu Bagikan / Social Card (PNG)</span>
+              </h4>
+              <p className="text-[11px] text-zinc-500">
+                {portfolio.language === 'en'
+                  ? 'High-resolution 1200 × 630 px image rendered according to your chosen theme and accent color.'
+                  : 'Gambar beresolusi tinggi 1200 × 630 px sesuai tema dan warna aksen untuk dibagikan di media sosial.'}
+              </p>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={openShareCardModal}
+              className="w-full sm:w-auto h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px] justify-center shrink-0"
+            >
+              <ImageIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+              <span>{portfolio.language === 'en' ? 'Download Image (PNG)' : 'Unduh Gambar (PNG)'}</span>
+            </Button>
+          </div>
+
+          {/* Card 3: Full-Page PNG */}
+          <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-0.5 min-w-0">
+              <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
+                <Monitor className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="truncate">Halaman Penuh / Full-Page (PNG)</span>
+              </h4>
+              <p className="text-[11px] text-zinc-500">
+                {portfolio.language === 'en'
+                  ? 'High-resolution 1280 px full-page capture of all sections with active layout and colors.'
+                  : 'Tangkapan layar resolusi tinggi 1280 px seluruh bagian portofolio dengan tema dan warna aktif.'}
+              </p>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={openFullPageModal}
+              className="w-full sm:w-auto h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px] justify-center shrink-0"
+            >
+              <Monitor className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>{portfolio.language === 'en' ? 'Download Full Page' : 'Unduh Halaman Penuh'}</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

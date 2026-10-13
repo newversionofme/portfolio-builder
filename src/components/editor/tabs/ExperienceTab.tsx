@@ -345,7 +345,7 @@ export function ExperienceTab() {
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-              <div className="space-y-1 min-w-0">
+              <div className="space-y-1 min-w-0 flex-1">
                 <h4 className="text-sm font-semibold text-zinc-900 dark:text-white truncate">
                   {exp.position}
                 </h4>

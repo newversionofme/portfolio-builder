@@ -298,7 +298,7 @@ export function EditorTabs() {
   const nextTab = currentIndex < TABS.length - 1 ? TABS[currentIndex + 1] : null;
 
   return (
-    <div className="w-full lg:w-[680px] xl:w-[740px] 2xl:w-[800px] border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col lg:flex-row h-[calc(100vh-4rem)] shrink-0">
+    <div className="w-full min-w-0 lg:min-w-[680px] xl:min-w-[740px] 2xl:min-w-[800px] lg:w-full border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col lg:flex-row h-full min-h-0 shrink-0">
       {/* ============================================================ */}
       {/* DESKTOP (>= 1024px): Vertical Sidebar Navigation               */}
       {/* ============================================================ */}
@@ -586,7 +586,7 @@ export function EditorTabs() {
         id={`tabpanel-${activeTab}`}
         aria-labelledby={`tab-${activeTab}`}
         tabIndex={0}
-        className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-white dark:bg-zinc-950 focus:outline-none"
+        className="flex-1 flex flex-col min-w-0 lg:min-w-[420px] overflow-y-auto bg-white dark:bg-zinc-950 focus:outline-none"
       >
         <div className="flex-1 p-4 sm:p-6 space-y-6">
           {activeTab === 'profile' && <ProfileTab />}

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { usePortfolioStore } from '@/lib/store/portfolio-store';
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export function LivePreviewPane() {
   const { portfolio, previewViewport } = usePortfolioStore();
@@ -68,21 +69,29 @@ export function LivePreviewPane() {
   const getContainerStyles = () => {
     switch (previewViewport) {
       case 'mobile':
-        return 'w-[375px] h-[812px] max-w-full my-auto rounded-[2.5rem] ring-8 ring-zinc-900/90 shadow-2xl overflow-hidden border-4 border-zinc-950';
+        return 'w-full h-full rounded-none border-none ring-0 shadow-none my-0 sm:w-[375px] sm:h-full sm:max-h-[820px] sm:my-auto sm:rounded-[2.5rem] sm:ring-8 sm:ring-zinc-900/90 sm:shadow-2xl sm:border-4 sm:border-zinc-950 sm:overflow-hidden';
       case 'tablet':
-        return 'w-[768px] h-[900px] max-w-full my-auto rounded-2xl ring-4 ring-zinc-800/90 shadow-2xl overflow-hidden border-2 border-zinc-800';
+        return 'w-full h-full rounded-none border-none ring-0 shadow-none my-0 sm:w-[768px] sm:max-w-full sm:h-full sm:max-h-[900px] sm:my-auto sm:rounded-2xl sm:ring-4 sm:ring-zinc-800/90 sm:shadow-2xl sm:border-2 sm:border-zinc-800 sm:overflow-hidden';
       case 'desktop':
       default:
-        return 'w-full h-full rounded-none border-none';
+        return 'w-full h-full rounded-none border-none ring-0 shadow-none my-0';
     }
   };
 
   const showOverlay = isLoading || isTemplateSwitching;
 
   return (
-    <div className="flex-1 bg-zinc-100 dark:bg-zinc-900/80 flex items-center justify-center overflow-auto h-[calc(100vh-4rem)] p-2 sm:p-4 relative">
+    <div
+      className={cn(
+        'flex-1 min-h-0 w-full h-full bg-zinc-100 dark:bg-zinc-900/80 flex items-center justify-center overflow-hidden relative',
+        previewViewport !== 'desktop' ? 'p-0 sm:p-4' : 'p-0'
+      )}
+    >
       <div
-        className={`transition-all duration-300 bg-white dark:bg-zinc-950 flex flex-col relative ${getContainerStyles()}`}
+        className={cn(
+          'transition-all duration-300 bg-white dark:bg-zinc-950 flex flex-col relative',
+          getContainerStyles()
+        )}
       >
         {/* Skeleton & Indicator Overlay */}
         {showOverlay && (
@@ -109,6 +118,7 @@ export function LivePreviewPane() {
           src="/preview"
           title="Portfolio Live Preview"
           className="w-full h-full border-0 bg-transparent flex-1"
+          style={{ WebkitOverflowScrolling: 'touch' }}
           onLoad={handleIframeLoad}
         />
       </div>
