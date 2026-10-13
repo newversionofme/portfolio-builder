@@ -69,6 +69,10 @@ export async function savePortfolio(data: FullPortfolioData): Promise<{
     // Execute atomic update in transaction
     await prisma.$transaction(async (tx) => {
       // 1. Update Core Portfolio & Theme
+      // Persist language in hiddenSections JSON as "lang:en" / "lang:id" (Zero DB migration required)
+      const baseHidden = (clean.hiddenSections || []).filter((s) => !s.startsWith('lang:'));
+      const combinedHidden = [...baseHidden, `lang:${clean.language || 'id'}`];
+
       await tx.portfolio.update({
         where: { id: currentPortfolio.id },
         data: {
@@ -77,7 +81,7 @@ export async function savePortfolio(data: FullPortfolioData): Promise<{
           accentColor: clean.accentColor,
           fontFamily: clean.fontFamily,
           sectionOrder: clean.sectionOrder,
-          hiddenSections: clean.hiddenSections,
+          hiddenSections: combinedHidden,
           seoTitle: clean.seoTitle,
           seoDescription: clean.seoDescription,
         },

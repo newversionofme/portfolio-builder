@@ -32,7 +32,15 @@ export function formatPortfolioForClient(portfolio: FullPortfolioFromDb): FullPo
     templateId: portfolio.templateId || 'minimalist',
     accentColor: portfolio.accentColor || '#2563eb',
     fontFamily: portfolio.fontFamily || 'Inter',
-    language: 'id',
+    language: (() => {
+      const hiddenList = (portfolio.hiddenSections as string[]) || [];
+      const langEntry = hiddenList.find((s) => s.startsWith('lang:'));
+      if (langEntry) {
+        const parsedLang = langEntry.replace('lang:', '');
+        if (parsedLang === 'en' || parsedLang === 'id') return parsedLang;
+      }
+      return 'id';
+    })(),
     sectionOrder: (portfolio.sectionOrder as string[]) || [
       'about',
       'skills',
@@ -43,7 +51,9 @@ export function formatPortfolioForClient(portfolio: FullPortfolioFromDb): FullPo
       'testimonials',
       'contact',
     ],
-    hiddenSections: (portfolio.hiddenSections as string[]) || [],
+    hiddenSections: ((portfolio.hiddenSections as string[]) || []).filter(
+      (s) => !s.startsWith('lang:')
+    ),
     seoTitle: portfolio.seoTitle || null,
     seoDescription: portfolio.seoDescription || null,
     ogImageUrl: portfolio.ogImageUrl || null,

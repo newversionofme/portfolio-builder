@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { getPublicPortfolioBySlug } from '@/lib/data/portfolio';
-import { PortfolioRenderer } from '@/components/templates/PortfolioRenderer';
+import { PublicPortfolioViewer } from '@/components/templates/PublicPortfolioViewer';
 import { auth } from '@/lib/auth/auth';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -101,7 +101,7 @@ export default async function PublicPortfolioPage({ params }: PageProps) {
         </div>
       )}
 
-      <PortfolioRenderer data={portfolio} />
+      <PublicPortfolioViewer portfolio={portfolio} />
     </div>
   );
 }
