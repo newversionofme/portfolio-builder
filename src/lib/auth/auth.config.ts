@@ -9,7 +9,7 @@ export const authConfig: NextAuthConfig = {
   trustHost: true,
   pages: {
     signIn: '/login',
-    newUser: '/onboarding',
+    newUser: '/dashboard',
   },
   session: { strategy: 'jwt' },
   secret: AUTH_SECRET_KEY,
@@ -19,9 +19,7 @@ export const authConfig: NextAuthConfig = {
       const isAuthRoute =
         nextUrl.pathname.startsWith('/login') ||
         nextUrl.pathname.startsWith('/register');
-      const isDashboardRoute =
-        nextUrl.pathname.startsWith('/dashboard') ||
-        nextUrl.pathname.startsWith('/onboarding');
+      const isDashboardRoute = nextUrl.pathname.startsWith('/dashboard');
 
       if (isDashboardRoute) {
         if (isLoggedIn) return true;
