@@ -4,6 +4,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { loginWithCredentials } from '@/actions/auth';
+import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -183,6 +184,17 @@ function LoginFormContent() {
             )}
           </Button>
         </form>
+
+        {/* Divider & Google Login Button */}
+        <div className="relative flex py-1 items-center">
+          <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+          <span className="flex-shrink mx-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium">
+            atau masuk dengan
+          </span>
+          <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+        </div>
+
+        <GoogleAuthButton mode="login" onError={(msg) => setError(msg)} />
 
         {/* Quick Demo Fill Buttons for Testing (Hanya di Localhost / Non-HTTPS) */}
         {isLocalOrNonHttps && (

@@ -147,3 +147,18 @@ export async function loginWithCredentials(email: string, password: string) {
 export async function logoutUser() {
   await signOut({ redirectTo: '/login' });
 }
+
+export async function loginWithGoogle(redirectTo: string = '/dashboard') {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    return {
+      error:
+        'Konfigurasi Google OAuth belum disetel (GOOGLE_CLIENT_ID atau GOOGLE_CLIENT_SECRET di file .env belum terisi).',
+    };
+  }
+
+  await signIn('google', { redirectTo });
+}
+
+export async function isGoogleAuthEnabled() {
+  return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+}

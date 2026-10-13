@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { registerUser } from '@/actions/auth';
+import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -170,6 +171,19 @@ export default function RegisterPage() {
               )}
             </Button>
           </form>
+
+          {/* Divider & Google Register Button */}
+          <div className="relative flex py-1 items-center mt-4">
+            <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+            <span className="flex-shrink mx-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium">
+              atau daftar dengan
+            </span>
+            <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
+          </div>
+
+          <div className="mt-3">
+            <GoogleAuthButton mode="register" onError={(msg) => setError(msg)} />
+          </div>
         </CardContent>
 
         <CardFooter className="flex justify-center border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
