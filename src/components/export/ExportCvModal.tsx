@@ -57,12 +57,19 @@ export function ExportCvModal({
       const { pdf } = await import('@react-pdf/renderer');
       const { CvPdfDocument } = await import('./CvPdfDocument');
 
+      // Resolve origin/domain for full URL links in CV
+      const appDomain =
+        typeof window !== 'undefined' && window.location.origin
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_APP_URL || 'https://portfolio-builder.com';
+
       // 3. Render PDF blob on client
       const docElement = (
         <CvPdfDocument
           portfolio={portfolio}
           language={language}
           avatarDataUri={avatarDataUri}
+          appDomain={appDomain}
         />
       );
 

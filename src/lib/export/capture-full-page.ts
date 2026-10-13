@@ -40,7 +40,8 @@ export function calculateCapturePlan(totalHeight: number, totalWidth = 1280) {
     ? SAFARI_MAX_CANVAS_DIMENSION
     : DESKTOP_MAX_CANVAS_DIMENSION;
 
-  let preferredPixelRatio = isMobileDevice ? 1.5 : 2.0;
+  // Use 1.0x (1280px crisp native scale) so downloaded PNG stays strictly under 2MB while remaining razor sharp
+  let preferredPixelRatio = 1.0;
 
   // If single canvas would exceed conservative threshold or height is large, calculate parts
   const isLongPage = totalHeight > MAX_SAFE_SLICE_HEIGHT || (totalHeight * preferredPixelRatio > maxDimension);

@@ -224,12 +224,14 @@ interface CvPdfDocumentProps {
   portfolio: FullPortfolioData;
   language?: SupportedLanguage;
   avatarDataUri?: string | null;
+  appDomain?: string;
 }
 
 export function CvPdfDocument({
   portfolio,
   language = 'id',
   avatarDataUri,
+  appDomain,
 }: CvPdfDocumentProps) {
   const t = getDictionary(language);
 
@@ -651,11 +653,24 @@ export function CvPdfDocument({
                 </Text>
               ) : null}
 
-              {portfolio.slug ? (
-                <Text style={styles.contactItem}>
-                  {sanitizePdfText(t.cvExport.curatedPortfolio)}: /u/{sanitizePdfText(portfolio.slug)}
-                </Text>
-              ) : null}
+              {portfolio.slug ? (() => {
+                const baseHost = appDomain
+                  ? appDomain.replace(/^https?:\/\//, '').replace(/\/$/, '')
+                  : typeof window !== 'undefined' && window.location.host
+                  ? window.location.host
+                  : 'portfolio-builder.com';
+                const fullUrl = `https://${baseHost}/u/${portfolio.slug}`;
+                const displayUrl = `${baseHost}/u/${portfolio.slug}`;
+
+                return (
+                  <Text style={styles.contactItem}>
+                    {sanitizePdfText(t.cvExport.curatedPortfolio)}:{' '}
+                    <Link src={fullUrl} style={styles.contactLink}>
+                      {sanitizePdfText(displayUrl)}
+                    </Link>
+                  </Text>
+                );
+              })() : null}
 
               {/* SOCIAL / PORTFOLIO LINKS */}
               {socialLinks.map((s, idx) => (

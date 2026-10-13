@@ -343,12 +343,20 @@ export function ExportFullPageModal({
             </div>
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-2 text-xs min-w-0">
               <span className="text-zinc-500 shrink-0">
-                {language === 'en' ? 'Slicing Strategy:' : 'Strategi Pemotongan:'}
+                {language === 'en' ? 'Target Size:' : 'Ukuran Berkas:'}
+              </span>
+              <span className="font-medium text-emerald-600 dark:text-emerald-400 break-words min-w-0 sm:text-right">
+                {language === 'en' ? 'Ultra-lightweight (< 2 MB)' : 'Ringan & Teroptimasi (< 2 MB)'}
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-2 text-xs min-w-0">
+              <span className="text-zinc-500 shrink-0">
+                {language === 'en' ? 'Content Layout:' : 'Format Konten:'}
               </span>
               <span className="font-medium text-zinc-800 dark:text-zinc-200 break-words min-w-0 sm:text-right">
                 {language === 'en'
-                  ? 'Adaptive multi-part if height > 3200px'
-                  : 'Adaptif otomatis bertingkat jika tinggi > 3200px'}
+                  ? 'Full text & link details (no clipped images)'
+                  : 'Teks utuh & tautan lengkap (bebas gambar terpotong)'}
               </span>
             </div>
           </div>

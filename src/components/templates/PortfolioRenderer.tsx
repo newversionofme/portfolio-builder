@@ -84,7 +84,10 @@ export function PortfolioRenderer({
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       .map((proj) => ({
         ...proj,
-        imageUrl: (proj.imageUrl && optimizedImages?.[proj.imageUrl]) || proj.imageUrl,
+        imageUrl:
+          exportMode === 'full-page'
+            ? undefined
+            : (proj.imageUrl && optimizedImages?.[proj.imageUrl]) || proj.imageUrl,
       })),
     experiences: [...(data.experiences || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
     educations: [...(data.educations || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
@@ -161,20 +164,49 @@ export function PortfolioRenderer({
             .export-full-page .min-h-screen {
               min-height: auto !important;
             }
-            /* Fallback solid backgrounds for backdrop-filter across templates */
-            .export-full-page .backdrop-blur-md,
-            .export-full-page .backdrop-blur-xl {
-              backdrop-filter: none !important;
-              -webkit-backdrop-filter: none !important;
+            /* Sembunyikan cover/visual image proyek agar ukuran file minimal (<2MB) & tidak terpotong */
+            .export-full-page .relative.w-full.h-36,
+            .export-full-page .relative.w-full.h-40,
+            .export-full-page .relative.w-full.h-48,
+            .export-full-page .relative.w-full.h-56,
+            .export-full-page .w-full.h-56,
+            .export-full-page .w-full.h-44,
+            .export-full-page .w-full.h-52,
+            .export-full-page .w-full.h-72,
+            .export-full-page .w-full.h-80,
+            .export-full-page article > div.relative,
+            .export-full-page article > div.w-full.relative,
+            .export-full-page .group .relative.overflow-hidden img {
+              display: none !important;
             }
-            .export-full-page nav.bg-\\[\\#0d1117\\]\\/95 {
-              background-color: #0d1117 !important;
+            .export-full-page .group > div:has(> img) {
+              display: none !important;
             }
-            .export-full-page nav.bg-zinc-900\\/80 {
-              background-color: #18181b !important;
+
+            /* Buka seluruh teks yang terpotong (line-clamp / truncate) agar tampil lengkap */
+            .export-full-page .line-clamp-2,
+            .export-full-page .line-clamp-3,
+            .export-full-page .line-clamp-4,
+            .export-full-page .line-clamp-5,
+            .export-full-page [class*="line-clamp-"] {
+              -webkit-line-clamp: unset !important;
+              display: block !important;
+              max-height: none !important;
+              overflow: visible !important;
             }
-            .export-full-page header.bg-\\[\\#FDFCF7\\]\\/90 {
-              background-color: #FDFCF7 !important;
+
+            .export-full-page .truncate {
+              white-space: normal !important;
+              overflow: visible !important;
+              text-overflow: unset !important;
+            }
+
+            /* Pastikan kontainer tidak memotong isi (overflow visible) */
+            .export-full-page section,
+            .export-full-page article,
+            .export-full-page .group {
+              overflow: visible !important;
+              break-inside: avoid;
             }
           `}</style>
           {renderTemplate()}

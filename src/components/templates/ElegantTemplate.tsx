@@ -69,7 +69,6 @@ export function ElegantTemplate({ data }: TemplateProps) {
   const hasCertifications = certifications && certifications.length > 0;
   const hasSkills = skills && skills.length > 0;
   const hasTestimonials = testimonials && testimonials.length > 0;
-  const hasSidebarContent = hasEducations || hasCertifications || hasSkills;
   const hasContact = hasEmail || hasWhatsapp || hasPhone || hasSocials || contactInfo?.enableContactForm;
 
   // Compute latest role (prioritize current, then newest start date)
@@ -87,6 +86,15 @@ export function ElegantTemplate({ data }: TemplateProps) {
     return (b.startDate || '').localeCompare(a.startDate || '');
   });
   const latestEducation = sortedEducations[0];
+
+  const hasAtAGlance = Boolean(
+    currentRole ||
+    latestEducation ||
+    (skills && skills.length > 0) ||
+    profile?.location ||
+    isAvailableForHire
+  );
+  const hasSidebarContent = hasEducations || hasCertifications || hasSkills || hasAtAGlance;
 
   const handleCopyEmail = () => {
     if (contactInfo?.email) {
@@ -112,6 +120,84 @@ export function ElegantTemplate({ data }: TemplateProps) {
     const mIdx = parseInt(month, 10) - 1;
     return `${months[mIdx] || month} ${year}`;
   };
+
+  const atAGlanceCard = hasAtAGlance ? (
+    <div className="w-full bg-stone-100/75 border border-stone-200/90 rounded-lg p-4 space-y-3">
+      <div className="text-[11px] font-[family-name:var(--font-heading)] uppercase tracking-wider text-stone-600 font-semibold flex items-center gap-1.5 border-b border-stone-200 pb-2">
+        <Info className="w-3.5 h-3.5 text-stone-600 shrink-0" />
+        <span>{t.atAGlance.title}</span>
+      </div>
+
+      <div className="space-y-2.5 text-xs">
+        {/* Current Position */}
+        {currentRole && (
+          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-0.5">
+            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
+              {t.atAGlance.currentRole}
+            </div>
+            <div className="font-semibold text-stone-900 break-words">
+              {currentRole.position}
+            </div>
+            <div className="text-stone-600 text-[11px] break-words">
+              {currentRole.company}
+            </div>
+          </div>
+        )}
+
+        {/* Latest Education */}
+        {latestEducation && (
+          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-0.5">
+            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
+              {t.atAGlance.latestEducation}
+            </div>
+            <div className="font-semibold text-stone-900 break-words">
+              {latestEducation.degree}
+            </div>
+            <div className="text-stone-600 text-[11px] break-words">
+              {latestEducation.institution}
+            </div>
+          </div>
+        )}
+
+        {/* Core Competencies (Top 3) */}
+        {skills.length > 0 && (
+          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-1">
+            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
+              {t.atAGlance.coreCompetencies}
+            </div>
+            <div className="flex flex-wrap gap-1 pt-0.5">
+              {skills.slice(0, 3).map((sk) => (
+                <span
+                  key={sk.id || sk.name}
+                  className="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-50 text-stone-800 border border-stone-200"
+                >
+                  {sk.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Location & Availability */}
+        {(profile?.location || isAvailableForHire) && (
+          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-1">
+            {profile?.location && (
+              <div className="text-stone-700 flex items-center gap-1.5">
+                <MapPin className="w-3 h-3 text-stone-400 shrink-0" />
+                <span className="break-words">{profile.location}</span>
+              </div>
+            )}
+            {isAvailableForHire && (
+              <div className="flex items-center gap-1.5 text-emerald-700 font-medium pt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0 motion-safe:animate-pulse motion-reduce:animate-none" />
+                <span>{profile?.hireBadgeText || t.atAGlance.available}</span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null;
 
   return (
     <div
@@ -176,7 +262,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
         <section className="border-b border-stone-200/90 pb-10 sm:pb-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             {/* Left: Identity & Title */}
-            <div className="lg:col-span-8 space-y-5">
+            <div className={profile?.avatarUrl ? "lg:col-span-8 space-y-5" : "lg:col-span-12 space-y-5"}>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-stone-500 font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest">
                   <span>{t.cvDossier}</span>
@@ -231,100 +317,31 @@ export function ElegantTemplate({ data }: TemplateProps) {
                   ))}
                 </div>
               )}
+
             </div>
 
-            {/* Right: Portrait & "Sekilas / At a Glance" Box */}
-            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start gap-6">
-              {profile?.avatarUrl && (
-                <div className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-lg overflow-hidden border-2 border-stone-200 bg-stone-100 shadow-md shrink-0">
-                  <Image
-                    src={profile.avatarUrl}
-                    alt={profile?.fullName || 'Avatar'}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 176px, 192px"
-                    priority
-                  />
-                </div>
-              )}
+            {/* Right: Portrait (Desktop) & Portrait + Sekilas (Mobile/Tablet) */}
+            {(profile?.avatarUrl || hasAtAGlance) && (
+              <div className={profile?.avatarUrl ? "lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start gap-6" : "lg:hidden w-full"}>
+                {profile?.avatarUrl && (
+                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-lg overflow-hidden border-2 border-stone-200 bg-stone-100 shadow-md shrink-0">
+                    <Image
+                      src={profile.avatarUrl}
+                      alt={profile?.fullName || 'Avatar'}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 176px, 192px"
+                      priority
+                    />
+                  </div>
+                )}
 
-              {/* Sekilas / At a Glance Summary Box (Dynamic, zero empty cells) */}
-              <div className="w-full bg-stone-100/75 border border-stone-200/90 rounded-lg p-4 space-y-3">
-                <div className="text-[11px] font-[family-name:var(--font-heading)] uppercase tracking-wider text-stone-600 font-semibold flex items-center gap-1.5 border-b border-stone-200 pb-2">
-                  <Info className="w-3.5 h-3.5 text-stone-600 shrink-0" />
-                  <span>{t.atAGlance.title}</span>
-                </div>
-
-                <div className="space-y-2.5 text-xs">
-                  {/* Current Position */}
-                  {currentRole && (
-                    <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-0.5">
-                      <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
-                        {t.atAGlance.currentRole}
-                      </div>
-                      <div className="font-semibold text-stone-900 break-words">
-                        {currentRole.position}
-                      </div>
-                      <div className="text-stone-600 text-[11px] break-words">
-                        {currentRole.company}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Latest Education */}
-                  {latestEducation && (
-                    <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-0.5">
-                      <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
-                        {t.atAGlance.latestEducation}
-                      </div>
-                      <div className="font-semibold text-stone-900 break-words">
-                        {latestEducation.degree}
-                      </div>
-                      <div className="text-stone-600 text-[11px] break-words">
-                        {latestEducation.institution}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Core Competencies (Top 3) */}
-                  {skills.length > 0 && (
-                    <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-1">
-                      <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
-                        {t.atAGlance.coreCompetencies}
-                      </div>
-                      <div className="flex flex-wrap gap-1 pt-0.5">
-                        {skills.slice(0, 3).map((sk) => (
-                          <span
-                            key={sk.id || sk.name}
-                            className="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-50 text-stone-800 border border-stone-200"
-                          >
-                            {sk.name}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Location & Availability */}
-                  {(profile?.location || isAvailableForHire) && (
-                    <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-1">
-                      {profile?.location && (
-                        <div className="text-stone-700 flex items-center gap-1.5">
-                          <MapPin className="w-3 h-3 text-stone-400 shrink-0" />
-                          <span className="break-words">{profile.location}</span>
-                        </div>
-                      )}
-                      {isAvailableForHire && (
-                        <div className="flex items-center gap-1.5 text-emerald-700 font-medium pt-0.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0 motion-safe:animate-pulse motion-reduce:animate-none" />
-                          <span>{profile?.hireBadgeText || t.atAGlance.available}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                {/* Sekilas / At a Glance Summary Box - Mobile & Tablet only (< lg) */}
+                <div className="w-full lg:hidden">
+                  {atAGlanceCard}
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
@@ -595,10 +612,15 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
           </main>
 
-          {/* Dossier Sidebar: Education, Certifications, Skills */}
+          {/* Dossier Sidebar: At a Glance (Desktop), Education, Certifications, Skills */}
           {hasSidebarContent && (
             <aside className="lg:col-span-4 space-y-10 lg:sticky lg:top-20">
               
+              {/* Sekilas / At a Glance Summary Box - Desktop only */}
+              <div className="hidden lg:block">
+                {atAGlanceCard}
+              </div>
+
               {/* Education Section */}
               {hasEducations && (
                 <section className="bg-white p-5 sm:p-6 rounded-lg border border-stone-200/90 shadow-2xs space-y-4">
