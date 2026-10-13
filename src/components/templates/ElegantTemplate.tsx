@@ -122,23 +122,23 @@ export function ElegantTemplate({ data }: TemplateProps) {
   };
 
   const atAGlanceCard = hasAtAGlance ? (
-    <div className="w-full bg-stone-100/75 border border-stone-200/90 rounded-lg p-4 space-y-3">
-      <div className="text-[11px] font-[family-name:var(--font-heading)] uppercase tracking-wider text-stone-600 font-semibold flex items-center gap-1.5 border-b border-stone-200 pb-2">
-        <Info className="w-3.5 h-3.5 text-stone-600 shrink-0" />
+    <div className="w-full bg-stone-100/75 dark:bg-[#181816] border border-stone-200/90 dark:border-stone-800 rounded-lg p-4 space-y-3 transition-colors duration-200">
+      <div className="text-[11px] font-[family-name:var(--font-heading)] uppercase tracking-wider text-stone-600 dark:text-stone-400 font-semibold flex items-center gap-1.5 border-b border-stone-200 dark:border-stone-800 pb-2">
+        <Info className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400 shrink-0" />
         <span>{t.atAGlance.title}</span>
       </div>
 
       <div className="space-y-2.5 text-xs">
         {/* Current Position */}
         {currentRole && (
-          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-0.5">
-            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
+          <div className="bg-white dark:bg-[#1f1f1d] p-2.5 rounded border border-stone-200/80 dark:border-stone-800 shadow-2xs space-y-0.5">
+            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500 dark:text-stone-400">
               {t.atAGlance.currentRole}
             </div>
-            <div className="font-semibold text-stone-900 break-words">
+            <div className="font-semibold text-stone-900 dark:text-stone-100 break-words">
               {currentRole.position}
             </div>
-            <div className="text-stone-600 text-[11px] break-words">
+            <div className="text-stone-600 dark:text-stone-400 text-[11px] break-words">
               {currentRole.company}
             </div>
           </div>
@@ -146,14 +146,14 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
         {/* Latest Education */}
         {latestEducation && (
-          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-0.5">
-            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
+          <div className="bg-white dark:bg-[#1f1f1d] p-2.5 rounded border border-stone-200/80 dark:border-stone-800 shadow-2xs space-y-0.5">
+            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500 dark:text-stone-400">
               {t.atAGlance.latestEducation}
             </div>
-            <div className="font-semibold text-stone-900 break-words">
+            <div className="font-semibold text-stone-900 dark:text-stone-100 break-words">
               {latestEducation.degree}
             </div>
-            <div className="text-stone-600 text-[11px] break-words">
+            <div className="text-stone-600 dark:text-stone-400 text-[11px] break-words">
               {latestEducation.institution}
             </div>
           </div>
@@ -161,15 +161,15 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
         {/* Core Competencies (Top 3) */}
         {skills.length > 0 && (
-          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-1">
-            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500">
+          <div className="bg-white dark:bg-[#1f1f1d] p-2.5 rounded border border-stone-200/80 dark:border-stone-800 shadow-2xs space-y-1">
+            <div className="text-[10px] uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500 dark:text-stone-400">
               {t.atAGlance.coreCompetencies}
             </div>
             <div className="flex flex-wrap gap-1 pt-0.5">
               {skills.slice(0, 3).map((sk) => (
                 <span
                   key={sk.id || sk.name}
-                  className="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-50 text-stone-800 border border-stone-200"
+                  className="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-50 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700"
                 >
                   {sk.name}
                 </span>
@@ -180,16 +180,16 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
         {/* Location & Availability */}
         {(profile?.location || isAvailableForHire) && (
-          <div className="bg-white p-2.5 rounded border border-stone-200/80 shadow-2xs space-y-1">
+          <div className="bg-white dark:bg-[#1f1f1d] p-2.5 rounded border border-stone-200/80 dark:border-stone-800 shadow-2xs space-y-1">
             {profile?.location && (
-              <div className="text-stone-700 flex items-center gap-1.5">
+              <div className="text-stone-700 dark:text-stone-300 flex items-center gap-1.5">
                 <MapPin className="w-3 h-3 text-stone-400 shrink-0" />
                 <span className="break-words">{profile.location}</span>
               </div>
             )}
             {isAvailableForHire && (
-              <div className="flex items-center gap-1.5 text-emerald-700 font-medium pt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0 motion-safe:animate-pulse motion-reduce:animate-none" />
+              <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-medium pt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500 shrink-0 motion-safe:animate-pulse motion-reduce:animate-none" />
                 <span>{profile?.hireBadgeText || t.atAGlance.available}</span>
               </div>
             )}
@@ -201,20 +201,20 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
   return (
     <div
-      className="min-h-screen bg-[#FDFCF7] text-stone-900 font-[family-name:var(--font-body)] selection:bg-stone-200 selection:text-stone-900 pb-28 overflow-x-hidden w-full antialiased"
+      className="min-h-screen bg-[#FDFCF7] dark:bg-[#121210] text-stone-900 dark:text-stone-100 font-[family-name:var(--font-body)] selection:bg-stone-200 dark:selection:bg-stone-800 selection:text-stone-900 dark:selection:text-stone-100 pb-28 overflow-x-hidden w-full antialiased transition-colors duration-200"
       style={{ '--accent-color': accentColor } as React.CSSProperties}
     >
       {/* Top Accent Rule & Header Bar */}
       <div className="w-full h-1.5" style={{ backgroundColor: accentColor }} />
-      <header className="border-b border-stone-200/80 bg-[#FDFCF7]/90 backdrop-blur-md sticky top-0 z-30">
+      <header className="border-b border-stone-200/80 dark:border-stone-800/80 bg-[#FDFCF7]/90 dark:bg-[#121210]/90 backdrop-blur-md sticky top-0 z-30 transition-colors duration-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <span className="font-[family-name:var(--font-heading)] font-bold text-lg sm:text-xl tracking-tight text-stone-900 truncate">
+            <span className="font-[family-name:var(--font-heading)] font-bold text-lg sm:text-xl tracking-tight text-stone-900 dark:text-stone-100 truncate">
               {profile?.fullName || t.cvDossier}
             </span>
             {isAvailableForHire && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 motion-safe:animate-pulse motion-reduce:animate-none" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 motion-safe:animate-pulse motion-reduce:animate-none" />
                 <span>{profile?.hireBadgeText || t.availableForHire}</span>
               </span>
             )}
@@ -226,7 +226,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                 asChild
                 variant="outline"
                 size="sm"
-                className="h-8 text-xs font-[family-name:var(--font-heading)] bg-white border-stone-300 text-stone-800 hover:bg-stone-50 hover:text-stone-950 transition-colors shadow-none"
+                className="h-8 text-xs font-[family-name:var(--font-heading)] bg-white dark:bg-stone-900 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-950 dark:hover:text-white transition-colors shadow-none"
               >
                 <a
                   href={profile.resumePdfUrl}
@@ -245,7 +245,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
               <Button
                 asChild
                 size="sm"
-                className="h-8 text-xs font-[family-name:var(--font-heading)] bg-stone-900 text-stone-50 hover:bg-stone-800 transition-colors shadow-none"
+                className="h-8 text-xs font-[family-name:var(--font-heading)] bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-950 hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors shadow-none"
               >
                 <a href={`mailto:${contactInfo.email}`}>
                   <Mail className="w-3.5 h-3.5 sm:mr-1.5" />
@@ -259,41 +259,41 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 space-y-12 sm:space-y-16">
         {/* Masthead / Hero Dossier */}
-        <section className="border-b border-stone-200/90 pb-10 sm:pb-14">
+        <section className="border-b border-stone-200/90 dark:border-stone-800/90 pb-10 sm:pb-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             {/* Left: Identity & Title */}
             <div className={profile?.avatarUrl ? "lg:col-span-8 space-y-5" : "lg:col-span-12 space-y-5"}>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-stone-500 font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest">
+                <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400 font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest">
                   <span>{t.cvDossier}</span>
                   <span>•</span>
                   <span>{language === 'en' ? 'Editorial Edition' : 'Edisi Editorial'}</span>
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-[family-name:var(--font-heading)] font-bold text-stone-950 tracking-tight leading-[1.1] break-words">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-[family-name:var(--font-heading)] font-bold text-stone-950 dark:text-white tracking-tight leading-[1.1] break-words">
                   {profile?.fullName || 'Portfolio'}
                 </h1>
-                <p className="text-lg sm:text-xl md:text-2xl font-[family-name:var(--font-heading)] italic text-stone-700 leading-relaxed break-words">
+                <p className="text-lg sm:text-xl md:text-2xl font-[family-name:var(--font-heading)] italic text-stone-700 dark:text-stone-300 leading-relaxed break-words">
                   {profile?.headline || t.subtitles.about}
                 </p>
               </div>
 
               {/* Location and Metadata */}
-              <div className="flex flex-wrap items-center gap-4 text-xs text-stone-600 pt-1">
+              <div className="flex flex-wrap items-center gap-4 text-xs text-stone-600 dark:text-stone-400 pt-1">
                 {profile?.location && (
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-stone-500 shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400 shrink-0" />
                     <span className="break-words">{profile.location}</span>
                   </div>
                 )}
                 {currentRole && (
                   <div className="flex items-center gap-1.5">
-                    <Briefcase className="w-3.5 h-3.5 text-stone-500 shrink-0" />
+                    <Briefcase className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400 shrink-0" />
                     <span>{currentRole.position} @ {currentRole.company}</span>
                   </div>
                 )}
                 {latestEducation && (
                   <div className="flex items-center gap-1.5">
-                    <GraduationCap className="w-3.5 h-3.5 text-stone-500 shrink-0" />
+                    <GraduationCap className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400 shrink-0" />
                     <span>{latestEducation.degree} • {latestEducation.institution}</span>
                   </div>
                 )}
@@ -308,7 +308,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                       href={s.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-white text-stone-700 hover:text-stone-950 border border-stone-200/90 hover:border-stone-300 transition-colors shadow-2xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:text-stone-950 dark:hover:text-white border border-stone-200/90 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 transition-colors shadow-2xs"
                       title={s.platform}
                     >
                       <SocialIcon platform={s.platform} className="w-3.5 h-3.5" />
@@ -324,7 +324,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
             {(profile?.avatarUrl || hasAtAGlance) && (
               <div className={profile?.avatarUrl ? "lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start gap-6" : "lg:hidden w-full"}>
                 {profile?.avatarUrl && (
-                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-lg overflow-hidden border-2 border-stone-200 bg-stone-100 shadow-md shrink-0">
+                  <div className="relative w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 rounded-lg overflow-hidden border-2 border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 shadow-md shrink-0">
                     <Image
                       src={profile.avatarUrl}
                       alt={profile?.fullName || 'Avatar'}
@@ -354,31 +354,31 @@ export function ElegantTemplate({ data }: TemplateProps) {
             {/* About / Overview */}
             {hasAbout && (
               <section className="space-y-4">
-                <div className="flex items-center gap-3 border-b border-stone-200 pb-2">
-                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 font-semibold">I.</span>
-                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900">
+                <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-800 pb-2">
+                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 dark:text-stone-500 font-semibold">I.</span>
+                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900 dark:text-stone-100">
                     {t.sections.about}
                   </h2>
                 </div>
 
                 {about?.bio && (
-                  <p className="text-stone-700 text-base sm:text-lg leading-relaxed whitespace-pre-line break-words text-justify sm:text-left">
+                  <p className="text-stone-700 dark:text-stone-300 text-base sm:text-lg leading-relaxed whitespace-pre-line break-words text-justify sm:text-left">
                     {about.bio}
                   </p>
                 )}
 
                 {about?.keyHighlights && about.keyHighlights.length > 0 && (
                   <div className="pt-2">
-                    <h3 className="text-xs uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500 font-semibold mb-3">
+                    <h3 className="text-xs uppercase font-[family-name:var(--font-heading)] tracking-wider text-stone-500 dark:text-stone-400 font-semibold mb-3">
                       {language === 'en' ? 'Core Highlights & Key Insights' : 'Sorotan Utama & Nilai Unggulan'}
                     </h3>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {about.keyHighlights.map((highlight, idx) => (
                         <li
                           key={idx}
-                          className="flex items-start gap-2 text-xs sm:text-sm text-stone-800 bg-white p-3 rounded border border-stone-200/80 shadow-2xs"
+                          className="flex items-start gap-2 text-xs sm:text-sm text-stone-800 dark:text-stone-200 bg-white dark:bg-[#1a1a18] p-3 rounded border border-stone-200/80 dark:border-stone-800 shadow-2xs"
                         >
-                          <span className="font-[family-name:var(--font-heading)] font-bold text-stone-400 mt-0.5">•</span>
+                          <span className="font-[family-name:var(--font-heading)] font-bold text-stone-400 dark:text-stone-500 mt-0.5">•</span>
                           <span className="break-words">{highlight}</span>
                         </li>
                       ))}
@@ -391,9 +391,9 @@ export function ElegantTemplate({ data }: TemplateProps) {
             {/* Projects / Works */}
             {hasProjects && (
               <section className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-stone-200 pb-2">
-                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 font-semibold">II.</span>
-                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900">
+                <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-800 pb-2">
+                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 dark:text-stone-500 font-semibold">II.</span>
+                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900 dark:text-stone-100">
                     {t.sections.projects}
                   </h2>
                 </div>
@@ -402,23 +402,23 @@ export function ElegantTemplate({ data }: TemplateProps) {
                   {projects.map((project, idx) => (
                     <article
                       key={project.id || idx}
-                      className="group bg-white p-5 sm:p-7 rounded-lg border border-stone-200/90 hover:border-stone-300 transition-all shadow-xs space-y-4"
+                      className="group bg-white dark:bg-[#1a1a18] p-5 sm:p-7 rounded-lg border border-stone-200/90 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 transition-all shadow-xs space-y-4"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-[family-name:var(--font-heading)] text-xs text-stone-400 font-medium">#{String(idx + 1).padStart(2, '0')}</span>
+                            <span className="font-[family-name:var(--font-heading)] text-xs text-stone-400 dark:text-stone-500 font-medium">#{String(idx + 1).padStart(2, '0')}</span>
                             {project.isFeatured && (
-                              <span className="px-2 py-0.5 text-[10px] font-[family-name:var(--font-heading)] uppercase tracking-wider bg-amber-50 text-amber-900 border border-amber-200 rounded">
+                              <span className="px-2 py-0.5 text-[10px] font-[family-name:var(--font-heading)] uppercase tracking-wider bg-amber-50 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded">
                                 {language === 'en' ? 'Featured' : 'Unggulan'}
                               </span>
                             )}
                           </div>
-                          <h3 className="text-lg sm:text-xl font-[family-name:var(--font-heading)] font-bold text-stone-950 group-hover:text-stone-700 transition-colors break-words">
+                          <h3 className="text-lg sm:text-xl font-[family-name:var(--font-heading)] font-bold text-stone-950 dark:text-white group-hover:text-stone-700 dark:group-hover:text-stone-300 transition-colors break-words">
                             {project.title}
                           </h3>
                           {project.tagline && (
-                            <p className="text-xs sm:text-sm font-[family-name:var(--font-heading)] italic text-stone-600 break-words">
+                            <p className="text-xs sm:text-sm font-[family-name:var(--font-heading)] italic text-stone-600 dark:text-stone-400 break-words">
                               {project.tagline}
                             </p>
                           )}
@@ -431,7 +431,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                               asChild
                               size="sm"
                               variant="outline"
-                              className="h-8 text-xs font-[family-name:var(--font-heading)] bg-stone-50 border-stone-300 text-stone-800 hover:bg-stone-100 hover:text-stone-950"
+                              className="h-8 text-xs font-[family-name:var(--font-heading)] bg-stone-50 dark:bg-stone-800 border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 hover:text-stone-950 dark:hover:text-white"
                             >
                               <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
                                 <span>{t.viewStudy}</span>
@@ -444,7 +444,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                               asChild
                               size="sm"
                               variant="ghost"
-                              className="h-8 text-xs font-[family-name:var(--font-heading)] text-stone-600 hover:text-stone-900 hover:bg-stone-100"
+                              className="h-8 text-xs font-[family-name:var(--font-heading)] text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800"
                             >
                               <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
                                 <SocialIcon platform="github" className="w-3.5 h-3.5" />
@@ -457,7 +457,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
                       {/* Project Image if available */}
                       {project.imageUrl && (
-                        <div className="relative w-full h-48 sm:h-64 rounded-md overflow-hidden bg-stone-100 border border-stone-200">
+                        <div className="relative w-full h-48 sm:h-64 rounded-md overflow-hidden bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800">
                           <Image
                             src={project.imageUrl}
                             alt={project.title}
@@ -469,17 +469,17 @@ export function ElegantTemplate({ data }: TemplateProps) {
                       )}
 
                       {/* Description */}
-                      <p className="text-sm sm:text-base text-stone-700 leading-relaxed whitespace-pre-line break-words">
+                      <p className="text-sm sm:text-base text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-line break-words">
                         {project.description}
                       </p>
 
                       {/* Tags */}
                       {project.tags && project.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pt-1 border-t border-stone-100">
+                        <div className="flex flex-wrap gap-1.5 pt-1 border-t border-stone-100 dark:border-stone-800">
                           {project.tags.map((tag, tIdx) => (
                             <span
                               key={tIdx}
-                              className="px-2 py-0.5 rounded text-[11px] font-mono bg-stone-100 text-stone-600 border border-stone-200/60"
+                              className="px-2 py-0.5 rounded text-[11px] font-mono bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200/60 dark:border-stone-700/60"
                             >
                               {tag}
                             </span>
@@ -495,35 +495,35 @@ export function ElegantTemplate({ data }: TemplateProps) {
             {/* Professional Experience */}
             {hasExperiences && (
               <section className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-stone-200 pb-2">
-                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 font-semibold">III.</span>
-                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900">
+                <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-800 pb-2">
+                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 dark:text-stone-500 font-semibold">III.</span>
+                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900 dark:text-stone-100">
                     {t.sections.experience}
                   </h2>
                 </div>
 
-                <div className="relative pl-6 sm:pl-8 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-300">
+                <div className="relative pl-6 sm:pl-8 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-300 dark:before:bg-stone-800">
                   {experiences.map((exp, idx) => (
                     <div key={exp.id || idx} className="relative space-y-2 group">
                       {/* Timeline Dot */}
-                      <div className="absolute -left-[1.85rem] sm:-left-[2.35rem] top-1.5 w-3 h-3 rounded-full bg-stone-900 border-2 border-[#FDFCF7] ring-1 ring-stone-300 group-hover:scale-125 transition-transform" />
+                      <div className="absolute -left-[1.85rem] sm:-left-[2.35rem] top-1.5 w-3 h-3 rounded-full bg-stone-900 dark:bg-stone-100 border-2 border-[#FDFCF7] dark:border-[#121210] ring-1 ring-stone-300 dark:ring-stone-700 group-hover:scale-125 transition-transform" />
 
                       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                        <h3 className="text-base sm:text-lg font-[family-name:var(--font-heading)] font-bold text-stone-950 break-words">
+                        <h3 className="text-base sm:text-lg font-[family-name:var(--font-heading)] font-bold text-stone-950 dark:text-white break-words">
                           {exp.position}
                         </h3>
-                        <span className="text-xs font-mono text-stone-500 whitespace-nowrap">
+                        <span className="text-xs font-mono text-stone-500 dark:text-stone-400 whitespace-nowrap">
                           {formatDate(exp.startDate)} — {exp.isCurrent ? t.present : formatDate(exp.endDate)}
                         </span>
                       </div>
 
-                      <div className="text-xs sm:text-sm font-[family-name:var(--font-heading)] italic text-stone-700 flex flex-wrap items-center gap-2">
+                      <div className="text-xs sm:text-sm font-[family-name:var(--font-heading)] italic text-stone-700 dark:text-stone-300 flex flex-wrap items-center gap-2">
                         {exp.companyUrl ? (
                           <a
                             href={exp.companyUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="underline decoration-stone-300 hover:decoration-stone-800 underline-offset-2 break-words"
+                            className="underline decoration-stone-300 dark:decoration-stone-700 hover:decoration-stone-800 dark:hover:decoration-stone-200 underline-offset-2 break-words"
                           >
                             {exp.company}
                           </a>
@@ -532,14 +532,14 @@ export function ElegantTemplate({ data }: TemplateProps) {
                         )}
                         {exp.location && (
                           <>
-                            <span className="text-stone-400">•</span>
-                            <span className="text-stone-600 not-italic text-xs">{exp.location}</span>
+                            <span className="text-stone-400 dark:text-stone-600">•</span>
+                            <span className="text-stone-600 dark:text-stone-400 not-italic text-xs">{exp.location}</span>
                           </>
                         )}
                         {exp.employmentType && (
                           <>
-                            <span className="text-stone-400">•</span>
-                            <span className="px-1.5 py-0.2 bg-stone-100 text-stone-600 rounded text-[10px] font-mono uppercase not-italic">
+                            <span className="text-stone-400 dark:text-stone-600">•</span>
+                            <span className="px-1.5 py-0.2 bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 rounded text-[10px] font-mono uppercase not-italic">
                               {exp.employmentType}
                             </span>
                           </>
@@ -547,7 +547,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                       </div>
 
                       {exp.description && (
-                        <p className="text-xs sm:text-sm text-stone-700 leading-relaxed whitespace-pre-line pt-1 break-words">
+                        <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed whitespace-pre-line pt-1 break-words">
                           {exp.description}
                         </p>
                       )}
@@ -560,9 +560,9 @@ export function ElegantTemplate({ data }: TemplateProps) {
             {/* Testimonials */}
             {hasTestimonials && (
               <section className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-stone-200 pb-2">
-                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 font-semibold">IV.</span>
-                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900">
+                <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-800 pb-2">
+                  <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 dark:text-stone-500 font-semibold">IV.</span>
+                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-bold text-stone-900 dark:text-stone-100">
                     {t.sections.testimonials}
                   </h2>
                 </div>
@@ -571,18 +571,18 @@ export function ElegantTemplate({ data }: TemplateProps) {
                   {testimonials.map((test, idx) => (
                     <blockquote
                       key={test.id || idx}
-                      className="bg-white p-5 sm:p-6 rounded-lg border border-stone-200/90 shadow-2xs space-y-4 flex flex-col justify-between"
+                      className="bg-white dark:bg-[#1a1a18] p-5 sm:p-6 rounded-lg border border-stone-200/90 dark:border-stone-800 shadow-2xs space-y-4 flex flex-col justify-between"
                     >
                       <div className="space-y-2">
-                        <Quote className="w-5 h-5 text-stone-400 fill-stone-100" />
-                        <p className="text-xs sm:text-sm font-[family-name:var(--font-heading)] italic text-stone-800 leading-relaxed break-words">
+                        <Quote className="w-5 h-5 text-stone-400 dark:text-stone-500 fill-stone-100 dark:fill-stone-800" />
+                        <p className="text-xs sm:text-sm font-[family-name:var(--font-heading)] italic text-stone-800 dark:text-stone-200 leading-relaxed break-words">
                           &ldquo;{test.quote}&rdquo;
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-3 pt-3 border-t border-stone-100">
+                      <div className="flex items-center gap-3 pt-3 border-t border-stone-100 dark:border-stone-800">
                         {test.avatarUrl ? (
-                          <div className="relative w-9 h-9 rounded-full overflow-hidden border border-stone-200 bg-stone-100 shrink-0">
+                          <div className="relative w-9 h-9 rounded-full overflow-hidden border border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 shrink-0">
                             <Image
                               src={test.avatarUrl}
                               alt={test.name}
@@ -591,15 +591,15 @@ export function ElegantTemplate({ data }: TemplateProps) {
                             />
                           </div>
                         ) : (
-                          <div className="w-9 h-9 rounded-full bg-stone-100 text-stone-700 border border-stone-200 flex items-center justify-center font-[family-name:var(--font-heading)] font-bold text-xs shrink-0">
+                          <div className="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700 flex items-center justify-center font-[family-name:var(--font-heading)] font-bold text-xs shrink-0">
                             {test.name.charAt(0)}
                           </div>
                         )}
                         <div className="min-w-0">
-                          <div className="font-[family-name:var(--font-heading)] font-bold text-xs sm:text-sm text-stone-900 truncate">
+                          <div className="font-[family-name:var(--font-heading)] font-bold text-xs sm:text-sm text-stone-900 dark:text-stone-100 truncate">
                             {test.name}
                           </div>
-                          <div className="text-[11px] text-stone-500 truncate">
+                          <div className="text-[11px] text-stone-500 dark:text-stone-400 truncate">
                             {test.role} {test.company ? `• ${test.company}` : ''}
                           </div>
                         </div>
@@ -623,35 +623,35 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
               {/* Education Section */}
               {hasEducations && (
-                <section className="bg-white p-5 sm:p-6 rounded-lg border border-stone-200/90 shadow-2xs space-y-4">
-                  <div className="flex items-center gap-2 border-b border-stone-100 pb-2.5">
-                    <GraduationCap className="w-4 h-4 text-stone-700" />
-                    <h3 className="font-[family-name:var(--font-heading)] font-bold text-base text-stone-900">
+                <section className="bg-white dark:bg-[#1a1a18] p-5 sm:p-6 rounded-lg border border-stone-200/90 dark:border-stone-800 shadow-2xs space-y-4">
+                  <div className="flex items-center gap-2 border-b border-stone-100 dark:border-stone-800 pb-2.5">
+                    <GraduationCap className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                    <h3 className="font-[family-name:var(--font-heading)] font-bold text-base text-stone-900 dark:text-stone-100">
                       {t.sections.education}
                     </h3>
                   </div>
 
                   <div className="space-y-4">
                     {educations.map((edu, idx) => (
-                      <div key={edu.id || idx} className="space-y-1 border-b border-stone-100 last:border-0 pb-3 last:pb-0">
-                        <div className="font-[family-name:var(--font-heading)] font-bold text-sm text-stone-950 break-words">
+                      <div key={edu.id || idx} className="space-y-1 border-b border-stone-100 dark:border-stone-800/80 last:border-0 pb-3 last:pb-0">
+                        <div className="font-[family-name:var(--font-heading)] font-bold text-sm text-stone-950 dark:text-stone-100 break-words">
                           {edu.degree}
                         </div>
-                        <div className="text-xs text-stone-700 font-[family-name:var(--font-heading)] italic break-words">
+                        <div className="text-xs text-stone-700 dark:text-stone-300 font-[family-name:var(--font-heading)] italic break-words">
                           {edu.fieldOfStudy ? `${edu.fieldOfStudy} • ` : ''}{edu.institution}
                         </div>
-                        <div className="text-[11px] font-mono text-stone-500 flex items-center justify-between pt-0.5">
+                        <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 flex items-center justify-between pt-0.5">
                           <span>
                             {formatDate(edu.startDate)} — {edu.isCurrent ? t.present : formatDate(edu.endDate)}
                           </span>
                           {edu.gpa && (
-                            <span className="font-semibold text-stone-800 bg-stone-100 px-1.5 py-0.2 rounded text-[10px]">
+                            <span className="font-semibold text-stone-800 dark:text-stone-200 bg-stone-100 dark:bg-stone-800 px-1.5 py-0.2 rounded text-[10px]">
                               {t.gpa} {edu.gpa}
                             </span>
                           )}
                         </div>
                         {edu.description && (
-                          <p className="text-xs text-stone-600 pt-1 leading-relaxed break-words">
+                          <p className="text-xs text-stone-600 dark:text-stone-400 pt-1 leading-relaxed break-words">
                             {edu.description}
                           </p>
                         )}
@@ -663,19 +663,19 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
               {/* Certifications Section */}
               {hasCertifications && (
-                <section className="bg-white p-5 sm:p-6 rounded-lg border border-stone-200/90 shadow-2xs space-y-4">
-                  <div className="flex items-center gap-2 border-b border-stone-100 pb-2.5">
-                    <Award className="w-4 h-4 text-stone-700" />
-                    <h3 className="font-[family-name:var(--font-heading)] font-bold text-base text-stone-900">
+                <section className="bg-white dark:bg-[#1a1a18] p-5 sm:p-6 rounded-lg border border-stone-200/90 dark:border-stone-800 shadow-2xs space-y-4">
+                  <div className="flex items-center gap-2 border-b border-stone-100 dark:border-stone-800 pb-2.5">
+                    <Award className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                    <h3 className="font-[family-name:var(--font-heading)] font-bold text-base text-stone-900 dark:text-stone-100">
                       {t.sections.certifications}
                     </h3>
                   </div>
 
                   <div className="space-y-4">
                     {certifications.map((cert, idx) => (
-                      <div key={cert.id || idx} className="space-y-1.5 border-b border-stone-100 last:border-0 pb-3.5 last:pb-0">
+                      <div key={cert.id || idx} className="space-y-1.5 border-b border-stone-100 dark:border-stone-800/80 last:border-0 pb-3.5 last:pb-0">
                         <div className="flex items-start justify-between gap-2">
-                          <div className="font-[family-name:var(--font-heading)] font-bold text-sm text-stone-950 leading-snug break-words">
+                          <div className="font-[family-name:var(--font-heading)] font-bold text-sm text-stone-950 dark:text-stone-100 leading-snug break-words">
                             {cert.title}
                           </div>
                           {cert.credentialUrl && (
@@ -683,7 +683,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                               href={cert.credentialUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-stone-400 hover:text-stone-800 transition-colors shrink-0"
+                              className="text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-colors shrink-0"
                               title={t.verifyCredential}
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -691,17 +691,17 @@ export function ElegantTemplate({ data }: TemplateProps) {
                           )}
                         </div>
 
-                        <div className="text-xs font-[family-name:var(--font-heading)] italic text-stone-600 break-words">
+                        <div className="text-xs font-[family-name:var(--font-heading)] italic text-stone-600 dark:text-stone-400 break-words">
                           {t.issuedBy} {cert.issuer}
                         </div>
 
-                        <div className="text-[11px] font-mono text-stone-500 flex flex-wrap items-center gap-2">
+                        <div className="text-[11px] font-mono text-stone-500 dark:text-stone-400 flex flex-wrap items-center gap-2">
                           <span>{t.issued}: {formatDate(cert.issueDate)}</span>
                           {cert.expiryDate && <span>• {t.expires}: {formatDate(cert.expiryDate)}</span>}
                         </div>
 
                         {cert.credentialId && (
-                          <div className="text-[10px] font-mono bg-stone-50 text-stone-600 px-2 py-0.5 rounded border border-stone-200/70 inline-block break-all">
+                          <div className="text-[10px] font-mono bg-stone-50 dark:bg-stone-900/60 text-stone-600 dark:text-stone-400 px-2 py-0.5 rounded border border-stone-200/70 dark:border-stone-800 inline-block break-all">
                             ID: {cert.credentialId}
                           </div>
                         )}
@@ -713,10 +713,10 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
               {/* Skills & Expertise Section */}
               {hasSkills && (
-                <section className="bg-white p-5 sm:p-6 rounded-lg border border-stone-200/90 shadow-2xs space-y-4">
-                  <div className="flex items-center gap-2 border-b border-stone-100 pb-2.5">
-                    <BookOpen className="w-4 h-4 text-stone-700" />
-                    <h3 className="font-[family-name:var(--font-heading)] font-bold text-base text-stone-900">
+                <section className="bg-white dark:bg-[#1a1a18] p-5 sm:p-6 rounded-lg border border-stone-200/90 dark:border-stone-800 shadow-2xs space-y-4">
+                  <div className="flex items-center gap-2 border-b border-stone-100 dark:border-stone-800 pb-2.5">
+                    <BookOpen className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                    <h3 className="font-[family-name:var(--font-heading)] font-bold text-base text-stone-900 dark:text-stone-100">
                       {t.sections.skills}
                     </h3>
                   </div>
@@ -724,18 +724,18 @@ export function ElegantTemplate({ data }: TemplateProps) {
                   <div className="space-y-4">
                     {Object.entries(skillsByCategory).map(([category, catSkills]) => (
                       <div key={category} className="space-y-2">
-                        <div className="text-xs font-[family-name:var(--font-heading)] uppercase tracking-wider text-stone-500 font-semibold">
+                        <div className="text-xs font-[family-name:var(--font-heading)] uppercase tracking-wider text-stone-500 dark:text-stone-400 font-semibold">
                           {category}
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {catSkills.map((sk) => (
                             <span
                               key={sk.id || sk.name}
-                              className="px-2.5 py-1 rounded text-xs font-medium bg-stone-50 text-stone-800 border border-stone-200/80 hover:border-stone-400 transition-colors"
+                              className="px-2.5 py-1 rounded text-xs font-medium bg-stone-50 dark:bg-stone-900/60 text-stone-800 dark:text-stone-200 border border-stone-200/80 dark:border-stone-800 hover:border-stone-400 dark:hover:border-stone-600 transition-colors"
                             >
                               {sk.name}
                               {sk.level && (
-                                <span className="text-[10px] text-stone-400 ml-1 font-mono font-normal">
+                                <span className="text-[10px] text-stone-400 dark:text-stone-500 ml-1 font-mono font-normal">
                                   ({sk.level})
                                 </span>
                               )}
@@ -755,29 +755,29 @@ export function ElegantTemplate({ data }: TemplateProps) {
 
         {/* Contact & Inquiries Section */}
         {hasContact && (
-          <section className="border-t border-stone-200/90 pt-12 pb-6 space-y-8">
+          <section className="border-t border-stone-200/90 dark:border-stone-800 pt-12 pb-6 space-y-8">
             <div className="max-w-2xl mx-auto text-center space-y-3">
-              <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 font-semibold">
+              <span className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-widest text-stone-400 dark:text-stone-500 font-semibold">
                 {t.sections.contact}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-[family-name:var(--font-heading)] font-bold text-stone-950">
+              <h2 className="text-2xl sm:text-3xl font-[family-name:var(--font-heading)] font-bold text-stone-950 dark:text-stone-100">
                 {language === 'en' ? 'Inquiries & Consultation' : 'Peluang Kolaborasi & Diskusi'}
               </h2>
-              <p className="text-sm font-[family-name:var(--font-heading)] italic text-stone-600 leading-relaxed">
+              <p className="text-sm font-[family-name:var(--font-heading)] italic text-stone-600 dark:text-stone-400 leading-relaxed">
                 {t.subtitles.contact}
               </p>
             </div>
 
-            <div className="max-w-xl mx-auto bg-white p-6 sm:p-8 rounded-lg border border-stone-200/90 shadow-sm space-y-6">
+            <div className="max-w-xl mx-auto bg-white dark:bg-[#1a1a18] p-6 sm:p-8 rounded-lg border border-stone-200/90 dark:border-stone-800 shadow-sm space-y-6">
               {/* Direct channels */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {hasEmail && contactInfo?.email && (
-                  <div className="p-3 bg-stone-50 rounded border border-stone-200 flex items-center justify-between gap-2">
+                  <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-[10px] font-[family-name:var(--font-heading)] uppercase text-stone-500">{t.contact.email}</div>
+                      <div className="text-[10px] font-[family-name:var(--font-heading)] uppercase text-stone-500 dark:text-stone-400">{t.contact.email}</div>
                       <a
                         href={`mailto:${contactInfo.email}`}
-                        className="text-xs font-medium text-stone-900 hover:underline truncate block"
+                        className="text-xs font-medium text-stone-900 dark:text-stone-100 hover:underline truncate block"
                       >
                         {contactInfo.email}
                       </a>
@@ -785,7 +785,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
                     <button
                       type="button"
                       onClick={handleCopyEmail}
-                      className="text-stone-400 hover:text-stone-800 p-1 shrink-0"
+                      className="text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 p-1 shrink-0"
                       title={t.contact.copyEmail}
                     >
                       {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -794,14 +794,14 @@ export function ElegantTemplate({ data }: TemplateProps) {
                 )}
 
                 {hasWhatsapp && contactInfo?.whatsapp && (
-                  <div className="p-3 bg-stone-50 rounded border border-stone-200 flex items-center justify-between gap-2">
+                  <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-[10px] font-[family-name:var(--font-heading)] uppercase text-stone-500">{t.contact.whatsapp}</div>
+                      <div className="text-[10px] font-[family-name:var(--font-heading)] uppercase text-stone-500 dark:text-stone-400">{t.contact.whatsapp}</div>
                       <a
                         href={`https://wa.me/${contactInfo.whatsapp.replace(/[^0-9]/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-medium text-stone-900 hover:underline truncate block"
+                        className="text-xs font-medium text-stone-900 dark:text-stone-100 hover:underline truncate block"
                       >
                         {contactInfo.whatsapp}
                       </a>
@@ -811,17 +811,17 @@ export function ElegantTemplate({ data }: TemplateProps) {
                 )}
 
                 {hasPhone && contactInfo?.phone && (
-                  <div className="p-3 bg-stone-50 rounded border border-stone-200 flex items-center justify-between gap-2">
+                  <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-[10px] font-[family-name:var(--font-heading)] uppercase text-stone-500">{t.contact.phone}</div>
+                      <div className="text-[10px] font-[family-name:var(--font-heading)] uppercase text-stone-500 dark:text-stone-400">{t.contact.phone}</div>
                       <a
                         href={`tel:${contactInfo.phone}`}
-                        className="text-xs font-medium text-stone-900 hover:underline truncate block"
+                        className="text-xs font-medium text-stone-900 dark:text-stone-100 hover:underline truncate block"
                       >
                         {contactInfo.phone}
                       </a>
                     </div>
-                    <Phone className="w-4 h-4 text-stone-500 shrink-0" />
+                    <Phone className="w-4 h-4 text-stone-500 dark:text-stone-400 shrink-0" />
                   </div>
                 )}
               </div>
@@ -830,7 +830,7 @@ export function ElegantTemplate({ data }: TemplateProps) {
               {hasEmail && contactInfo?.email && (
                 <Button
                   asChild
-                  className="w-full h-11 text-sm font-[family-name:var(--font-heading)] bg-stone-900 text-stone-50 hover:bg-stone-800 transition-colors shadow-none"
+                  className="w-full h-11 text-sm font-[family-name:var(--font-heading)] bg-stone-900 dark:bg-stone-100 text-stone-50 dark:text-stone-950 hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors shadow-none"
                 >
                   <a href={`mailto:${contactInfo.email}?subject=${encodeURIComponent(t.contact.inquirySubject)}`}>
                     <Send className="w-4 h-4 mr-2" />
@@ -843,9 +843,9 @@ export function ElegantTemplate({ data }: TemplateProps) {
         )}
 
         {/* Editorial Footer */}
-        <footer className="border-t border-stone-200 pt-8 pb-4 text-center text-xs font-[family-name:var(--font-heading)] text-stone-500 space-y-1">
+        <footer className="border-t border-stone-200 dark:border-stone-800 pt-8 pb-4 text-center text-xs font-[family-name:var(--font-heading)] text-stone-500 dark:text-stone-400 space-y-1">
           <p>© {new Date().getFullYear()} {profile?.fullName || 'Portfolio'}. {t.footer.allRightsReserved}</p>
-          <p className="text-[11px] text-stone-400">{t.footer.curatedWith} • Elegant Template</p>
+          <p className="text-[11px] text-stone-400 dark:text-stone-500">{t.footer.curatedWith} • Elegant Template</p>
         </footer>
       </div>
     </div>

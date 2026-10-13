@@ -80,31 +80,31 @@ export function BoldTemplate({ data }: TemplateProps) {
 
   return (
     <div
-      className="min-h-screen bg-zinc-950 text-zinc-100 font-[family-name:var(--font-body)] selection:bg-white selection:text-zinc-950 pb-28 overflow-x-hidden w-full"
+      className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-[family-name:var(--font-body)] selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950 pb-28 overflow-x-hidden w-full transition-colors duration-200"
       style={{ '--accent-theme': accentColor } as React.CSSProperties}
     >
       {/* Dynamic Ambient Background Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         <div
-          className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[140px] opacity-20"
+          className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[140px] opacity-10 dark:opacity-20"
           style={{ backgroundColor: accentColor }}
         />
         <div
-          className="absolute top-1/3 -right-40 w-[30rem] h-[30rem] rounded-full blur-[160px] opacity-15"
+          className="absolute top-1/3 -right-40 w-[30rem] h-[30rem] rounded-full blur-[160px] opacity-10 dark:opacity-15"
           style={{ backgroundColor: accentColor }}
         />
         <div
-          className="absolute -bottom-40 left-1/3 w-[32rem] h-[32rem] rounded-full blur-[180px] opacity-10"
+          className="absolute -bottom-40 left-1/3 w-[32rem] h-[32rem] rounded-full blur-[180px] opacity-5 dark:opacity-10"
           style={{ backgroundColor: accentColor }}
         />
       </div>
 
       {/* Floating Top Navigation Pill */}
       <header className="sticky top-4 z-40 max-w-5xl mx-auto px-4 w-full">
-        <nav className="bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/90 rounded-full px-4 sm:px-6 py-3 flex items-center justify-between shadow-2xl shadow-black/40">
+        <nav className="bg-white/90 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200/90 dark:border-zinc-800/90 rounded-full px-4 sm:px-6 py-3 flex items-center justify-between shadow-xl dark:shadow-2xl shadow-black/5 dark:shadow-black/40 transition-colors duration-200">
           <div className="flex items-center gap-3 min-w-0">
             {profile?.avatarUrl && (
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-700 relative shrink-0">
+              <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-300 dark:border-zinc-700 relative shrink-0">
                 <Image
                   src={profile.avatarUrl}
                   alt={profile.fullName || 'Avatar'}
@@ -113,14 +113,14 @@ export function BoldTemplate({ data }: TemplateProps) {
                 />
               </div>
             )}
-            <span className="font-[family-name:var(--font-heading)] font-extrabold text-sm sm:text-base tracking-tight text-white truncate max-w-[140px] sm:max-w-xs">
+            <span className="font-[family-name:var(--font-heading)] font-extrabold text-sm sm:text-base tracking-tight text-zinc-950 dark:text-white truncate max-w-[140px] sm:max-w-xs">
               {profile?.fullName || 'Portfolio'}
             </span>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             {isAvailableForHire && (
-              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
                 <span className="relative flex h-2 w-2">
                   <span className="motion-safe:animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
@@ -133,13 +133,13 @@ export function BoldTemplate({ data }: TemplateProps) {
             {hasEmail && (
               <Button
                 size="sm"
-                className="h-8 px-3.5 text-xs font-[family-name:var(--font-heading)] font-bold rounded-full bg-white text-zinc-950 hover:bg-zinc-200 transition-transform motion-safe:hover:scale-105"
+                className="h-8 px-3.5 text-xs font-[family-name:var(--font-heading)] font-bold rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-transform motion-safe:hover:scale-105"
                 onClick={handleCopyEmail}
                 aria-label={t.contact.copyEmail}
               >
                 {copiedEmail ? (
                   <>
-                    <Check className="w-3.5 h-3.5 mr-1 text-emerald-600" />
+                    <Check className="w-3.5 h-3.5 mr-1 text-emerald-500 dark:text-emerald-600" />
                     <span>{t.contact.copied}</span>
                   </>
                 ) : (
@@ -158,8 +158,8 @@ export function BoldTemplate({ data }: TemplateProps) {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 space-y-6 sm:space-y-8 w-full">
         
         {/* HERO BENTO BOX */}
-        <section className="bg-gradient-to-b from-zinc-900/90 to-zinc-900/40 border-2 border-zinc-800 rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-12 relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(#3f3f46_1px,transparent_1px)] [background-size:16px_16px] opacity-25 pointer-events-none rounded-tr-3xl" />
+        <section className="bg-gradient-to-b from-white to-zinc-50/80 dark:from-zinc-900/90 dark:to-zinc-900/40 border-2 border-zinc-200 dark:border-zinc-800 rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-12 relative overflow-hidden shadow-xl dark:shadow-2xl transition-colors duration-200">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(#a1a1aa_1px,transparent_1px)] dark:bg-[radial-gradient(#3f3f46_1px,transparent_1px)] [background-size:16px_16px] opacity-25 pointer-events-none rounded-tr-3xl" />
           
           <div className="flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between gap-8 sm:gap-12 relative z-10">
             <div className="space-y-6 flex-1 min-w-0 w-full">
@@ -173,8 +173,8 @@ export function BoldTemplate({ data }: TemplateProps) {
                   {language === 'en' ? 'Featured Portfolio' : 'Portofolio Unggulan'}
                 </span>
                 {profile?.location && (
-                  <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400 bg-zinc-800/80 px-3 py-1 rounded-full border border-zinc-700/60">
-                    <MapPin className="w-3.5 h-3.5 text-zinc-300 shrink-0" />
+                  <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/80 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-700/60">
+                    <MapPin className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-300 shrink-0" />
                     <span>{profile.location}</span>
                   </div>
                 )}
@@ -182,11 +182,11 @@ export function BoldTemplate({ data }: TemplateProps) {
 
               {/* Massive Headline / Full Name */}
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-[family-name:var(--font-heading)] font-black tracking-tight text-white leading-[0.95] break-words">
+                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-[family-name:var(--font-heading)] font-black tracking-tight text-zinc-950 dark:text-white leading-[0.95] break-words">
                   {profile?.fullName || 'Portfolio'}
                 </h1>
                 {profile?.headline && (
-                  <p className="text-lg sm:text-2xl md:text-3xl font-[family-name:var(--font-heading)] font-bold text-zinc-300 leading-snug break-words">
+                  <p className="text-lg sm:text-2xl md:text-3xl font-[family-name:var(--font-heading)] font-bold text-zinc-700 dark:text-zinc-300 leading-snug break-words">
                     {profile.headline}
                   </p>
                 )}
@@ -197,7 +197,7 @@ export function BoldTemplate({ data }: TemplateProps) {
                 {hasEmail && contactInfo?.email && (
                   <a
                     href={`mailto:${contactInfo.email}`}
-                    className="inline-flex items-center gap-2 h-11 px-6 rounded-full font-[family-name:var(--font-heading)] font-bold text-sm bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-lg motion-safe:hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 h-11 px-6 rounded-full font-[family-name:var(--font-heading)] font-bold text-sm bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-lg motion-safe:hover:-translate-y-0.5"
                   >
                     <Send className="w-4 h-4" />
                     <span>{t.getInTouch}</span>
@@ -221,7 +221,7 @@ export function BoldTemplate({ data }: TemplateProps) {
                     href={profile.resumePdfUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 h-11 px-5 rounded-full font-[family-name:var(--font-heading)] font-bold text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-all motion-safe:hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 h-11 px-5 rounded-full font-[family-name:var(--font-heading)] font-bold text-sm bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 transition-all motion-safe:hover:-translate-y-0.5"
                   >
                     <FileText className="w-4 h-4" />
                     <span>{t.downloadResume}</span>
@@ -230,14 +230,14 @@ export function BoldTemplate({ data }: TemplateProps) {
 
                 {/* Social Icons Pill Group */}
                 {hasSocials && (
-                  <div className="flex items-center gap-1.5 p-1 bg-zinc-800/80 border border-zinc-700/80 rounded-full">
+                  <div className="flex items-center gap-1.5 p-1 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/80 rounded-full">
                     {socialLinks.map((s, idx) => (
                       <a
                         key={s.id || idx}
                         href={s.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-9 h-9 rounded-full flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-700 transition-colors"
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
                         aria-label={`Open ${s.platform}`}
                       >
                         <SocialIcon platform={s.platform} className="w-4 h-4" />
@@ -252,7 +252,7 @@ export function BoldTemplate({ data }: TemplateProps) {
             {profile?.avatarUrl && (
               <div className="relative group shrink-0 mx-auto lg:mx-0">
                 <div
-                  className="w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-3xl sm:rounded-[2rem] overflow-hidden border-4 border-zinc-800 relative shadow-2xl transition-transform duration-300 motion-safe:group-hover:scale-105"
+                  className="w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-3xl sm:rounded-[2rem] overflow-hidden border-4 border-zinc-200 dark:border-zinc-800 relative shadow-2xl transition-transform duration-300 motion-safe:group-hover:scale-105"
                   style={{
                     boxShadow: `0 20px 50px -15px ${accentColor}33`,
                   }}
@@ -266,7 +266,7 @@ export function BoldTemplate({ data }: TemplateProps) {
                   />
                 </div>
                 <div
-                  className="absolute -bottom-3 -right-3 px-3.5 py-1 rounded-full text-[11px] font-[family-name:var(--font-heading)] font-black tracking-wide uppercase text-white shadow-xl border-2 border-zinc-950 flex items-center gap-1"
+                  className="absolute -bottom-3 -right-3 px-3.5 py-1 rounded-full text-[11px] font-[family-name:var(--font-heading)] font-black tracking-wide uppercase text-white shadow-xl border-2 border-white dark:border-zinc-950 flex items-center gap-1"
                   style={{ backgroundColor: accentColor }}
                 >
                   <Sparkles className="w-3 h-3" />
@@ -283,20 +283,20 @@ export function BoldTemplate({ data }: TemplateProps) {
             
             {/* Bento Card: About */}
             {hasAbout && (
-              <div className={`${hasSkills ? 'md:col-span-7' : 'md:col-span-12'} bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden`}>
+              <div className={`${hasSkills ? 'md:col-span-7' : 'md:col-span-12'} bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden shadow-sm dark:shadow-none transition-colors duration-200`}>
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: accentColor }}
                     />
-                    <h2 className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400">
+                    <h2 className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                       {t.sections.about}
                     </h2>
                   </div>
 
                   {about?.bio && (
-                    <p className="text-base sm:text-lg text-zinc-200 leading-relaxed font-normal break-words">
+                    <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-200 leading-relaxed font-normal break-words">
                       {about.bio}
                     </p>
                   )}
@@ -304,16 +304,16 @@ export function BoldTemplate({ data }: TemplateProps) {
 
                 {about?.keyHighlights && about.keyHighlights.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <span className="text-xs font-[family-name:var(--font-heading)] font-bold text-zinc-400 uppercase tracking-wider block">
+                    <span className="text-xs font-[family-name:var(--font-heading)] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">
                       {language === 'en' ? 'Core Highlights' : 'Sorotan Utama'}
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {about.keyHighlights.map((highlight, idx) => (
                         <span
                           key={idx}
-                          className="px-3.5 py-1.5 rounded-xl bg-zinc-800/90 border border-zinc-700/80 text-xs font-semibold text-zinc-200 flex items-center gap-1.5"
+                          className="px-3.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/90 border border-zinc-200 dark:border-zinc-700/80 text-xs font-semibold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5"
                         >
-                          <Star className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <Star className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400 shrink-0" />
                           <span>{highlight}</span>
                         </span>
                       ))}
@@ -325,10 +325,10 @@ export function BoldTemplate({ data }: TemplateProps) {
 
             {/* Bento Card: Skills */}
             {hasSkills && (
-              <div className={`${hasAbout ? 'md:col-span-5' : 'md:col-span-12'} bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-5 relative overflow-hidden`}>
+              <div className={`${hasAbout ? 'md:col-span-5' : 'md:col-span-12'} bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-5 relative overflow-hidden shadow-sm dark:shadow-none transition-colors duration-200`}>
                 <div className="flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-zinc-400" />
-                  <h2 className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400">
+                  <Layers className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+                  <h2 className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                     {t.sections.skills}
                   </h2>
                 </div>
@@ -336,18 +336,18 @@ export function BoldTemplate({ data }: TemplateProps) {
                 <div className="space-y-4">
                   {Object.entries(skillsByCategory).map(([category, items]) => (
                     <div key={category} className="space-y-2">
-                      <span className="text-[11px] font-[family-name:var(--font-heading)] font-bold uppercase tracking-wider text-zinc-400 block">
+                      <span className="text-[11px] font-[family-name:var(--font-heading)] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block">
                         {category}
                       </span>
                       <div className="flex flex-wrap gap-2">
                         {items.map((skill) => (
                           <div
                             key={skill.id || skill.name}
-                            className="px-3 py-1.5 rounded-xl bg-zinc-800/80 hover:bg-zinc-700/80 border border-zinc-700/70 text-xs font-bold text-zinc-200 transition-colors flex items-center gap-1.5 shadow-xs"
+                            className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-200 dark:border-zinc-700/70 text-xs font-bold text-zinc-800 dark:text-zinc-200 transition-colors flex items-center gap-1.5 shadow-xs"
                           >
                             <span>{skill.name}</span>
                             {skill.level && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-zinc-900/80 text-zinc-400 font-medium">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-zinc-200/80 dark:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400 font-medium">
                                 {skill.level}
                               </span>
                             )}
@@ -367,14 +367,14 @@ export function BoldTemplate({ data }: TemplateProps) {
           <section className="space-y-6 pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400 block">
+                <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block">
                   {t.sections.projects}
                 </span>
-                <h2 className="text-2xl sm:text-4xl font-[family-name:var(--font-heading)] font-black text-white tracking-tight">
+                <h2 className="text-2xl sm:text-4xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white tracking-tight">
                   {language === 'en' ? 'Selected Works & Case Studies' : 'Koleksi Portofolio & Studi Kasus'}
                 </h2>
               </div>
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 font-mono">
+              <span className="text-xs font-bold px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-mono">
                 {projects.length} Works
               </span>
             </div>
@@ -385,20 +385,20 @@ export function BoldTemplate({ data }: TemplateProps) {
                 return (
                   <div
                     key={project.id || idx}
-                    className={`group bg-zinc-900/70 border-2 border-zinc-800 hover:border-zinc-700 rounded-3xl overflow-hidden flex flex-col justify-between transition-all duration-300 motion-safe:hover:-translate-y-1 shadow-xl ${
+                    className={`group bg-white dark:bg-zinc-900/70 border-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-3xl overflow-hidden flex flex-col justify-between transition-all duration-300 motion-safe:hover:-translate-y-1 shadow-lg dark:shadow-xl ${
                       isFirstFeatured ? 'md:col-span-2' : 'md:col-span-1'
                     }`}
                   >
                     {/* Project Visual Cover */}
                     {project.imageUrl ? (
-                      <div className="w-full h-56 sm:h-72 md:h-80 relative overflow-hidden bg-zinc-950 border-b border-zinc-800/80">
+                      <div className="w-full h-56 sm:h-72 md:h-80 relative overflow-hidden bg-zinc-100 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800/80">
                         <Image
                           src={project.imageUrl}
                           alt={project.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-80" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-60 dark:opacity-80" />
                         
                         {project.isFeatured && (
                           <div
@@ -411,9 +411,9 @@ export function BoldTemplate({ data }: TemplateProps) {
                       </div>
                     ) : (
                       <div
-                        className="w-full h-44 sm:h-52 relative overflow-hidden bg-gradient-to-br from-zinc-900 to-zinc-950 border-b border-zinc-800/80 flex items-center justify-center p-6"
+                        className="w-full h-44 sm:h-52 relative overflow-hidden bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-900 dark:to-zinc-950 border-b border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center p-6"
                       >
-                        <Layers className="w-12 h-12 text-zinc-700 group-hover:text-zinc-500 transition-colors" />
+                        <Layers className="w-12 h-12 text-zinc-400 dark:text-zinc-700 group-hover:text-zinc-600 dark:group-hover:text-zinc-500 transition-colors" />
                         {project.isFeatured && (
                           <div
                             className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-white shadow-lg"
@@ -434,7 +434,7 @@ export function BoldTemplate({ data }: TemplateProps) {
                             {project.tags.map((tag, tIdx) => (
                               <span
                                 key={tIdx}
-                                className="px-2.5 py-1 rounded-lg bg-zinc-800/90 text-[11px] font-bold text-zinc-300 border border-zinc-700/60 font-mono"
+                                className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800/90 text-[11px] font-bold text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/60 font-mono"
                               >
                                 {tag}
                               </span>
@@ -442,23 +442,23 @@ export function BoldTemplate({ data }: TemplateProps) {
                           </div>
                         )}
 
-                        <h3 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-black text-white group-hover:text-zinc-200 transition-colors break-words">
+                        <h3 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white group-hover:text-zinc-700 dark:group-hover:text-zinc-200 transition-colors break-words">
                           {project.title}
                         </h3>
 
                         {project.tagline && (
-                          <p className="text-sm font-medium text-zinc-400 break-words">
+                          <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400 break-words">
                             {project.tagline}
                           </p>
                         )}
 
-                        <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal whitespace-pre-line break-words">
+                        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-normal whitespace-pre-line break-words">
                           {project.description}
                         </p>
                       </div>
 
                       {/* Project Action Links */}
-                      <div className="flex items-center gap-3 pt-4 border-t border-zinc-800/80 flex-wrap">
+                      <div className="flex items-center gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-800/80 flex-wrap">
                         {project.liveUrl && (
                           <a
                             href={project.liveUrl}
@@ -477,7 +477,7 @@ export function BoldTemplate({ data }: TemplateProps) {
                             href={project.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 transition-colors"
                           >
                             <SocialIcon platform="github" className="w-3.5 h-3.5" />
                             <span>{t.sourceCode}</span>
@@ -498,35 +498,35 @@ export function BoldTemplate({ data }: TemplateProps) {
             
             {/* Experience Bento */}
             {hasExperiences && (
-              <div className={`${hasCredentials ? 'md:col-span-7' : 'md:col-span-12'} bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-6`}>
+              <div className={`${hasCredentials ? 'md:col-span-7' : 'md:col-span-12'} bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm dark:shadow-none transition-colors duration-200`}>
                 <div className="space-y-1">
-                  <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400 block">
+                  <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block">
                     {t.sections.experience}
                   </span>
-                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-black text-white tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white tracking-tight flex items-center gap-2">
                     <Briefcase className="w-5 h-5 text-zinc-400" />
                     <span>{t.sections.experience}</span>
                   </h2>
                 </div>
 
-                <div className="space-y-6 relative pl-4 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:bg-zinc-800">
+                <div className="space-y-6 relative pl-4 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:bg-zinc-200 dark:before:bg-zinc-800">
                   {experiences.map((exp, idx) => (
                     <div key={exp.id || idx} className="relative pl-6 space-y-2 group">
                       <div
-                        className="absolute -left-[1.35rem] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-zinc-950 transition-transform group-hover:scale-125"
+                        className="absolute -left-[1.35rem] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-zinc-950 transition-transform group-hover:scale-125"
                         style={{ backgroundColor: accentColor }}
                       />
 
                       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                        <h3 className="text-base font-bold text-white break-words font-[family-name:var(--font-heading)]">
+                        <h3 className="text-base font-bold text-zinc-950 dark:text-white break-words font-[family-name:var(--font-heading)]">
                           {exp.position}
                         </h3>
-                        <span className="text-xs font-mono text-zinc-400 whitespace-nowrap">
+                        <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
                           {exp.startDate} — {exp.isCurrent ? t.present : exp.endDate || t.present}
                         </span>
                       </div>
 
-                      <div className="text-xs font-bold text-zinc-300 flex items-center gap-2 flex-wrap">
+                      <div className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-2 flex-wrap">
                         {exp.companyUrl ? (
                           <a
                             href={exp.companyUrl}
@@ -542,14 +542,14 @@ export function BoldTemplate({ data }: TemplateProps) {
                         )}
                         {exp.location && <span>• {exp.location}</span>}
                         {exp.employmentType && (
-                          <span className="px-2 py-0.5 rounded-md bg-zinc-800 text-[10px] uppercase font-mono text-zinc-300">
+                          <span className="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-[10px] uppercase font-mono text-zinc-700 dark:text-zinc-300">
                             {exp.employmentType}
                           </span>
                         )}
                       </div>
 
                       {exp.description && (
-                        <p className="text-xs sm:text-sm text-zinc-300 font-normal leading-relaxed whitespace-pre-line pt-1 break-words">
+                        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 font-normal leading-relaxed whitespace-pre-line pt-1 break-words">
                           {exp.description}
                         </p>
                       )}
@@ -564,12 +564,12 @@ export function BoldTemplate({ data }: TemplateProps) {
               <div className={`${hasExperiences ? 'md:col-span-5' : 'md:col-span-12'} space-y-6`}>
                 {/* Education */}
                 {hasEducations && (
-                  <div className="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-5">
+                  <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm dark:shadow-none transition-colors duration-200">
                     <div className="space-y-1">
-                      <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400 block">
+                      <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block">
                         {t.sections.education}
                       </span>
-                      <h2 className="text-xl font-[family-name:var(--font-heading)] font-black text-white tracking-tight flex items-center gap-2">
+                      <h2 className="text-xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white tracking-tight flex items-center gap-2">
                         <GraduationCap className="w-5 h-5 text-zinc-400" />
                         <span>{t.sections.education}</span>
                       </h2>
@@ -579,19 +579,19 @@ export function BoldTemplate({ data }: TemplateProps) {
                       {educations.map((edu, idx) => (
                         <div
                           key={edu.id || idx}
-                          className="p-4 rounded-2xl bg-zinc-800/40 border border-zinc-700/60 space-y-1.5"
+                          className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/60 space-y-1.5"
                         >
-                          <h3 className="text-sm font-bold text-white font-[family-name:var(--font-heading)] break-words">
+                          <h3 className="text-sm font-bold text-zinc-950 dark:text-white font-[family-name:var(--font-heading)] break-words">
                             {edu.degree}
                           </h3>
-                          <div className="text-xs text-zinc-300">
+                          <div className="text-xs text-zinc-600 dark:text-zinc-300">
                             {edu.fieldOfStudy ? `${edu.fieldOfStudy} • ` : ''}{edu.institution}
                           </div>
-                          <div className="text-[11px] font-mono text-zinc-400">
+                          <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
                             {edu.startDate} – {edu.isCurrent ? t.present : edu.endDate || ''}
                           </div>
                           {edu.gpa && (
-                            <span className="inline-block text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300">
+                            <span className="inline-block text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300">
                               {t.gpa}: {edu.gpa}
                             </span>
                           )}
@@ -603,13 +603,13 @@ export function BoldTemplate({ data }: TemplateProps) {
 
                 {/* Certifications */}
                 {hasCertifications && (
-                  <div className="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-5">
+                  <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm dark:shadow-none transition-colors duration-200">
                     <div className="space-y-1">
-                      <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400 block">
+                      <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block">
                         {t.sections.certifications}
                       </span>
-                      <h2 className="text-xl font-[family-name:var(--font-heading)] font-black text-white tracking-tight flex items-center gap-2">
-                        <Award className="w-5 h-5 text-amber-400" />
+                      <h2 className="text-xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white tracking-tight flex items-center gap-2">
+                        <Award className="w-5 h-5 text-amber-500 dark:text-amber-400" />
                         <span>{t.sections.certifications}</span>
                       </h2>
                     </div>
@@ -618,13 +618,13 @@ export function BoldTemplate({ data }: TemplateProps) {
                       {certifications.map((cert, idx) => (
                         <div
                           key={cert.id || idx}
-                          className="p-4 rounded-2xl bg-zinc-800/40 border border-zinc-700/60 flex items-start justify-between gap-3"
+                          className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/60 flex items-start justify-between gap-3"
                         >
                           <div className="space-y-1">
-                            <h3 className="text-sm font-bold text-white font-[family-name:var(--font-heading)] break-words">
+                            <h3 className="text-sm font-bold text-zinc-950 dark:text-white font-[family-name:var(--font-heading)] break-words">
                               {cert.title}
                             </h3>
-                            <p className="text-xs font-medium text-zinc-400">
+                            <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                               {cert.issuer} {cert.issueDate ? `• ${cert.issueDate}` : ''}
                             </p>
                             {cert.credentialId && (
@@ -639,7 +639,7 @@ export function BoldTemplate({ data }: TemplateProps) {
                               href={cert.credentialUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors shrink-0"
+                              className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors shrink-0"
                               aria-label={t.verifyCredential}
                             >
                               <ArrowUpRight className="w-4 h-4" />
@@ -657,12 +657,12 @@ export function BoldTemplate({ data }: TemplateProps) {
 
         {/* TESTIMONIALS */}
         {hasTestimonials && (
-          <section className="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-6 sm:p-10 space-y-6">
+          <section className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-10 space-y-6 shadow-sm dark:shadow-none transition-colors duration-200">
             <div className="space-y-1">
-              <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-400 block">
+              <span className="text-xs font-[family-name:var(--font-heading)] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400 block">
                 {t.sections.testimonials}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-[family-name:var(--font-heading)] font-black text-white tracking-tight flex items-center gap-2">
+              <h2 className="text-2xl sm:text-3xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white tracking-tight flex items-center gap-2">
                 <Quote className="w-6 h-6 text-zinc-400" />
                 <span>{language === 'en' ? 'Collaborator Testimonials' : 'Rekomendasi & Testimoni'}</span>
               </h2>
@@ -672,15 +672,15 @@ export function BoldTemplate({ data }: TemplateProps) {
               {testimonials.map((testi, idx) => (
                 <div
                   key={testi.id || idx}
-                  className="p-6 rounded-2xl bg-zinc-800/40 border border-zinc-700/60 flex flex-col justify-between space-y-4"
+                  className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/60 flex flex-col justify-between space-y-4"
                 >
-                  <p className="text-sm sm:text-base text-zinc-200 italic font-normal leading-relaxed break-words">
+                  <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-200 italic font-normal leading-relaxed break-words">
                     &ldquo;{testi.quote}&rdquo;
                   </p>
 
                   <div className="flex items-center gap-3 pt-2">
                     {testi.avatarUrl ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-700 relative shrink-0">
+                      <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-700 relative shrink-0">
                         <Image
                           src={testi.avatarUrl}
                           alt={testi.name}
@@ -689,15 +689,15 @@ export function BoldTemplate({ data }: TemplateProps) {
                         />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-white font-black text-sm shrink-0 font-[family-name:var(--font-heading)]">
+                      <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-zinc-900 dark:text-white font-black text-sm shrink-0 font-[family-name:var(--font-heading)]">
                         {testi.name.charAt(0)}
                       </div>
                     )}
                     <div>
-                      <h4 className="text-sm font-bold text-white break-words font-[family-name:var(--font-heading)]">
+                      <h4 className="text-sm font-bold text-zinc-950 dark:text-white break-words font-[family-name:var(--font-heading)]">
                         {testi.name}
                       </h4>
-                      <p className="text-xs text-zinc-400">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400">
                         {testi.role} {testi.company ? `at ${testi.company}` : ''}
                       </p>
                     </div>
@@ -710,9 +710,9 @@ export function BoldTemplate({ data }: TemplateProps) {
 
         {/* CALL TO ACTION / CONTACT */}
         <section
-          className="rounded-3xl sm:rounded-[2.5rem] p-8 sm:p-14 text-center space-y-6 relative overflow-hidden shadow-2xl border-2 border-zinc-800"
+          className="rounded-3xl sm:rounded-[2.5rem] p-8 sm:p-14 text-center space-y-6 relative overflow-hidden shadow-2xl border-2 border-zinc-200 dark:border-zinc-800 bg-gradient-to-b from-zinc-100 to-zinc-200 dark:bg-none"
           style={{
-            background: `radial-gradient(ellipse at top, ${accentColor}22 0%, #121316 70%)`,
+            background: `radial-gradient(ellipse at top, ${accentColor}22 0%, var(--cta-bg, #121316) 70%)`,
           }}
         >
           <div className="max-w-2xl mx-auto space-y-4">
@@ -722,10 +722,10 @@ export function BoldTemplate({ data }: TemplateProps) {
             >
               {t.sections.contact}
             </span>
-            <h2 className="text-3xl sm:text-5xl font-[family-name:var(--font-heading)] font-black text-white tracking-tight leading-tight break-words">
+            <h2 className="text-3xl sm:text-5xl font-[family-name:var(--font-heading)] font-black text-zinc-950 dark:text-white tracking-tight leading-tight break-words">
               {language === 'en' ? 'Have a visionary project in mind? Let’s collaborate.' : 'Punya proyek menarik? Mari berkolaborasi.'}
             </h2>
-            <p className="text-sm sm:text-base text-zinc-300 font-normal max-w-xl mx-auto break-words">
+            <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 font-normal max-w-xl mx-auto break-words">
               {t.subtitles.contact}
             </p>
           </div>
@@ -734,7 +734,7 @@ export function BoldTemplate({ data }: TemplateProps) {
             {hasEmail && contactInfo?.email && (
               <a
                 href={`mailto:${contactInfo.email}`}
-                className="inline-flex items-center gap-2 h-12 px-7 rounded-full font-[family-name:var(--font-heading)] font-bold text-sm bg-white text-zinc-950 hover:bg-zinc-200 transition-all shadow-xl motion-safe:hover:scale-105"
+                className="inline-flex items-center gap-2 h-12 px-7 rounded-full font-[family-name:var(--font-heading)] font-bold text-sm bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-xl motion-safe:hover:scale-105"
               >
                 <Mail className="w-4 h-4" />
                 <span>{contactInfo.email}</span>
@@ -758,7 +758,7 @@ export function BoldTemplate({ data }: TemplateProps) {
       </main>
 
       {/* Minimal Footer */}
-      <footer className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 text-center text-xs text-zinc-400 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-zinc-900 mt-12 font-[family-name:var(--font-heading)]">
+      <footer className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 text-center text-xs text-zinc-500 dark:text-zinc-400 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-zinc-200 dark:border-zinc-900 mt-12 font-[family-name:var(--font-heading)]">
         <p>© {new Date().getFullYear()} {profile?.fullName || 'Portfolio'}. {t.footer.allRightsReserved}</p>
         <p className="flex items-center gap-1">
           <span>{t.footer.curatedWith}</span>

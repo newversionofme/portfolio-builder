@@ -28,13 +28,9 @@ export function PublicPortfolioViewer({ portfolio }: PublicPortfolioViewerProps)
 
   return (
     <div className="relative min-h-screen">
-      {/* 
-        DESKTOP / TABLET (sm:flex): 
-        Floating Pill Kapsul Bahasa & Tema di pojok kanan atas seperti gambar (Globe • EN/ID | Theme) 
-      */}
       <aside
         aria-label="Desktop Visitor Controls"
-        className="hidden sm:flex fixed top-4 right-4 z-50 pointer-events-auto"
+        className="hidden min-[1301px]:flex fixed top-4 right-4 z-50 pointer-events-auto"
       >
         <div className="flex items-center gap-1.5 p-1 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md rounded-full shadow-lg shadow-black/10 dark:shadow-black/40 border border-zinc-200/90 dark:border-zinc-800/90 transition-all hover:scale-[1.02]">
           {/* Language Switch Button */}
@@ -58,13 +54,10 @@ export function PublicPortfolioViewer({ portfolio }: PublicPortfolioViewerProps)
         </div>
       </aside>
 
-      {/* 
-        MOBILE ONLY (sm:hidden):
-        Floating Gear Icon Button di Pojok Kanan Bawah.
-      */}
+
       <aside
         aria-label="Mobile Visitor Controls"
-        className="sm:hidden fixed bottom-5 right-5 z-50 pointer-events-auto"
+        className="min-[1301px]:hidden fixed bottom-5 right-5 z-50 pointer-events-auto"
       >
         <PortfolioActionsMenu
           currentLanguage={activeLang}
