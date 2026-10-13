@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { loginWithCredentials } from '@/actions/auth';
@@ -17,8 +17,19 @@ function LoginFormContent() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const registered = searchParams.get('registered');
+  const [isLocalOrNonHttps, setIsLocalOrNonHttps] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isNonHttps = window.location.protocol !== 'https:';
+      const isLocalhost =
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.endsWith('.local');
+      setIsLocalOrNonHttps(isNonHttps || isLocalhost || process.env.NODE_ENV === 'development');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,6 +99,16 @@ function LoginFormContent() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const demoUser = searchParams.get('demo');
+    if (demoUser === 'alex') {
+      fillDemoAccount('alex.rivera@example.com');
+    } else if (demoUser === 'maya') {
+      fillDemoAccount('maya.lin@example.com');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <Card className="shadow-lg border-zinc-200/80 dark:border-zinc-800">
@@ -163,24 +184,25 @@ function LoginFormContent() {
           </Button>
         </form>
 
-        {/* Quick Demo Fill Buttons for Testing (Only in Development) */}
-        {process.env.NODE_ENV === 'development' && (
+        {/* Quick Demo Fill Buttons for Testing (Hanya di Localhost / Non-HTTPS) */}
+        {isLocalOrNonHttps && (
           <div className="pt-2">
             <div className="relative flex py-2 items-center">
               <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
-              <span className="flex-shrink mx-3 text-xs text-zinc-400 uppercase tracking-wider">
-                Dev Demo Quick Fill
+              <span className="flex-shrink mx-3 text-xs text-amber-600 dark:text-amber-400 font-medium uppercase tracking-wider">
+                Akun Demo Lokal (Seed)
               </span>
               <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="text-xs text-zinc-600 dark:text-zinc-400 justify-start"
+                className="text-xs text-zinc-700 dark:text-zinc-300 justify-start h-9 hover:bg-amber-50 dark:hover:bg-amber-950/30"
                 onClick={() => fillDemoAccount('alex.rivera@example.com')}
+                disabled={loading}
               >
                 👨‍💻 Alex (Developer)
               </Button>
@@ -188,8 +210,9 @@ function LoginFormContent() {
                 type="button"
                 variant="outline"
                 size="sm"
-                className="text-xs text-zinc-600 dark:text-zinc-400 justify-start"
+                className="text-xs text-zinc-700 dark:text-zinc-300 justify-start h-9 hover:bg-amber-50 dark:hover:bg-amber-950/30"
                 onClick={() => fillDemoAccount('maya.lin@example.com')}
+                disabled={loading}
               >
                 🎨 Maya (Designer)
               </Button>
