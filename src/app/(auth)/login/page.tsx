@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
 import { loginWithCredentials } from '@/actions/auth';
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import { Lock, Mail, ArrowRight, Loader2, UserCheck, AlertCircle } from 'lucide-
 function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t, language } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,7 +50,7 @@ function LoginFormContent() {
       ]);
 
       if ('timeout' in res) {
-        setError('Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
+        setError(language === 'en' ? 'No response from server. Check your connection.' : 'Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
         setLoading(false);
         return;
       }
@@ -61,7 +63,7 @@ function LoginFormContent() {
         router.refresh();
       }
     } catch {
-      setError('Terjadi kesalahan saat masuk. Silakan coba lagi.');
+      setError(language === 'en' ? 'An error occurred during sign in. Please try again.' : 'Terjadi kesalahan saat masuk. Silakan coba lagi.');
       setLoading(false);
     }
   };
@@ -83,7 +85,7 @@ function LoginFormContent() {
       ]);
 
       if ('timeout' in res) {
-        setError('Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
+        setError(language === 'en' ? 'No response from server. Check your connection.' : 'Belum ada respons dari server. Periksa koneksi Anda sebelum mencoba lagi.');
         setLoading(false);
         return;
       }
@@ -96,7 +98,7 @@ function LoginFormContent() {
         router.refresh();
       }
     } catch {
-      setError('Terjadi kesalahan saat masuk akun demo. Silakan coba lagi.');
+      setError(language === 'en' ? 'An error occurred during demo sign in. Please try again.' : 'Terjadi kesalahan saat masuk akun demo. Silakan coba lagi.');
       setLoading(false);
     }
   };
@@ -114,9 +116,9 @@ function LoginFormContent() {
   return (
     <Card className="shadow-lg border-zinc-200/80 dark:border-zinc-800">
       <CardHeader className="space-y-1 text-center">
-        <CardTitle className="text-2xl font-bold tracking-tight">Selamat Datang Kembali</CardTitle>
+        <CardTitle className="text-2xl font-bold tracking-tight">{t.auth.loginTitle}</CardTitle>
         <CardDescription>
-          Masuk ke akun Anda untuk mengelola dan mempublikasikan portofolio
+          {t.auth.loginSubtitle}
         </CardDescription>
       </CardHeader>
 
@@ -124,7 +126,7 @@ function LoginFormContent() {
         {registered && (
           <div className="p-3 rounded-lg bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 text-sm flex items-center gap-2 border border-emerald-200 dark:border-emerald-900">
             <UserCheck className="w-4 h-4 shrink-0" />
-            <span>Akun berhasil dibuat! Silakan masuk dengan kredensial Anda.</span>
+            <span>{language === 'en' ? 'Account created successfully! Please sign in.' : 'Akun berhasil dibuat! Silakan masuk dengan kredensial Anda.'}</span>
           </div>
         )}
 
@@ -137,7 +139,7 @@ function LoginFormContent() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Alamat Email</Label>
+            <Label htmlFor="email">{t.auth.emailLabel}</Label>
             <div className="relative">
               <Mail className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
               <Input
@@ -154,7 +156,7 @@ function LoginFormContent() {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t.auth.passwordLabel}</Label>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
@@ -174,11 +176,11 @@ function LoginFormContent() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Memverifikasi...
+                {language === 'en' ? 'Verifying...' : 'Memverifikasi...'}
               </>
             ) : (
               <>
-                Masuk Sekarang
+                {t.auth.loginButton}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </>
             )}
@@ -189,7 +191,7 @@ function LoginFormContent() {
         <div className="relative flex py-1 items-center">
           <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
           <span className="flex-shrink mx-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium">
-            atau masuk dengan
+            {t.auth.orContinueWith}
           </span>
           <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
         </div>
@@ -202,7 +204,7 @@ function LoginFormContent() {
             <div className="relative flex py-2 items-center">
               <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
               <span className="flex-shrink mx-3 text-xs text-amber-600 dark:text-amber-400 font-medium uppercase tracking-wider">
-                Akun Demo Lokal (Seed)
+                {language === 'en' ? 'Local Demo Account (Seed)' : 'Akun Demo Lokal (Seed)'}
               </span>
               <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
             </div>
@@ -235,9 +237,9 @@ function LoginFormContent() {
 
       <CardFooter className="flex justify-center border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
         <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          Belum punya akun?{' '}
+          {t.auth.dontHaveAccount}{' '}
           <Link href="/register" className="font-semibold text-blue-600 hover:underline">
-            Daftar Gratis
+            {t.auth.registerLink}
           </Link>
         </p>
       </CardFooter>

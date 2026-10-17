@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { loginWithGoogle } from '@/actions/auth';
@@ -16,6 +17,7 @@ export function GoogleAuthButton({
   callbackUrl = '/dashboard',
   onError,
 }: GoogleAuthButtonProps) {
+  const { language } = useLanguage();
   const [loading, setLoading] = useState(false);
 
   const handleGoogleClick = async () => {
@@ -48,7 +50,7 @@ export function GoogleAuthButton({
       {loading ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin text-zinc-500" />
-          <span>Menghubungkan ke Google...</span>
+          <span>{language === 'en' ? 'Connecting to Google...' : 'Menghubungkan ke Google...'}</span>
         </>
       ) : (
         <>
@@ -71,7 +73,15 @@ export function GoogleAuthButton({
               d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
             />
           </svg>
-          <span>{mode === 'login' ? 'Masuk dengan Google' : 'Daftar dengan Google'}</span>
+          <span>
+            {mode === 'login'
+              ? language === 'en'
+                ? 'Sign in with Google'
+                : 'Masuk dengan Google'
+              : language === 'en'
+              ? 'Sign up with Google'
+              : 'Daftar dengan Google'}
+          </span>
         </>
       )}
     </Button>
