@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageProvider';
 import { FullPortfolioData } from '@/lib/validations/portfolio';
@@ -26,7 +26,16 @@ import {
   User,
   Palette,
   Send,
+  Menu,
+  X,
+  Sun,
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface DashboardViewProps {
   portfolio: FullPortfolioData;
@@ -36,6 +45,7 @@ interface DashboardViewProps {
 
 export function DashboardView({ portfolio, userName, onLogout }: DashboardViewProps) {
   const { t, language } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isPublished = portfolio.status === 'PUBLISHED';
 
   // Check if account is brand new / has zero items
@@ -66,7 +76,7 @@ export function DashboardView({ portfolio, userName, onLogout }: DashboardViewPr
             </span>
           </Link>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden sm:flex items-center gap-2 sm:gap-3">
             <span className="text-xs text-zinc-500 hidden sm:inline truncate max-w-[150px]">
               {t.dashboard.greeting}, <strong className="text-zinc-800 dark:text-zinc-200">{userName || 'User'}</strong>
             </span>
@@ -75,6 +85,42 @@ export function DashboardView({ portfolio, userName, onLogout }: DashboardViewPr
             <form action={onLogout}>
               <LogoutButton />
             </form>
+          </div>
+
+          <div className="sm:hidden">
+            <DropdownMenu onOpenChange={setMobileMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-10 w-10 rounded-lg border-zinc-200 dark:border-zinc-800"
+                  aria-label={mobileMenuOpen ? t.nav.closeMenu : t.nav.menu}
+                  title={mobileMenuOpen ? t.nav.closeMenu : t.nav.menu}
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64 p-2 space-y-2">
+                <div className="px-2 py-1 text-xs text-zinc-500">
+                  {t.dashboard.greeting},{' '}
+                  <strong className="text-zinc-800 dark:text-zinc-200">{userName || 'User'}</strong>
+                </div>
+                <DropdownMenuSeparator />
+                <div className="flex items-center gap-2 px-1">
+                  <Globe className="w-4 h-4 text-zinc-500" />
+                  <LanguageToggle variant="outline" />
+                </div>
+                <div className="flex items-center gap-2 px-1">
+                  <Sun className="w-4 h-4 text-amber-500" />
+                  <ThemeToggle />
+                </div>
+                <DropdownMenuSeparator />
+                <form action={onLogout} className="px-1">
+                  <LogoutButton />
+                </form>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>

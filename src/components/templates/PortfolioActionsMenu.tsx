@@ -11,14 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Settings, Globe, Sun, Moon, Laptop, Check } from 'lucide-react';
+import type { ComponentProps } from 'react';
+import { Settings, Menu, Globe, Sun, Moon, Laptop, Check } from 'lucide-react';
 
 interface PortfolioActionsMenuProps {
   currentLanguage: 'id' | 'en';
   onLanguageChange: (lang: 'id' | 'en') => void;
   className?: string;
   variant?: 'outline' | 'ghost';
-  triggerIcon?: 'gear' | 'dots';
+  triggerIcon?: 'gear' | 'dots' | 'menu';
+  side?: ComponentProps<typeof DropdownMenuContent>['side'];
 }
 
 export function PortfolioActionsMenu({
@@ -27,6 +29,7 @@ export function PortfolioActionsMenu({
   className = '',
   variant = 'ghost',
   triggerIcon = 'gear',
+  side = 'top',
 }: PortfolioActionsMenuProps) {
   const { theme, resolvedTheme, setTheme } = useTheme();
 
@@ -49,13 +52,17 @@ export function PortfolioActionsMenu({
           aria-label={labelSettings}
           title={labelSettings}
         >
-          <Settings className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
+          {triggerIcon === 'menu' ? (
+            <Menu className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+          ) : (
+            <Settings className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
+          )}
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="end"
-        side="top"
+        side={side}
         sideOffset={8}
         className="w-52 text-xs bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 shadow-xl rounded-xl p-1.5 z-50"
       >
