@@ -13,6 +13,8 @@ import { Plus, GraduationCap, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
 import { ListItemActions } from '../common/ListItemActions';
+import { useEditorText } from '@/lib/i18n/editor-copy';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
 
 const emptyEducation: EducationData = {
   institution: '',
@@ -27,6 +29,8 @@ const emptyEducation: EducationData = {
 };
 
 export function EducationTab() {
+  const tx = useEditorText();
+  const { language } = useLanguage();
   const { portfolio, addEducation, updateEducation, removeEducation, moveItem } =
     usePortfolioStore();
   const educations = portfolio.educations || [];
@@ -70,34 +74,34 @@ export function EducationTab() {
     const newErrors: Record<string, string> = {};
 
     if (!localEdu.institution.trim()) {
-      newErrors.institution = 'Nama institusi / universitas wajib diisi';
+      newErrors.institution = tx('Nama institusi / universitas wajib diisi');
     }
     if (!localEdu.degree.trim()) {
-      newErrors.degree = 'Gelar / jenjang studi wajib diisi';
+      newErrors.degree = tx('Gelar / jenjang studi wajib diisi');
     }
     if (!localEdu.startDate.trim()) {
-      newErrors.startDate = 'Bulan & tahun mulai wajib diisi';
+      newErrors.startDate = tx('Bulan & tahun mulai wajib diisi');
     }
 
     if (!validation.success) {
       validation.error.issues.forEach((issue) => {
         const fieldName = String(issue.path[0] || 'institution');
-        newErrors[fieldName] = issue.message;
+        newErrors[fieldName] = tx(issue.message);
       });
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error('Silakan lengkapi kolom yang wajib diisi');
+      toast.error(tx('Silakan lengkapi kolom yang wajib diisi'));
       return;
     }
 
     if (editingIndex !== null) {
       updateEducation(editingIndex, localEdu);
-      toast.success(`Riwayat pendidikan di ${localEdu.institution} berhasil diperbarui!`);
+      toast.success(`${tx('Riwayat pendidikan di')} ${localEdu.institution} ${tx('berhasil diperbarui!')}`);
     } else {
       addEducation(localEdu);
-      toast.success(`Pendidikan di ${localEdu.institution} berhasil ditambahkan!`);
+      toast.success(`${tx('Pendidikan di')} ${localEdu.institution} ${tx('berhasil ditambahkan!')}`);
     }
 
     handleCancel();
@@ -114,7 +118,7 @@ export function EducationTab() {
     }
 
     removeEducation(index);
-    toast.success(`Pendidikan di "${title}" berhasil dihapus.`);
+    toast.success(`${tx('Pendidikan')} "${title}" ${tx('berhasil dihapus.')}`);
     setDeleteTarget(null);
   };
 
@@ -125,10 +129,10 @@ export function EducationTab() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-            Pendidikan (Education)
+            {tx('Pendidikan (Education)')}
           </h3>
           <p className="text-xs text-zinc-500">
-            Riwayat perguruan tinggi, sekolah, bootcamp, atau akademi.
+            {tx('Riwayat perguruan tinggi, sekolah, bootcamp, atau akademi.')}
           </p>
         </div>
 
@@ -139,7 +143,7 @@ export function EducationTab() {
             className="gap-1.5 h-9 min-h-[38px] text-xs bg-blue-600 hover:bg-blue-700"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Tambah Pendidikan</span>
+            <span>{tx('Tambah Pendidikan')}</span>
           </Button>
         )}
       </div>
@@ -149,7 +153,7 @@ export function EducationTab() {
           <CardContent className="p-4 sm:p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-zinc-200/60 dark:border-zinc-800">
               <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                {editingIndex !== null ? 'Edit Riwayat Pendidikan' : 'Tambah Riwayat Pendidikan'}
+                {tx(editingIndex !== null ? 'Edit Riwayat Pendidikan' : 'Tambah Riwayat Pendidikan')}
               </span>
               <Button
                 variant="ghost"
@@ -157,17 +161,17 @@ export function EducationTab() {
                 className="h-8 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="edu-institution" className="text-xs">
-                Nama Institusi / Universitas *
+                {tx('Nama Institusi / Universitas')} *
               </Label>
               <Input
                 id="edu-institution"
-                placeholder="e.g. Universitas Indonesia"
+                placeholder={tx('e.g. Universitas Indonesia')}
                 value={localEdu.institution}
                 onChange={(e) => {
                   setLocalEdu({ ...localEdu, institution: e.target.value });
@@ -183,11 +187,11 @@ export function EducationTab() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="edu-degree" className="text-xs">
-                  Gelar / Tingkat Studi *
+                  {tx('Gelar / Tingkat Studi')} *
                 </Label>
                 <Input
                   id="edu-degree"
-                  placeholder="e.g. Sarjana Komputer (S.Kom)"
+                  placeholder={tx('e.g. Sarjana Komputer (S.Kom)')}
                   value={localEdu.degree}
                   onChange={(e) => {
                     setLocalEdu({ ...localEdu, degree: e.target.value });
@@ -201,11 +205,11 @@ export function EducationTab() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="edu-field" className="text-xs">
-                  Jurusan / Bidang Studi
+                  {tx('Jurusan / Bidang Studi')}
                 </Label>
                 <Input
                   id="edu-field"
-                  placeholder="e.g. Teknik Informatika"
+                  placeholder={tx('e.g. Teknik Informatika')}
                   value={localEdu.fieldOfStudy || ''}
                   onChange={(e) =>
                     setLocalEdu({ ...localEdu, fieldOfStudy: e.target.value })
@@ -217,7 +221,7 @@ export function EducationTab() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="edu-start" className="text-xs">
-                  Tahun / Bulan Mulai *
+                  {tx('Tahun / Bulan Mulai')} *
                 </Label>
                 <Input
                   id="edu-start"
@@ -235,7 +239,7 @@ export function EducationTab() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="edu-end" className="text-xs">
-                  Tahun / Bulan Selesai
+                  {tx('Tahun / Bulan Selesai')}
                 </Label>
                 <Input
                   id="edu-end"
@@ -249,11 +253,11 @@ export function EducationTab() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="edu-gpa" className="text-xs">
-                  IPK / Nilai (Opsional)
+                  {tx('IPK / Nilai (Opsional)')}
                 </Label>
                 <Input
                   id="edu-gpa"
-                  placeholder="e.g. 3.85 / 4.00"
+                  placeholder={tx('e.g. 3.85 / 4.00')}
                   value={localEdu.gpa || ''}
                   onChange={(e) =>
                     setLocalEdu({ ...localEdu, gpa: e.target.value })
@@ -271,18 +275,18 @@ export function EducationTab() {
                 }
               />
               <Label htmlFor="edu-current" className="text-xs cursor-pointer">
-                Masih menempuh studi saat ini
+                {tx('Masih menempuh studi saat ini')}
               </Label>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="edu-desc" className="text-xs">
-                Aktivitas, Prestasi, atau Catatan
+                {tx('Aktivitas, Prestasi, atau Catatan')}
               </Label>
               <Textarea
                 id="edu-desc"
                 rows={2}
-                placeholder="Penghargaan akademik, organisasi mahasiswa, judul skripsi..."
+                placeholder={tx('Penghargaan akademik, organisasi mahasiswa, judul skripsi...')}
                 value={localEdu.description || ''}
                 onChange={(e) =>
                   setLocalEdu({ ...localEdu, description: e.target.value })
@@ -297,14 +301,14 @@ export function EducationTab() {
                 className="h-9 min-h-[38px] text-xs"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
               <Button
                 size="sm"
                 className="h-9 min-h-[38px] bg-blue-600 hover:bg-blue-700 text-xs px-5"
                 onClick={handleSave}
               >
-                {editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Pendidikan'}
+                {tx(editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Pendidikan')}
               </Button>
             </div>
           </CardContent>
@@ -315,7 +319,7 @@ export function EducationTab() {
       <div className="space-y-3">
         {educations.length === 0 && !isFormOpen && (
           <div className="p-8 text-center rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 text-xs space-y-2">
-            <p>Belum ada riwayat pendidikan yang ditambahkan.</p>
+            <p>{tx('Belum ada riwayat pendidikan yang ditambahkan.')}</p>
             <Button
               variant="outline"
               size="sm"
@@ -323,7 +327,7 @@ export function EducationTab() {
               className="gap-1.5 h-8 text-xs"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Pendidikan Pertama</span>
+              <span>{tx('Tambah Pendidikan Pertama')}</span>
             </Button>
           </div>
         )}
@@ -344,13 +348,13 @@ export function EducationTab() {
                   <span className="truncate">{edu.institution}</span>
                 </h4>
                 <p className="text-xs text-zinc-600 dark:text-zinc-400 truncate">
-                  {edu.degree} {edu.fieldOfStudy && `in ${edu.fieldOfStudy}`}
-                  {edu.gpa && ` • IPK: ${edu.gpa}`}
+                  {edu.degree} {edu.fieldOfStudy && `${language === 'en' ? 'in' : 'di'} ${edu.fieldOfStudy}`}
+                  {edu.gpa && ` • ${tx('IPK:')} ${edu.gpa}`}
                 </p>
                 <div className="flex items-center gap-1 text-[11px] text-zinc-400">
                   <Calendar className="w-3 h-3 shrink-0" />
                   <span>
-                    {edu.startDate} — {edu.isCurrent ? 'Sekarang' : edu.endDate || 'Sekarang'}
+                    {edu.startDate} — {edu.isCurrent ? tx('Sekarang') : edu.endDate || tx('Sekarang')}
                   </span>
                 </div>
               </div>
@@ -377,7 +381,7 @@ export function EducationTab() {
         isOpen={deleteTarget !== null}
         onClose={() => setDeleteTarget(null)}
         itemName={deleteTarget?.title || ''}
-        itemType="pendidikan"
+        itemType={tx('pendidikan')}
         onConfirm={handleDeleteConfirmed}
       />
     </div>

@@ -13,6 +13,7 @@ import { Plus, Calendar, Building2, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
 import { ListItemActions } from '../common/ListItemActions';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 const emptyExperience: ExperienceData = {
   company: '',
@@ -28,6 +29,7 @@ const emptyExperience: ExperienceData = {
 };
 
 export function ExperienceTab() {
+  const tx = useEditorText();
   const { portfolio, addExperience, updateExperience, removeExperience, moveItem } =
     usePortfolioStore();
   const experiences = portfolio.experiences || [];
@@ -72,34 +74,34 @@ export function ExperienceTab() {
     const newErrors: Record<string, string> = {};
 
     if (!localExp.position.trim()) {
-      newErrors.position = 'Posisi / jabatan wajib diisi';
+      newErrors.position = tx('Posisi / jabatan wajib diisi');
     }
     if (!localExp.company.trim()) {
-      newErrors.company = 'Nama perusahaan wajib diisi';
+      newErrors.company = tx('Nama perusahaan wajib diisi');
     }
     if (!localExp.startDate.trim()) {
-      newErrors.startDate = 'Bulan & tahun mulai wajib diisi';
+      newErrors.startDate = tx('Bulan & tahun mulai wajib diisi');
     }
 
     if (!validation.success) {
       validation.error.issues.forEach((issue) => {
         const fieldName = String(issue.path[0] || 'position');
-        newErrors[fieldName] = issue.message;
+        newErrors[fieldName] = tx(issue.message);
       });
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error('Silakan lengkapi kolom yang wajib diisi');
+      toast.error(tx('Silakan lengkapi kolom yang wajib diisi'));
       return;
     }
 
     if (editingIndex !== null) {
       updateExperience(editingIndex, localExp);
-      toast.success(`Pengalaman di ${localExp.company} berhasil diperbarui!`);
+      toast.success(`${tx('Pengalaman di')} ${localExp.company} ${tx('berhasil diperbarui!')}`);
     } else {
       addExperience(localExp);
-      toast.success(`Pengalaman di ${localExp.company} berhasil ditambahkan!`);
+      toast.success(`${tx('Pengalaman di')} ${localExp.company} ${tx('berhasil ditambahkan!')}`);
     }
 
     handleCancel();
@@ -116,7 +118,7 @@ export function ExperienceTab() {
       setEditingIndex(editingIndex - 1);
     }
 
-    toast.success(`Pengalaman "${deleteTarget.title}" telah dihapus.`);
+    toast.success(`${tx('Pengalaman')} "${deleteTarget.title}" ${tx('telah dihapus.')}`);
     setDeleteTarget(null);
   };
 
@@ -127,10 +129,10 @@ export function ExperienceTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-            Pengalaman Kerja (Experience)
+            {tx('Pengalaman Kerja (Experience)')}
           </h3>
           <p className="text-xs text-zinc-500">
-            Riwayat karier, pekerjaan purna waktu, magang, atau freelance ({experiences.length} riwayat).
+            {tx('Riwayat karier, pekerjaan purna waktu, magang, atau freelance')} ({experiences.length} {tx('riwayat')}).
           </p>
         </div>
 
@@ -141,7 +143,7 @@ export function ExperienceTab() {
             className="gap-1.5 h-9 text-xs bg-blue-600 hover:bg-blue-700 min-h-[36px]"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Tambah Pengalaman</span>
+            <span>{tx('Tambah Pengalaman')}</span>
           </Button>
         )}
       </div>
@@ -153,7 +155,7 @@ export function ExperienceTab() {
             <div className="flex items-center justify-between border-b border-blue-100 dark:border-blue-900/60 pb-3">
               <span className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-2">
                 <Briefcase className="w-4 h-4" />
-                <span>{editingIndex !== null ? 'Edit Pengalaman' : 'Tambah Riwayat Pengalaman'}</span>
+                <span>{tx(editingIndex !== null ? 'Edit Pengalaman' : 'Tambah Riwayat Pengalaman')}</span>
               </span>
               <Button
                 variant="ghost"
@@ -161,17 +163,17 @@ export function ExperienceTab() {
                 className="h-8 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-xs">
-                  Posisi / Jabatan <span className="text-red-500">*</span>
+                  {tx('Posisi / Jabatan')} <span className="text-red-500">*</span>
                 </Label>
                 <Input
-                  placeholder="e.g. Lead Frontend Engineer"
+                  placeholder={tx('e.g. Lead Frontend Engineer')}
                   value={localExp.position}
                   onChange={(e) => {
                     setLocalExp({ ...localExp, position: e.target.value });
@@ -184,10 +186,10 @@ export function ExperienceTab() {
 
               <div className="space-y-1.5">
                 <Label className="text-xs">
-                  Nama Perusahaan / Organisasi <span className="text-red-500">*</span>
+                  {tx('Nama Perusahaan / Organisasi')} <span className="text-red-500">*</span>
                 </Label>
                 <Input
-                  placeholder="e.g. GoTo Group"
+                  placeholder={tx('e.g. GoTo Group')}
                   value={localExp.company}
                   onChange={(e) => {
                     setLocalExp({ ...localExp, company: e.target.value });
@@ -201,7 +203,7 @@ export function ExperienceTab() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-xs">Jenis Pekerjaan</Label>
+                <Label className="text-xs">{tx('Jenis Pekerjaan')}</Label>
                 <select
                   className="flex h-9 w-full rounded-md border border-zinc-200 bg-white px-3 py-1 text-xs shadow-2xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 dark:border-zinc-800 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100"
                   value={localExp.employmentType || 'Full-time'}
@@ -209,18 +211,18 @@ export function ExperienceTab() {
                     setLocalExp({ ...localExp, employmentType: e.target.value })
                   }
                 >
-                  <option value="Full-time">Full-time (Purna Waktu)</option>
-                  <option value="Part-time">Part-time (Paruh Waktu)</option>
-                  <option value="Contract">Contract (Kontrak)</option>
-                  <option value="Freelance">Freelance</option>
-                  <option value="Internship">Internship (Magang)</option>
+                  <option value="Full-time">{tx('Full-time (Purna Waktu)')}</option>
+                  <option value="Part-time">{tx('Part-time (Paruh Waktu)')}</option>
+                  <option value="Contract">{tx('Contract (Kontrak)')}</option>
+                  <option value="Freelance">{tx('Freelance')}</option>
+                  <option value="Internship">{tx('Internship (Magang)')}</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs">Lokasi Kerja</Label>
+                <Label className="text-xs">{tx('Lokasi Kerja')}</Label>
                 <Input
-                  placeholder="e.g. Jakarta, Indonesia (Remote)"
+                  placeholder={tx('e.g. Jakarta, Indonesia (Remote)')}
                   value={localExp.location || ''}
                   onChange={(e) =>
                     setLocalExp({ ...localExp, location: e.target.value })
@@ -232,7 +234,7 @@ export function ExperienceTab() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-xs">
-                  Bulan & Tahun Mulai <span className="text-red-500">*</span>
+                  {tx('Bulan & Tahun Mulai')} <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   type="month"
@@ -247,7 +249,7 @@ export function ExperienceTab() {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs">Bulan & Tahun Selesai</Label>
+                <Label className="text-xs">{tx('Bulan & Tahun Selesai')}</Label>
                 <Input
                   type="month"
                   disabled={localExp.isCurrent}
@@ -272,14 +274,14 @@ export function ExperienceTab() {
                 }
               />
               <Label htmlFor="isCurrent" className="text-xs cursor-pointer">
-                Saya masih aktif bekerja di perusahaan ini saat ini
+                {tx('Saya masih aktif bekerja di perusahaan ini saat ini')}
               </Label>
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs">Deskripsi Tanggung Jawab & Pencapaian</Label>
+              <Label className="text-xs">{tx('Deskripsi Tanggung Jawab & Pencapaian')}</Label>
               <Textarea
-                placeholder="Ceritakan kontribusi utama, teknologi yang dipakai, atau dampak yang dihasilkan..."
+                placeholder={tx('Ceritakan kontribusi utama, teknologi yang dipakai, atau dampak yang dihasilkan...')}
                 rows={3}
                 value={localExp.description || ''}
                 onChange={(e) =>
@@ -296,7 +298,7 @@ export function ExperienceTab() {
                 onClick={handleCancel}
                 className="h-9 px-4 text-xs"
               >
-                Batal
+                {tx('Batal')}
               </Button>
               <Button
                 type="button"
@@ -304,7 +306,7 @@ export function ExperienceTab() {
                 className="h-9 px-4 text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-2xs"
                 onClick={handleSave}
               >
-                {editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Pengalaman'}
+                {tx(editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Pengalaman')}
               </Button>
             </div>
           </CardContent>
@@ -318,10 +320,10 @@ export function ExperienceTab() {
             <Briefcase className="w-8 h-8 mx-auto text-zinc-300 dark:text-zinc-600" />
             <div>
               <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Belum ada riwayat pengalaman
+                {tx('Belum ada riwayat pengalaman')}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">
-                Tambahkan riwayat pekerjaan atau magang Anda.
+                {tx('Tambahkan riwayat pekerjaan atau magang Anda.')}
               </p>
             </div>
             <Button
@@ -330,7 +332,7 @@ export function ExperienceTab() {
               className="h-8 text-xs bg-blue-600 hover:bg-blue-700 gap-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Pengalaman</span>
+              <span>{tx('Tambah Pengalaman')}</span>
             </Button>
           </div>
         )}
@@ -358,7 +360,7 @@ export function ExperienceTab() {
                   <div className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-zinc-400" />
                     <span>
-                      {exp.startDate} — {exp.isCurrent ? 'Sekarang' : exp.endDate || 'Sekarang'}
+                      {exp.startDate} — {exp.isCurrent ? tx('Sekarang') : exp.endDate || tx('Sekarang')}
                     </span>
                   </div>
                   {exp.employmentType && (
@@ -385,8 +387,8 @@ export function ExperienceTab() {
                 onMoveDown={() => moveItem('experiences', idx, 'down')}
                 isFirst={idx === 0}
                 isLast={idx === experiences.length - 1}
-                editLabel="Edit"
-                deleteLabel="Hapus"
+                editLabel={tx('Edit')}
+                deleteLabel={tx('Hapus')}
               />
             </div>
           </div>
@@ -398,8 +400,8 @@ export function ExperienceTab() {
         isOpen={deleteTarget !== null}
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
-        itemName={deleteTarget?.title || 'Pengalaman'}
-        itemType="pengalaman"
+        itemName={deleteTarget?.title || tx('Pengalaman')}
+        itemType={tx('pengalaman')}
       />
     </div>
   );

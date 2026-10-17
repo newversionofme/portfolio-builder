@@ -13,6 +13,7 @@ import { Plus, Upload, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
 import { ListItemActions } from '../common/ListItemActions';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 const emptyTestimonial: TestimonialData = {
   name: '',
@@ -24,6 +25,7 @@ const emptyTestimonial: TestimonialData = {
 };
 
 export function TestimonialsTab() {
+  const tx = useEditorText();
   const {
     portfolio,
     addTestimonial,
@@ -79,7 +81,7 @@ export function TestimonialsTab() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Ukuran foto maksimal 2MB');
+      toast.error(tx('Ukuran foto maksimal 2MB'));
       return;
     }
 
@@ -95,16 +97,16 @@ export function TestimonialsTab() {
 
       const data = await res.json();
       if (!res.ok || data.error) {
-        toast.error(data.error || 'Gagal mengunggah foto avatar');
+        toast.error(tx(data.error || 'Gagal mengunggah foto avatar'));
       } else {
         if (editingIndex !== null && localTest.avatarUrl && localTest.avatarUrl !== data.data.url) {
           oldAvatarPendingCleanupRef.current = localTest.avatarUrl;
         }
         setLocalTest((prev) => ({ ...prev, avatarUrl: data.data.url }));
-        toast.success('Foto profil berhasil diunggah!');
+        toast.success(tx('Foto profil berhasil diunggah!'));
       }
     } catch {
-      toast.error('Terjadi kesalahan saat mengunggah foto');
+      toast.error(tx('Terjadi kesalahan saat mengunggah foto'));
     } finally {
       setUploading(false);
     }
@@ -122,31 +124,31 @@ export function TestimonialsTab() {
     const newErrors: Record<string, string> = {};
 
     if (!localTest.name.trim()) {
-      newErrors.name = 'Nama pemberi rekomendasi wajib diisi';
+      newErrors.name = tx('Nama pemberi rekomendasi wajib diisi');
     }
     if (!localTest.role.trim()) {
-      newErrors.role = 'Jabatan / posisi wajib diisi';
+      newErrors.role = tx('Jabatan / posisi wajib diisi');
     }
     if (!localTest.quote.trim()) {
-      newErrors.quote = 'Kutipan testimoni wajib diisi';
+      newErrors.quote = tx('Kutipan testimoni wajib diisi');
     }
 
     if (!validation.success) {
       validation.error.issues.forEach((issue) => {
         const fieldName = String(issue.path[0] || 'name');
-        newErrors[fieldName] = issue.message;
+        newErrors[fieldName] = tx(issue.message);
       });
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error('Silakan lengkapi kolom yang wajib diisi');
+      toast.error(tx('Silakan lengkapi kolom yang wajib diisi'));
       return;
     }
 
     if (editingIndex !== null) {
       updateTestimonial(editingIndex, localTest);
-      toast.success(`Testimoni dari "${localTest.name}" berhasil diperbarui!`);
+      toast.success(`${tx('Testimoni dari')} "${localTest.name}" ${tx('berhasil diperbarui!')}`);
 
       // Cleanup old avatar if changed
       if (oldAvatarPendingCleanupRef.current) {
@@ -162,7 +164,7 @@ export function TestimonialsTab() {
       }
     } else {
       addTestimonial(localTest);
-      toast.success(`Testimoni dari "${localTest.name}" berhasil ditambahkan!`);
+      toast.success(`${tx('Testimoni dari')} "${localTest.name}" ${tx('berhasil ditambahkan!')}`);
     }
 
     handleCancel();
@@ -193,7 +195,7 @@ export function TestimonialsTab() {
       });
     }
 
-    toast.success(`Testimoni dari "${title}" berhasil dihapus.`);
+    toast.success(`${tx('Testimoni dari')} "${title}" ${tx('berhasil dihapus.')}`);
     setDeleteTarget(null);
   };
 
@@ -204,10 +206,10 @@ export function TestimonialsTab() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-            Testimoni & Rekomendasi
+            {tx('Testimoni & Rekomendasi')}
           </h3>
           <p className="text-xs text-zinc-500">
-            Kutipan rekomendasi dari manajer, klien, atau rekan kerja.
+            {tx('Kutipan rekomendasi dari manajer, klien, atau rekan kerja.')}
           </p>
         </div>
 
@@ -218,7 +220,7 @@ export function TestimonialsTab() {
             className="gap-1.5 h-9 min-h-[38px] text-xs bg-blue-600 hover:bg-blue-700"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Tambah Testimoni</span>
+            <span>{tx('Tambah Testimoni')}</span>
           </Button>
         )}
       </div>
@@ -228,7 +230,7 @@ export function TestimonialsTab() {
           <CardContent className="p-4 sm:p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-zinc-200/60 dark:border-zinc-800">
               <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                {editingIndex !== null ? 'Edit Testimoni' : 'Tambah Testimoni Baru'}
+                {tx(editingIndex !== null ? 'Edit Testimoni' : 'Tambah Testimoni Baru')}
               </span>
               <Button
                 variant="ghost"
@@ -236,7 +238,7 @@ export function TestimonialsTab() {
                 className="h-8 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
             </div>
 
@@ -245,7 +247,7 @@ export function TestimonialsTab() {
               <Avatar className="h-14 w-14 border border-zinc-200 dark:border-zinc-800">
                 <AvatarImage src={localTest.avatarUrl || ''} alt={localTest.name} />
                 <AvatarFallback className="bg-zinc-100 dark:bg-zinc-800 text-xs text-zinc-500">
-                  {localTest.name ? localTest.name.slice(0, 2).toUpperCase() : 'Avatar'}
+                  {localTest.name ? localTest.name.slice(0, 2).toUpperCase() : tx('Avatar')}
                 </AvatarFallback>
               </Avatar>
 
@@ -264,7 +266,7 @@ export function TestimonialsTab() {
                     ) : (
                       <Upload className="w-3.5 h-3.5" />
                     )}
-                    <span>{uploading ? 'Mengunggah...' : 'Unggah Foto'}</span>
+                    <span>{uploading ? tx('Mengunggah...') : tx('Unggah Foto')}</span>
                   </div>
                 </label>
 
@@ -277,7 +279,7 @@ export function TestimonialsTab() {
                     onClick={handleRemoveAvatar}
                   >
                     <X className="w-3.5 h-3.5" />
-                    <span>Hapus Foto</span>
+                    <span>{tx('Hapus Foto')}</span>
                   </Button>
                 )}
               </div>
@@ -286,11 +288,11 @@ export function TestimonialsTab() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="test-name" className="text-xs">
-                  Nama Pemberi Rekomendasi *
+                  {tx('Nama Pemberi Rekomendasi *')}
                 </Label>
                 <Input
                   id="test-name"
-                  placeholder="e.g. Sarah Jenkins"
+                  placeholder={tx('e.g. Sarah Jenkins')}
                   value={localTest.name}
                   onChange={(e) => {
                     setLocalTest({ ...localTest, name: e.target.value });
@@ -305,11 +307,11 @@ export function TestimonialsTab() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="test-role" className="text-xs">
-                  Jabatan / Peran *
+                  {tx('Jabatan / Peran *')}
                 </Label>
                 <Input
                   id="test-role"
-                  placeholder="e.g. VP of Engineering"
+                  placeholder={tx('e.g. VP of Engineering')}
                   value={localTest.role}
                   onChange={(e) => {
                     setLocalTest({ ...localTest, role: e.target.value });
@@ -325,11 +327,11 @@ export function TestimonialsTab() {
 
             <div className="space-y-1.5">
               <Label htmlFor="test-company" className="text-xs">
-                Nama Perusahaan / Klien (Opsional)
+                {tx('Nama Perusahaan / Klien (Opsional)')}
               </Label>
               <Input
                 id="test-company"
-                placeholder="e.g. Tech Corp / Vercel Ecosystem"
+                placeholder={tx('e.g. Tech Corp / Vercel Ecosystem')}
                 value={localTest.company || ''}
                 onChange={(e) =>
                   setLocalTest({ ...localTest, company: e.target.value })
@@ -339,12 +341,12 @@ export function TestimonialsTab() {
 
             <div className="space-y-1.5">
               <Label htmlFor="test-quote" className="text-xs">
-                Kutipan Testimoni *
+                {tx('Kutipan Testimoni *')}
               </Label>
               <Textarea
                 id="test-quote"
                 rows={3}
-                placeholder="Tuliskan ulasan atau rekomendasi tentang etos kerja Anda..."
+                placeholder={tx('Tuliskan ulasan atau rekomendasi tentang etos kerja Anda...')}
                 value={localTest.quote}
                 onChange={(e) => {
                   setLocalTest({ ...localTest, quote: e.target.value });
@@ -364,14 +366,14 @@ export function TestimonialsTab() {
                 className="h-9 min-h-[38px] text-xs"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
               <Button
                 size="sm"
                 className="h-9 min-h-[38px] bg-blue-600 hover:bg-blue-700 text-xs px-5"
                 onClick={handleSave}
               >
-                {editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Testimoni'}
+                {tx(editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Testimoni')}
               </Button>
             </div>
           </CardContent>
@@ -382,7 +384,7 @@ export function TestimonialsTab() {
       <div className="space-y-3">
         {testimonials.length === 0 && !isFormOpen && (
           <div className="p-8 text-center rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 text-xs space-y-2">
-            <p>Belum ada testimoni yang ditambahkan.</p>
+            <p>{tx('Belum ada testimoni yang ditambahkan.')}</p>
             <Button
               variant="outline"
               size="sm"
@@ -390,7 +392,7 @@ export function TestimonialsTab() {
               className="gap-1.5 h-8 text-xs"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Testimoni Pertama</span>
+              <span>{tx('Tambah Testimoni Pertama')}</span>
             </Button>
           </div>
         )}
@@ -448,7 +450,7 @@ export function TestimonialsTab() {
         isOpen={deleteTarget !== null}
         onClose={() => setDeleteTarget(null)}
         itemName={deleteTarget?.title || ''}
-        itemType="testimoni"
+        itemType={tx('testimoni')}
         onConfirm={handleDeleteConfirmed}
       />
     </div>

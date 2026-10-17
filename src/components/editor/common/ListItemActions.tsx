@@ -3,6 +3,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronUp, ChevronDown, Pencil, Trash2 } from 'lucide-react';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 interface ListItemActionsProps {
   onEdit: () => void;
@@ -27,6 +28,7 @@ export function ListItemActions({
   deleteLabel = 'Hapus',
   className = '',
 }: ListItemActionsProps) {
+  const tx = useEditorText();
   return (
     <div className={`flex flex-wrap items-center gap-1.5 shrink-0 ${className}`}>
       {/* Tombol Naik / Turun Urutan */}
@@ -36,8 +38,8 @@ export function ListItemActions({
             type="button"
             onClick={onMoveUp}
             disabled={isFirst}
-            title="Pindahkan ke atas"
-            aria-label="Pindahkan urutan ke atas"
+            title={tx('Pindahkan ke atas')}
+            aria-label={tx('Pindahkan urutan ke atas')}
             className="w-8 h-8 sm:w-8 sm:h-8 min-w-[32px] min-h-[32px] flex items-center justify-center rounded text-zinc-500 hover:text-zinc-900 dark:hover:text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-200/60 dark:hover:bg-zinc-800 transition-colors"
           >
             <ChevronUp className="w-4 h-4" />
@@ -46,8 +48,8 @@ export function ListItemActions({
             type="button"
             onClick={onMoveDown}
             disabled={isLast}
-            title="Pindahkan ke bawah"
-            aria-label="Pindahkan urutan ke bawah"
+            title={tx('Pindahkan ke bawah')}
+            aria-label={tx('Pindahkan urutan ke bawah')}
             className="w-8 h-8 sm:w-8 sm:h-8 min-w-[32px] min-h-[32px] flex items-center justify-center rounded text-zinc-500 hover:text-zinc-900 dark:hover:text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-zinc-200/60 dark:hover:bg-zinc-800 transition-colors"
           >
             <ChevronDown className="w-4 h-4" />
@@ -64,7 +66,7 @@ export function ListItemActions({
         className="h-9 px-3 text-xs gap-1.5 min-h-[36px] font-medium border-zinc-200 dark:border-zinc-800 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950/40 dark:hover:text-blue-400"
       >
         <Pencil className="w-3.5 h-3.5" />
-        <span>{editLabel}</span>
+        <span>{tx(editLabel)}</span>
       </Button>
 
       {/* Tombol Hapus */}
@@ -76,7 +78,7 @@ export function ListItemActions({
         className="h-9 px-3 text-xs gap-1.5 min-h-[36px] font-medium text-zinc-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40"
       >
         <Trash2 className="w-3.5 h-3.5" />
-        <span>{deleteLabel}</span>
+        <span>{tx(deleteLabel)}</span>
       </Button>
     </div>
   );

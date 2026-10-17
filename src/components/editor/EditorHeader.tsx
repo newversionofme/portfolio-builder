@@ -42,8 +42,10 @@ import { useExportModalStore } from '@/lib/store/export-modal-store';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { LanguageToggle } from '@/components/ui/LanguageToggle';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function EditorHeader() {
+  const tx = useEditorText();
   const {
     portfolio,
     saveStatus,
@@ -77,7 +79,7 @@ export function EditorHeader() {
         timeoutPromise,
       ]);
 
-      if ('timeout' in res) {
+      if (res && 'timeout' in res) {
         toast.error(
           language === 'en'
             ? 'No response from server. Check your connection.'
@@ -86,8 +88,8 @@ export function EditorHeader() {
         return;
       }
 
-      if (res?.error) {
-        toast.error(res.error);
+      if (res && res.error) {
+        toast.error(tx(res.error));
       } else {
         updateStatus(newStatus);
         if (newStatus === 'PUBLISHED') {
@@ -102,11 +104,9 @@ export function EditorHeader() {
         }
       }
     } catch {
-      toast.error(
-        language === 'en'
-          ? 'Failed to update publication status. Check your connection.'
-          : 'Gagal mengubah status publikasi. Silakan periksa koneksi Anda.'
-      );
+      toast.error(tx(language === 'en'
+        ? 'Failed to update publication status. Check your connection.'
+        : 'Gagal mengubah status publikasi. Silakan periksa koneksi Anda.'));
     } finally {
       setPublishing(false);
     }
@@ -188,8 +188,8 @@ export function EditorHeader() {
               ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-2xs'
               : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
           }`}
-          title={language === 'en' ? 'Desktop View' : 'Tampilan Desktop'}
-          aria-label={language === 'en' ? 'Desktop View' : 'Tampilan Desktop'}
+          title={tx(language === 'en' ? 'Desktop View' : 'Tampilan Desktop')}
+          aria-label={tx(language === 'en' ? 'Desktop View' : 'Tampilan Desktop')}
         >
           <Monitor className="w-4 h-4" />
         </button>
@@ -200,8 +200,8 @@ export function EditorHeader() {
               ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-2xs'
               : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
           }`}
-          title={language === 'en' ? 'Tablet View (768px)' : 'Tampilan Tablet (768px)'}
-          aria-label={language === 'en' ? 'Tablet View (768px)' : 'Tampilan Tablet (768px)'}
+          title={tx(language === 'en' ? 'Tablet View (768px)' : 'Tampilan Tablet (768px)')}
+          aria-label={tx(language === 'en' ? 'Tablet View (768px)' : 'Tampilan Tablet (768px)')}
         >
           <Tablet className="w-4 h-4" />
         </button>
@@ -212,8 +212,8 @@ export function EditorHeader() {
               ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-2xs'
               : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
           }`}
-          title={language === 'en' ? 'Mobile View (375px)' : 'Tampilan Mobile (375px)'}
-          aria-label={language === 'en' ? 'Mobile View (375px)' : 'Tampilan Mobile (375px)'}
+          title={tx(language === 'en' ? 'Mobile View (375px)' : 'Tampilan Mobile (375px)')}
+          aria-label={tx(language === 'en' ? 'Mobile View (375px)' : 'Tampilan Mobile (375px)')}
         >
           <Smartphone className="w-4 h-4" />
         </button>
@@ -409,7 +409,7 @@ export function EditorHeader() {
                     title={t.theme.system}
                   >
                     <Laptop className="w-3.5 h-3.5 text-zinc-500" />
-                    <span>{language === 'en' ? 'Auto' : 'Sistem'}</span>
+                    <span>{tx(language === 'en' ? 'Auto' : 'Sistem')}</span>
                   </button>
                 </div>
               </div>
@@ -481,7 +481,7 @@ export function EditorHeader() {
                           : 'border-zinc-200 dark:border-zinc-800'
                       }`}
                     >
-                      Tablet
+                      {tx('Tablet')}
                     </button>
                     <button
                       onClick={() => setPreviewViewport('mobile')}
@@ -491,7 +491,7 @@ export function EditorHeader() {
                           : 'border-zinc-200 dark:border-zinc-800'
                       }`}
                     >
-                      Mobile
+                      {tx('Mobile')}
                     </button>
                   </div>
                 </div>

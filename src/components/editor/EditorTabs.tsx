@@ -17,6 +17,7 @@ import { AppearanceTab } from './tabs/AppearanceTab';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/lib/i18n/LanguageProvider';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -107,6 +108,7 @@ export function EditorTabs() {
   } = usePortfolioStore();
 
   const { t, language } = useLanguage();
+  const tx = useEditorText();
   const localizedTabs = TABS.map((tab) => ({
     ...tab,
     label: t.editor.tabNames[tab.id as keyof typeof t.editor.tabNames] || tab.label,
@@ -148,7 +150,7 @@ export function EditorTabs() {
       setTimeout(() => {
         resolve({
           success: false,
-          error: 'Penyimpanan melebihi batas waktu (timeout 15 detik). Silakan coba lagi.',
+          error: tx('Penyimpanan melebihi batas waktu (timeout 15 detik). Silakan coba lagi.'),
         });
       }, 15000);
     });
@@ -161,16 +163,16 @@ export function EditorTabs() {
         lastSavedPayloadRef.current = targetPayload;
         markAsSaved(targetPortfolio);
       } else {
-        const errorMsg = res?.error || 'Gagal menyimpan perubahan.';
+        const errorMsg = tx(res?.error || 'Gagal menyimpan perubahan.');
         console.error('[EditorTabs Save Failed]:', errorMsg);
         setSaveStatus('error', errorMsg);
-        toast.error(`Autosave gagal: ${errorMsg}`);
+        toast.error(`${tx('Autosave gagal:')} ${errorMsg}`);
       }
     } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : 'Terjadi kendala jaringan saat menyimpan.';
+      const errorMsg = tx(err instanceof Error ? err.message : 'Terjadi kendala jaringan saat menyimpan.');
       console.error('[EditorTabs Autosave Exception]:', err);
       setSaveStatus('error', errorMsg);
-      toast.error(`Autosave error: ${errorMsg}`);
+      toast.error(`${tx('Autosave error:')} ${errorMsg}`);
     } finally {
       isSavingRef.current = false;
       const currentNewestPayload = getPortfolioComparableJson(usePortfolioStore.getState().portfolio);
@@ -364,13 +366,13 @@ export function EditorTabs() {
                 />
                 <span className="truncate flex-1">{tab.label}</span>
                 {isComplete ? (
-                  <span title="Bagian sudah terisi" className="shrink-0">
+                  <span title={tx('Bagian sudah terisi')} className="shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   </span>
                 ) : (
                   <span
                     className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 shrink-0"
-                    title="Belum terisi"
+                    title={tx('Belum terisi')}
                   />
                 )}
               </button>
@@ -463,14 +465,14 @@ export function EditorTabs() {
                           className="text-[10px] text-emerald-600 border-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-900 shrink-0 gap-1"
                         >
                           <CheckCircle2 className="w-3 h-3" />
-                          <span>{language === 'en' ? 'Filled' : 'Terisi'}</span>
+                          <span>{tx('Terisi')}</span>
                         </Badge>
                       ) : (
                         <Badge
                           variant="outline"
                           className="text-[10px] text-zinc-400 border-zinc-200 dark:border-zinc-800 shrink-0"
                         >
-                          {language === 'en' ? 'Empty' : 'Kosong'}
+                          {tx('Kosong')}
                         </Badge>
                       )}
                     </button>
@@ -488,7 +490,7 @@ export function EditorTabs() {
             type="button"
             onClick={() => scrollTabs('left')}
             disabled={!canScrollLeft}
-            aria-label="Geser tab ke kiri"
+            aria-label={tx('Geser tab ke kiri')}
             className={cn(
               'h-8 w-8 flex items-center justify-center shrink-0 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-opacity z-20 motion-reduce:transition-none',
               canScrollLeft ? 'opacity-100 hover:bg-zinc-200/60 dark:hover:bg-zinc-800' : 'opacity-20 cursor-not-allowed'
@@ -538,7 +540,7 @@ export function EditorTabs() {
                   <Icon className="w-3.5 h-3.5 shrink-0" />
                   <span>{tab.label}</span>
                   {isComplete ? (
-                    <span title="Terisi" className="shrink-0 flex items-center">
+                    <span title={tx('Terisi')} className="shrink-0 flex items-center">
                       <CheckCircle2
                         className={cn(
                           'w-3 h-3 shrink-0',
@@ -552,7 +554,7 @@ export function EditorTabs() {
                         'w-1.5 h-1.5 rounded-full shrink-0',
                         isActive ? 'bg-blue-300' : 'bg-zinc-300 dark:bg-zinc-700'
                       )}
-                      title="Belum terisi"
+                      title={tx('Belum terisi')}
                     />
                   )}
                 </button>
@@ -574,7 +576,7 @@ export function EditorTabs() {
             type="button"
             onClick={() => scrollTabs('right')}
             disabled={!canScrollRight}
-            aria-label="Geser tab ke kanan"
+            aria-label={tx('Geser tab ke kanan')}
             className={cn(
               'h-8 w-8 flex items-center justify-center shrink-0 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-opacity z-20 motion-reduce:transition-none',
               canScrollRight ? 'opacity-100 hover:bg-zinc-200/60 dark:hover:bg-zinc-800' : 'opacity-20 cursor-not-allowed'
@@ -645,9 +647,9 @@ export function EditorTabs() {
                 variant="outline"
                 onClick={() => {
                   toast.success(
-                    language === 'en'
+                    tx(language === 'en'
                       ? 'All 10 portfolio sections configured!'
-                      : 'Semua 10 bagian portofolio telah selesai dikonfigurasi!'
+                      : 'Semua 10 bagian portofolio telah selesai dikonfigurasi!')
                   );
                 }}
                 className="text-xs h-9 gap-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30"

@@ -9,8 +9,10 @@ import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Upload, Trash2, Loader2, Sparkles, User } from 'lucide-react';
 import { toast } from 'sonner';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function ProfileTab() {
+  const tx = useEditorText();
   const { portfolio, updateProfile, updateSlug } = usePortfolioStore();
   const profile = portfolio.profile;
   const [uploading, setUploading] = useState(false);
@@ -20,7 +22,7 @@ export function ProfileTab() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Ukuran file maksimal 2 MB');
+      toast.error(tx('Ukuran file maksimal 2 MB'));
       return;
     }
 
@@ -41,16 +43,16 @@ export function ProfileTab() {
 
       const data = await res.json();
       if (!res.ok || data.error) {
-        toast.error(data.error || 'Gagal mengunggah foto');
+        toast.error(tx(data.error || 'Gagal mengunggah foto'));
       } else {
         updateProfile({ avatarUrl: data.data.url });
-        toast.success('Foto profil berhasil diperbarui!');
+        toast.success(tx('Foto profil berhasil diperbarui!'));
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') {
-        toast.error('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.');
+        toast.error(tx('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.'));
       } else {
-        toast.error('Terjadi kesalahan saat mengunggah foto');
+        toast.error(tx('Terjadi kesalahan saat mengunggah foto'));
       }
     } finally {
       clearTimeout(timeoutId);
@@ -62,10 +64,10 @@ export function ProfileTab() {
     <div className="space-y-6">
       <div>
         <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-          Profil Utama
+          {tx('Profil Utama')}
         </h3>
         <p className="text-xs text-zinc-500">
-          Informasi dasar yang menjadi headline portofolio Anda.
+          {tx('Informasi dasar yang menjadi headline portofolio Anda.')}
         </p>
       </div>
 
@@ -75,7 +77,7 @@ export function ProfileTab() {
           {profile?.avatarUrl ? (
             <Image
               src={profile.avatarUrl}
-              alt="Avatar"
+              alt={tx('Avatar')}
               fill
               className="object-cover"
             />
@@ -85,7 +87,7 @@ export function ProfileTab() {
         </div>
 
         <div className="space-y-1.5 flex-1">
-          <Label className="text-xs font-medium">Foto Profil</Label>
+          <Label className="text-xs font-medium">{tx('Foto Profil')}</Label>
           <div className="flex items-center gap-2">
             <label className="cursor-pointer">
               <input
@@ -109,7 +111,7 @@ export function ProfileTab() {
                   ) : (
                     <Upload className="w-3.5 h-3.5" />
                   )}
-                  {uploading ? 'Mengunggah...' : 'Upload Foto'}
+                  {uploading ? tx('Mengunggah...') : tx('Upload Foto')}
                 </span>
               </Button>
             </label>
@@ -121,13 +123,15 @@ export function ProfileTab() {
                 size="sm"
                 className="h-8 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                 onClick={() => updateProfile({ avatarUrl: null })}
+                aria-label={tx('Hapus Foto')}
+                title={tx('Hapus Foto')}
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </Button>
             )}
           </div>
           <p className="text-[11px] text-zinc-400">
-            JPG, PNG, atau WebP (Maks 2 MB).
+            {tx('JPG, PNG, atau WebP (Maks 2 MB).')}
           </p>
         </div>
       </div>
@@ -135,24 +139,24 @@ export function ProfileTab() {
       {/* Full Name & Slug */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="fullName">Nama Lengkap</Label>
+          <Label htmlFor="fullName">{tx('Nama Lengkap')}</Label>
           <Input
             id="fullName"
             value={profile?.fullName || ''}
             onChange={(e) => updateProfile({ fullName: e.target.value })}
-            placeholder="e.g. Alex Rivera"
+            placeholder={tx('e.g. Alex Rivera')}
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="slug">Custom URL Slug</Label>
+          <Label htmlFor="slug">{tx('Custom URL Slug')}</Label>
           <Input
             id="slug"
             value={portfolio.slug || ''}
             onChange={(e) =>
               updateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))
             }
-            placeholder="alex-rivera"
+            placeholder={tx('alex-rivera')}
           />
           <p className="text-[11px] text-zinc-400 font-mono">
             /u/{portfolio.slug || 'slug'}
@@ -162,22 +166,22 @@ export function ProfileTab() {
 
       {/* Headline & Location */}
       <div className="space-y-1.5">
-        <Label htmlFor="headline">Headline Profesi / Tagline</Label>
+        <Label htmlFor="headline">{tx('Headline Profesi / Tagline')}</Label>
         <Input
           id="headline"
           value={profile?.headline || ''}
           onChange={(e) => updateProfile({ headline: e.target.value })}
-          placeholder="e.g. Senior Full-Stack Engineer & Open Source Contributor"
+          placeholder={tx('e.g. Senior Full-Stack Engineer & Open Source Contributor')}
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="location">Lokasi</Label>
+        <Label htmlFor="location">{tx('Lokasi')}</Label>
         <Input
           id="location"
           value={profile?.location || ''}
           onChange={(e) => updateProfile({ location: e.target.value })}
-          placeholder="e.g. Jakarta, Indonesia (Open to Remote)"
+          placeholder={tx('e.g. Jakarta, Indonesia (Open to Remote)')}
         />
       </div>
 
@@ -187,11 +191,11 @@ export function ProfileTab() {
           <div className="flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-emerald-600" />
             <span className="text-sm font-medium text-zinc-900 dark:text-white">
-              Status Siap Bekerja (Hire Badge)
+              {tx('Status Siap Bekerja (Hire Badge)')}
             </span>
           </div>
           <p className="text-xs text-zinc-500">
-            Tampilkan badge &ldquo;Available for hire&rdquo; di header portofolio Anda.
+            {tx('Tampilkan badge “Available for hire” di header portofolio Anda.')}
           </p>
         </div>
         <Switch
@@ -202,12 +206,12 @@ export function ProfileTab() {
 
       {profile?.availableForHire && (
         <div className="space-y-1.5">
-          <Label htmlFor="hireBadgeText">Teks Badge Ketersediaan</Label>
+          <Label htmlFor="hireBadgeText">{tx('Teks Badge Ketersediaan')}</Label>
           <Input
             id="hireBadgeText"
             value={profile?.hireBadgeText || ''}
             onChange={(e) => updateProfile({ hireBadgeText: e.target.value })}
-            placeholder="e.g. Open for Full-time & Freelance Projects"
+            placeholder={tx('e.g. Open for Full-time & Freelance Projects')}
           />
         </div>
       )}
