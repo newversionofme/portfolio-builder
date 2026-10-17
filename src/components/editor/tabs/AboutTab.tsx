@@ -8,8 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, X, Sparkles } from 'lucide-react';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function AboutTab() {
+  const tx = useEditorText();
   const { portfolio, updateAbout } = usePortfolioStore();
   const about = portfolio.about;
   const [highlightInput, setHighlightInput] = useState('');
@@ -30,30 +32,30 @@ export function AboutTab() {
     <div className="space-y-6">
       <div>
         <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-          Tentang Saya (About)
+          {tx('Tentang Saya (About)')}
         </h3>
         <p className="text-xs text-zinc-500">
-          Ceritakan latar belakang, fokus karier, dan pencapaian utama Anda.
+          {tx('Ceritakan latar belakang, fokus karier, dan pencapaian utama Anda.')}
         </p>
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="bio">Bio & Ringkasan Naratif</Label>
+        <Label htmlFor="bio">{tx('Bio & Ringkasan Naratif')}</Label>
         <Textarea
           id="bio"
           rows={6}
           value={about?.bio || ''}
           onChange={(e) => updateAbout({ bio: e.target.value })}
-          placeholder="Tuliskan cerita karier, passion, serta bidang keahlian Anda..."
+          placeholder={tx('Tuliskan cerita karier, passion, serta bidang keahlian Anda...')}
         />
       </div>
 
       {/* Key Highlights / Pill Tags */}
       <div className="space-y-3 pt-2">
         <div className="space-y-0.5">
-          <Label>Highlight Utama (Badge Poin)</Label>
+          <Label>{tx('Highlight Utama (Badge Poin)')}</Label>
           <p className="text-xs text-zinc-500">
-            Contoh: &ldquo;5+ Tahun Pengalaman&rdquo;, &ldquo;100k+ Active Users&rdquo;, &ldquo;Red Dot Winner&rdquo;
+            {tx('Contoh: “5+ Tahun Pengalaman”, “100k+ Active Users”, “Red Dot Winner”')}
           </p>
         </div>
 
@@ -67,7 +69,7 @@ export function AboutTab() {
                 addHighlight();
               }
             }}
-            placeholder="Tambah poin highlight..."
+            placeholder={tx('Tambah poin highlight...')}
           />
           <Button
             type="button"
@@ -76,7 +78,7 @@ export function AboutTab() {
             className="shrink-0 gap-1.5"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah</span>
+            <span>{tx('Tambah')}</span>
           </Button>
         </div>
 
@@ -94,6 +96,8 @@ export function AboutTab() {
                   type="button"
                   onClick={() => removeHighlight(idx)}
                   className="hover:text-red-600 transition-colors"
+                  aria-label={tx('Hapus highlight')}
+                  title={tx('Hapus highlight')}
                 >
                   <X className="w-3 h-3" />
                 </button>

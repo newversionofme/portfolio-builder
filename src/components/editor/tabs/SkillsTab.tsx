@@ -23,8 +23,10 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function SkillsTab() {
+  const tx = useEditorText();
   const { portfolio, addSkill, updateSkill, removeSkill, moveItem } =
     usePortfolioStore();
   const skills = portfolio.skills || [];
@@ -62,18 +64,18 @@ export function SkillsTab() {
 
   const handleAddSkill = () => {
     if (!quickName.trim()) {
-      toast.error('Nama keahlian wajib diisi');
+      toast.error(tx('Nama keahlian wajib diisi'));
       return;
     }
     const newSkill: SkillData = {
       name: quickName.trim(),
-      category: quickCategory.trim() || 'General',
+      category: quickCategory.trim() || tx('General'),
       level: quickLevel || 'Advanced',
       order: skills.length,
     };
 
     addSkill(newSkill);
-    toast.success(`Keahlian "${newSkill.name}" ditambahkan!`);
+    toast.success(`${tx('Keahlian')} "${newSkill.name}" ${tx('berhasil ditambahkan!')}`);
     setQuickName('');
   };
 
@@ -94,7 +96,7 @@ export function SkillsTab() {
 
     const validation = skillSchema.safeParse(localSkill);
     if (!localSkill.name.trim()) {
-      setEditErrors({ name: 'Nama keahlian wajib diisi' });
+      setEditErrors({ name: tx('Nama keahlian wajib diisi') });
       return;
     }
 
@@ -108,7 +110,7 @@ export function SkillsTab() {
     }
 
     updateSkill(editingIndex, localSkill);
-    toast.success(`Keahlian "${localSkill.name}" berhasil diperbarui!`);
+    toast.success(`${tx('Keahlian')} "${localSkill.name}" ${tx('berhasil diperbarui!')}`);
     closeEditModal();
   };
 
@@ -123,18 +125,18 @@ export function SkillsTab() {
     }
 
     removeSkill(index);
-    toast.success(`Keahlian "${title}" berhasil dihapus.`);
+    toast.success(`${tx('Keahlian')} "${title}" ${tx('berhasil dihapus.')}`);
     setDeleteTarget(null);
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-          Keahlian (Skills & Expertise)
+          <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
+        {tx('Keahlian (Skills & Expertise)')}
         </h3>
         <p className="text-xs text-zinc-500">
-          Tambahkan keahlian teknis, tools, bahasa pemrograman, atau soft skills.
+          {tx('Tambahkan keahlian teknis, tools, bahasa pemrograman, atau soft skills.')}
         </p>
       </div>
 
@@ -143,11 +145,11 @@ export function SkillsTab() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="space-y-1 sm:col-span-1">
             <Label htmlFor="quick-skill-name" className="text-xs">
-              Nama Keahlian *
+              {tx('Nama Keahlian *')}
             </Label>
             <Input
               id="quick-skill-name"
-              placeholder="e.g. React.js, Python, Figma"
+              placeholder={tx('e.g. React.js, Python, Figma')}
               value={quickName}
               onChange={(e) => setQuickName(e.target.value)}
               onKeyDown={(e) => {
@@ -161,11 +163,11 @@ export function SkillsTab() {
 
           <div className="space-y-1 sm:col-span-1">
             <Label htmlFor="quick-skill-cat" className="text-xs">
-              Kategori
+              {tx('Kategori')}
             </Label>
             <Input
               id="quick-skill-cat"
-              placeholder="e.g. Frontend"
+              placeholder={tx('e.g. Frontend')}
               value={quickCategory}
               onChange={(e) => setQuickCategory(e.target.value)}
               onKeyDown={(e) => {
@@ -179,7 +181,7 @@ export function SkillsTab() {
 
           <div className="space-y-1 sm:col-span-1">
             <Label htmlFor="quick-skill-level" className="text-xs">
-              Tingkat Kemahiran
+              {tx('Tingkat Kemahiran')}
             </Label>
             <select
               id="quick-skill-level"
@@ -187,17 +189,17 @@ export function SkillsTab() {
               value={quickLevel}
               onChange={(e) => setQuickLevel(e.target.value)}
             >
-              <option value="Beginner">Beginner (Pemula)</option>
-              <option value="Intermediate">Intermediate (Menengah)</option>
-              <option value="Advanced">Advanced (Mahir)</option>
-              <option value="Expert">Expert (Ahli)</option>
+              <option value="Beginner">{tx('Beginner (Pemula)')}</option>
+              <option value="Intermediate">{tx('Intermediate (Menengah)')}</option>
+              <option value="Advanced">{tx('Advanced (Mahir)')}</option>
+              <option value="Expert">{tx('Expert (Ahli)')}</option>
             </select>
           </div>
         </div>
 
         {/* Quick Category Buttons */}
         <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-          <span className="text-[11px] text-zinc-400">Pilih Kategori:</span>
+          <span className="text-[11px] text-zinc-400">{tx('Pilih Kategori:')}</span>
           {quickCategories.map((qc) => (
             <button
               key={qc}
@@ -205,7 +207,7 @@ export function SkillsTab() {
               onClick={() => setQuickCategory(qc)}
               className="text-[11px] px-2 py-0.5 rounded bg-zinc-200/60 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors"
             >
-              {qc}
+              {tx(qc)}
             </button>
           ))}
         </div>
@@ -217,7 +219,7 @@ export function SkillsTab() {
           disabled={!quickName.trim()}
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Tambahkan Keahlian</span>
+          <span>{tx('Tambahkan Keahlian')}</span>
         </Button>
       </div>
 
@@ -225,18 +227,18 @@ export function SkillsTab() {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-            Daftar Keahlian ({skills.length})
+            {tx('Daftar Keahlian')} ({skills.length})
           </Label>
           {skills.length > 0 && (
             <span className="text-[11px] text-zinc-400">
-              Klik chip untuk mengedit • Atur posisi dengan panah
+              {tx('Klik chip untuk mengedit • Atur posisi dengan panah')}
             </span>
           )}
         </div>
 
         {skills.length === 0 ? (
           <div className="p-8 text-center rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 text-xs">
-            Belum ada keahlian ditambahkan. Ketik nama skill di atas lalu klik Tambahkan.
+            {tx('Belum ada keahlian ditambahkan. Ketik nama skill di atas lalu klik Tambahkan.')}
           </div>
         ) : (
           <div className="flex flex-wrap gap-2.5">
@@ -251,8 +253,8 @@ export function SkillsTab() {
                   onClick={() => moveItem('skills', idx, 'up')}
                   disabled={idx === 0}
                   className="h-10 w-8 flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
-                  aria-label={`Pindahkan ${sk.name} ke kiri`}
-                  title="Pindahkan ke kiri"
+                  aria-label={tx(`Pindahkan ${sk.name} ke kiri`)}
+                  title={tx('Pindahkan ke kiri')}
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
@@ -262,7 +264,7 @@ export function SkillsTab() {
                   type="button"
                   onClick={() => openEditModal(idx)}
                   className="px-2.5 py-2 flex items-center gap-1.5 text-left text-xs font-medium text-zinc-900 dark:text-zinc-100 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors"
-                  title="Klik untuk mengedit keahlian"
+                  title={tx('Klik untuk mengedit keahlian')}
                 >
                   <Cpu className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                   <span className="font-semibold">{sk.name}</span>
@@ -285,8 +287,8 @@ export function SkillsTab() {
                   onClick={() => moveItem('skills', idx, 'down')}
                   disabled={idx === skills.length - 1}
                   className="h-10 w-8 flex items-center justify-center text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
-                  aria-label={`Pindahkan ${sk.name} ke kanan`}
-                  title="Pindahkan ke kanan"
+                  aria-label={tx(`Pindahkan ${sk.name} ke kanan`)}
+                  title={tx('Pindahkan ke kanan')}
                 >
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
@@ -301,8 +303,8 @@ export function SkillsTab() {
                     })
                   }
                   className="min-w-[40px] min-h-[40px] h-10 w-10 flex items-center justify-center text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors border-l border-zinc-100 dark:border-zinc-800"
-                  aria-label={`Hapus ${sk.name}`}
-                  title={`Hapus ${sk.name}`}
+                  aria-label={tx(`Hapus ${sk.name}`)}
+                  title={tx(`Hapus ${sk.name}`)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -317,14 +319,14 @@ export function SkillsTab() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-base font-semibold">
-              Edit Keahlian
+              {tx('Edit Keahlian')}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3 py-2">
             <div className="space-y-1">
               <Label htmlFor="edit-skill-name" className="text-xs">
-                Nama Keahlian *
+                {tx('Nama Keahlian *')}
               </Label>
               <Input
                 id="edit-skill-name"
@@ -342,11 +344,11 @@ export function SkillsTab() {
 
             <div className="space-y-1">
               <Label htmlFor="edit-skill-cat" className="text-xs">
-                Kategori
+                {tx('Kategori')}
               </Label>
               <Input
                 id="edit-skill-cat"
-                placeholder="e.g. Frontend, Design, Backend"
+                placeholder={tx('e.g. Frontend, Design, Backend')}
                 value={localSkill.category || ''}
                 onChange={(e) =>
                   setLocalSkill({ ...localSkill, category: e.target.value })
@@ -356,7 +358,7 @@ export function SkillsTab() {
 
             <div className="space-y-1">
               <Label htmlFor="edit-skill-level" className="text-xs">
-                Tingkat Kemahiran
+                {tx('Tingkat Kemahiran')}
               </Label>
               <select
                 id="edit-skill-level"
@@ -366,10 +368,10 @@ export function SkillsTab() {
                   setLocalSkill({ ...localSkill, level: e.target.value })
                 }
               >
-                <option value="Beginner">Beginner (Pemula)</option>
-                <option value="Intermediate">Intermediate (Menengah)</option>
-                <option value="Advanced">Advanced (Mahir)</option>
-                <option value="Expert">Expert (Ahli)</option>
+                <option value="Beginner">{tx('Beginner (Pemula)')}</option>
+                <option value="Intermediate">{tx('Intermediate (Menengah)')}</option>
+                <option value="Advanced">{tx('Advanced (Mahir)')}</option>
+                <option value="Expert">{tx('Expert (Ahli)')}</option>
               </select>
             </div>
           </div>
@@ -382,7 +384,7 @@ export function SkillsTab() {
               onClick={closeEditModal}
               className="h-9 min-h-[38px] text-xs"
             >
-              Batal
+              {tx('Batal')}
             </Button>
             <Button
               type="button"
@@ -390,7 +392,7 @@ export function SkillsTab() {
               onClick={handleSaveEdit}
               className="h-9 min-h-[38px] bg-blue-600 hover:bg-blue-700 text-xs px-4"
             >
-              Simpan Perubahan
+              {tx('Simpan Perubahan')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -401,7 +403,7 @@ export function SkillsTab() {
         isOpen={deleteTarget !== null}
         onClose={() => setDeleteTarget(null)}
         itemName={deleteTarget?.title || ''}
-        itemType="keahlian"
+        itemType={tx('keahlian')}
         onConfirm={handleDeleteConfirmed}
       />
     </div>

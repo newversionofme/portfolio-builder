@@ -6,8 +6,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2, Globe, Mail, Phone } from 'lucide-react';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function ContactTab() {
+  const tx = useEditorText();
   const {
     portfolio,
     updateContact,
@@ -38,24 +40,24 @@ export function ContactTab() {
     { value: 'instagram', label: 'Instagram' },
     { value: 'dribbble', label: 'Dribbble' },
     { value: 'youtube', label: 'YouTube' },
-    { value: 'website', label: 'Website Pribadi' },
+    { value: 'website', label: tx('Website Pribadi') },
   ];
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-          Kontak & Sosial Media
+          {tx('Kontak & Sosial Media')}
         </h3>
         <p className="text-xs text-zinc-500">
-          Cara rekruter dan pengunjung menghubungi Anda secara langsung.
+          {tx('Cara rekruter dan pengunjung menghubungi Anda secara langsung.')}
         </p>
       </div>
 
       {/* Direct Contact Fields */}
       <div className="space-y-4 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40">
         <div className="space-y-1.5">
-          <Label htmlFor="contactEmail">Email Kontak</Label>
+          <Label htmlFor="contactEmail">{tx('Email Kontak')}</Label>
           <div className="relative">
             <Mail className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
             <Input
@@ -71,7 +73,7 @@ export function ContactTab() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <Label htmlFor="phone">Nomor Telepon</Label>
+            <Label htmlFor="phone">{tx('Nomor Telepon')}</Label>
             <div className="relative">
               <Phone className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
               <Input
@@ -85,7 +87,7 @@ export function ContactTab() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="whatsapp">Nomor WhatsApp</Label>
+            <Label htmlFor="whatsapp">{tx('Nomor WhatsApp')}</Label>
             <Input
               id="whatsapp"
               placeholder="+62 812 3456 7890"
@@ -98,7 +100,7 @@ export function ContactTab() {
 
       {/* Social Links Manager */}
       <div className="space-y-3">
-        <Label>Tautan Sosial Media & Portofolio Eksternal</Label>
+        <Label>{tx('Tautan Sosial Media & Portofolio Eksternal')}</Label>
 
         <div className="flex gap-2">
           <select
@@ -134,7 +136,7 @@ export function ContactTab() {
             disabled={!url.trim()}
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Tambah</span>
+            <span>{tx('Tambah')}</span>
           </Button>
         </div>
 
@@ -160,6 +162,8 @@ export function ContactTab() {
                 size="icon"
                 className="h-7 w-7 text-zinc-400 hover:text-red-600"
                 onClick={() => removeSocialLink(idx)}
+                aria-label={tx('Hapus tautan')}
+                title={tx('Hapus tautan')}
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </Button>

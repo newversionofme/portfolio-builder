@@ -7,68 +7,70 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Check, Layout, Palette, Terminal, Briefcase, FileText, ImageIcon, Monitor } from 'lucide-react';
 import { useExportModalStore } from '@/lib/store/export-modal-store';
 import { Button } from '@/components/ui/button';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function AppearanceTab() {
+  const tx = useEditorText();
   const { portfolio, updateTheme } = usePortfolioStore();
   const { openCvModal, openShareCardModal, openFullPageModal } = useExportModalStore();
 
   const templates = [
     {
       id: 'minimalist',
-      name: 'Minimalist',
-      desc: 'Clean, editorial, whitespace-focused',
+      name: tx('Minimalist'),
+      desc: tx('Clean, editorial, whitespace-focused'),
       icon: Layout,
     },
     {
       id: 'bold',
-      name: 'Bold / Creative',
-      desc: 'Bento-grid, vibrant pop accents, visual-first',
+      name: tx('Bold / Creative'),
+      desc: tx('Bento-grid, vibrant pop accents, visual-first'),
       icon: Palette,
     },
     {
       id: 'developer',
-      name: 'Developer / Dark',
-      desc: 'Terminal aesthetics, monospace, GitHub repos',
+      name: tx('Developer / Dark'),
+      desc: tx('Terminal aesthetics, monospace, GitHub repos'),
       icon: Terminal,
     },
     {
       id: 'elegant',
-      name: 'Elegant / Pro',
-      desc: 'Refined serif typography, prestige corporate',
+      name: tx('Elegant / Pro'),
+      desc: tx('Refined serif typography, prestige corporate'),
       icon: Briefcase,
     },
   ];
 
   const accentColors = [
-    { name: 'Electric Blue', hex: '#2563eb' },
-    { name: 'Emerald Green', hex: '#059669' },
-    { name: 'Violet Purple', hex: '#7c3aed' },
-    { name: 'Amber Orange', hex: '#d97706' },
-    { name: 'Rose Pink', hex: '#e11d48' },
-    { name: 'Slate Dark', hex: '#18181b' },
+    { name: tx('Electric Blue'), hex: '#2563eb' },
+    { name: tx('Emerald Green'), hex: '#059669' },
+    { name: tx('Violet Purple'), hex: '#7c3aed' },
+    { name: tx('Amber Orange'), hex: '#d97706' },
+    { name: tx('Rose Pink'), hex: '#e11d48' },
+    { name: tx('Slate Dark'), hex: '#18181b' },
   ];
 
   const fonts = [
-    { id: 'Inter', name: 'Inter (Modern Sans)' },
-    { id: 'Plus Jakarta Sans', name: 'Plus Jakarta Sans (Friendly Tech)' },
-    { id: 'Playfair Display', name: 'Playfair Display (Editorial Serif)' },
-    { id: 'JetBrains Mono', name: 'JetBrains Mono (Developer Mono)' },
+    { id: 'Inter', name: tx('Inter (Modern Sans)') },
+    { id: 'Plus Jakarta Sans', name: tx('Plus Jakarta Sans (Friendly Tech)') },
+    { id: 'Playfair Display', name: tx('Playfair Display (Editorial Serif)') },
+    { id: 'JetBrains Mono', name: tx('JetBrains Mono (Developer Mono)') },
   ];
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-          Tampilan & Tema Visual
+          {tx('Tampilan & Tema Visual')}
         </h3>
         <p className="text-xs text-zinc-500">
-          Ubah gaya visual portofolio Anda secara instan tanpa mengubah data.
+          {tx('Ubah gaya visual portofolio Anda secara instan tanpa mengubah data.')}
         </p>
       </div>
 
       {/* Template Selection */}
       <div className="space-y-3">
-        <Label>Pilihan Template (4 Tema Bawaan)</Label>
+        <Label>{tx('Pilihan Template (4 Tema Bawaan)')}</Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {templates.map((tpl) => {
             const Icon = tpl.icon;
@@ -118,7 +120,7 @@ export function AppearanceTab() {
 
       {/* Accent Color Picker */}
       <div className="space-y-3">
-        <Label>Warna Aksen Utama</Label>
+        <Label>{tx('Warna Aksen Utama')}</Label>
         <div className="flex items-center gap-3 flex-wrap">
           {accentColors.map((col) => {
             const isSelected = portfolio.accentColor === col.hex;
@@ -142,7 +144,7 @@ export function AppearanceTab() {
 
       {/* Font Family Selection */}
       <div className="space-y-3">
-        <Label>Pilihan Tipografi Font</Label>
+        <Label>{tx('Pilihan Tipografi Font')}</Label>
         <div className="space-y-2">
           {fonts.map((f) => {
             const isSelected = portfolio.fontFamily === f.id;
@@ -168,7 +170,7 @@ export function AppearanceTab() {
 
       {/* Language Selection */}
       <div className="space-y-3">
-        <Label>Bahasa Portofolio (Portfolio Language)</Label>
+        <Label>{tx('Bahasa Portofolio (Portfolio Language)')}</Label>
         <div className="grid grid-cols-2 gap-3">
           <div
             onClick={() => updateTheme({ language: 'id' })}
@@ -180,9 +182,9 @@ export function AppearanceTab() {
           >
             <div>
               <span className="text-xs font-semibold text-zinc-900 dark:text-white block">
-                🇮🇩 Bahasa Indonesia
+                🇮🇩 {tx('Bahasa Indonesia')}
               </span>
-              <span className="text-[11px] text-zinc-500">Label standar bahasa Indonesia</span>
+              <span className="text-[11px] text-zinc-500">{tx('Label standar bahasa Indonesia')}</span>
             </div>
             {(portfolio.language || 'id') === 'id' && <Check className="w-4 h-4 text-blue-600" />}
           </div>
@@ -199,7 +201,7 @@ export function AppearanceTab() {
               <span className="text-xs font-semibold text-zinc-900 dark:text-white block">
                 🇬🇧 English
               </span>
-              <span className="text-[11px] text-zinc-500">International English labels</span>
+              <span className="text-[11px] text-zinc-500">{tx('International English labels')}</span>
             </div>
             {portfolio.language === 'en' && <Check className="w-4 h-4 text-blue-600" />}
           </div>
@@ -210,12 +212,10 @@ export function AppearanceTab() {
       <div className="space-y-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
         <div>
           <Label className="text-sm font-semibold text-zinc-900 dark:text-white">
-            {portfolio.language === 'en' ? 'Export & Documents' : 'Ekspor & Dokumen'}
+            {tx('Ekspor & Dokumen')}
           </Label>
           <p className="text-xs text-zinc-500 mt-0.5">
-            {portfolio.language === 'en'
-              ? 'Download your curriculum vitae (PDF) and social share card (PNG) generated directly from your portfolio.'
-              : 'Unduh kurikulum vitae (PDF) dan kartu gambar bagikan (PNG) yang disusun langsung dari data portofolio ini.'}
+            {tx('Unduh kurikulum vitae (PDF) dan kartu gambar bagikan (PNG) yang disusun langsung dari data portofolio ini.')}
           </p>
         </div>
 
@@ -225,12 +225,10 @@ export function AppearanceTab() {
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
                 <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                <span className="truncate">Curriculum Vitae (PDF)</span>
+                <span className="truncate">{tx('Curriculum Vitae (PDF)')}</span>
               </h4>
               <p className="text-[11px] text-zinc-500">
-                {portfolio.language === 'en'
-                  ? 'Standard ATS-friendly A4 format with selectable vector text.'
-                  : 'Format standar A4 ramah ATS dengan teks vektor yang dapat disalin.'}
+                {tx('Format standar A4 ramah ATS dengan teks vektor yang dapat disalin.')}
               </p>
             </div>
 
@@ -242,7 +240,7 @@ export function AppearanceTab() {
               className="w-full sm:w-auto h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px] justify-center shrink-0"
             >
               <FileText className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>{portfolio.language === 'en' ? 'Download CV (PDF)' : 'Unduh CV (PDF)'}</span>
+              <span>{tx('Unduh CV (PDF)')}</span>
             </Button>
           </div>
 
@@ -251,12 +249,10 @@ export function AppearanceTab() {
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
                 <ImageIcon className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                <span className="truncate">Kartu Bagikan / Social Card (PNG)</span>
+                <span className="truncate">{tx('Kartu Bagikan / Social Card (PNG)')}</span>
               </h4>
               <p className="text-[11px] text-zinc-500">
-                {portfolio.language === 'en'
-                  ? 'High-resolution 1200 × 630 px image rendered according to your chosen theme and accent color.'
-                  : 'Gambar beresolusi tinggi 1200 × 630 px sesuai tema dan warna aksen untuk dibagikan di media sosial.'}
+                {tx('Gambar beresolusi tinggi 1200 × 630 px sesuai tema dan warna aksen untuk dibagikan di media sosial.')}
               </p>
             </div>
 
@@ -268,7 +264,7 @@ export function AppearanceTab() {
               className="w-full sm:w-auto h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px] justify-center shrink-0"
             >
               <ImageIcon className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-              <span>{portfolio.language === 'en' ? 'Download Image (PNG)' : 'Unduh Gambar (PNG)'}</span>
+              <span>{tx('Unduh Gambar (PNG)')}</span>
             </Button>
           </div>
 
@@ -277,12 +273,10 @@ export function AppearanceTab() {
             <div className="space-y-0.5 min-w-0">
               <h4 className="text-xs font-semibold text-zinc-900 dark:text-white flex items-center gap-1.5">
                 <Monitor className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span className="truncate">Halaman Penuh / Full-Page (PNG)</span>
+                <span className="truncate">{tx('Halaman Penuh / Full-Page (PNG)')}</span>
               </h4>
               <p className="text-[11px] text-zinc-500">
-                {portfolio.language === 'en'
-                  ? 'High-resolution 1280 px full-page capture of all sections with active layout and colors.'
-                  : 'Tangkapan layar resolusi tinggi 1280 px seluruh bagian portofolio dengan tema dan warna aktif.'}
+                {tx('Tangkapan layar resolusi tinggi 1280 px seluruh bagian portofolio dengan tema dan warna aktif.')}
               </p>
             </div>
 
@@ -294,7 +288,7 @@ export function AppearanceTab() {
               className="w-full sm:w-auto h-10 sm:h-8 px-3 text-xs gap-1.5 cursor-pointer font-medium min-h-[40px] sm:min-h-[32px] justify-center shrink-0"
             >
               <Monitor className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>{portfolio.language === 'en' ? 'Download Full Page' : 'Unduh Halaman Penuh'}</span>
+              <span>{tx('Unduh Halaman Penuh')}</span>
             </Button>
           </div>
         </div>

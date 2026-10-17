@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
 import { registerUser } from '@/actions/auth';
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,7 @@ import { Lock, Mail, User, Link as LinkIcon, ArrowRight, Loader2, AlertCircle } 
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t, language } = useLanguage();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,9 +76,9 @@ export default function RegisterPage() {
     <div className="w-full max-w-md">
       <Card className="shadow-lg border-zinc-200/80 dark:border-zinc-800">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold tracking-tight">Buat Akun Portofolio</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">{t.auth.registerTitle}</CardTitle>
           <CardDescription>
-            Cukup isi form, langsung dapat website portofolio profesional
+            {t.auth.registerSubtitle}
           </CardDescription>
         </CardHeader>
 
@@ -90,7 +92,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
             <div className="space-y-1.5">
-              <Label htmlFor="name">Nama Lengkap</Label>
+              <Label htmlFor="name">{t.auth.nameLabel}</Label>
               <div className="relative">
                 <User className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
                 <Input
@@ -106,7 +108,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="slug">Tautan Portofolio (Slug URL)</Label>
+              <Label htmlFor="slug">{language === 'en' ? 'Portfolio Link (Slug URL)' : 'Tautan Portofolio (Slug URL)'}</Label>
               <div className="relative">
                 <LinkIcon className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
                 <Input
@@ -120,12 +122,12 @@ export default function RegisterPage() {
                 />
               </div>
               <p className="text-[11px] text-zinc-500">
-                URL publik Anda: <span className="font-mono text-blue-600 font-medium">/u/{slug || 'username'}</span>
+                {language === 'en' ? 'Your public link:' : 'URL publik Anda:'} <span className="font-mono text-blue-600 font-medium">/u/{slug || 'username'}</span>
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="email">Alamat Email</Label>
+              <Label htmlFor="email">{t.auth.emailLabel}</Label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
                 <Input
@@ -141,13 +143,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t.auth.passwordLabel}</Label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Minimal 6 karakter"
+                  placeholder={language === 'en' ? 'Minimum 6 characters' : 'Minimal 6 karakter'}
                   className="pl-9"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -161,11 +163,11 @@ export default function RegisterPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Mendaftarkan Akun...
+                  {language === 'en' ? 'Creating Account...' : 'Mendaftarkan Akun...'}
                 </>
               ) : (
                 <>
-                  Daftar Sekarang
+                  {t.auth.registerButton}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </>
               )}
@@ -176,7 +178,7 @@ export default function RegisterPage() {
           <div className="relative flex py-1 items-center mt-4">
             <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
             <span className="flex-shrink mx-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium">
-              atau daftar dengan
+              {t.auth.orContinueWith}
             </span>
             <div className="flex-grow border-t border-zinc-200 dark:border-zinc-800"></div>
           </div>
@@ -188,9 +190,9 @@ export default function RegisterPage() {
 
         <CardFooter className="flex justify-center border-t border-zinc-100 dark:border-zinc-800/80 pt-4">
           <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            Sudah memiliki akun?{' '}
+            {t.auth.alreadyHaveAccount}{' '}
             <Link href="/login" className="font-semibold text-blue-600 hover:underline">
-              Masuk di Sini
+              {t.auth.loginLink}
             </Link>
           </p>
         </CardFooter>

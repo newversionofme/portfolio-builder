@@ -63,6 +63,8 @@ export function PublicPortfolioViewer({ portfolio }: PublicPortfolioViewerProps)
           currentLanguage={activeLang}
           onLanguageChange={(lang) => setActiveLang(lang)}
           variant="outline"
+          triggerIcon="menu"
+          side="bottom"
           className="w-10 h-10 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-black/20 dark:shadow-black/50"
         />
       </aside>

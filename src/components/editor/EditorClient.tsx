@@ -13,12 +13,14 @@ import { useExportModalStore } from '@/lib/store/export-modal-store';
 import { ExportCvModal } from '@/components/export/ExportCvModal';
 import { ExportShareCardModal } from '@/components/export/ExportShareCardModal';
 import { ExportFullPageModal } from '@/components/export/ExportFullPageModal';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 interface EditorClientProps {
   initialData: FullPortfolioData;
 }
 
 export function EditorClient({ initialData }: EditorClientProps) {
+  const tx = useEditorText();
   const { initializePortfolio, isInitialized, previewViewport, setPreviewViewport } =
     usePortfolioStore();
   const initializedIdRef = useRef<string | null>(null);
@@ -100,7 +102,7 @@ export function EditorClient({ initialData }: EditorClientProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
         <div className="animate-pulse text-sm text-zinc-500">
-          Memuat data portofolio...
+          {tx('Memuat data portofolio...')}
         </div>
       </div>
     );
@@ -122,11 +124,11 @@ export function EditorClient({ initialData }: EditorClientProps) {
                 ? 'bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-2xs'
                 : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
             )}
-            aria-label="Mode Edit Formulir"
+            aria-label={tx('Mode Edit Formulir')}
             aria-pressed={activeMobileView === 'edit'}
           >
             <FileEdit className="w-3.5 h-3.5" />
-            <span>Edit</span>
+            <span>{tx('Edit')}</span>
           </button>
           <button
             type="button"
@@ -137,11 +139,11 @@ export function EditorClient({ initialData }: EditorClientProps) {
                 ? 'bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-2xs'
                 : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
             )}
-            aria-label="Mode Pratinjau Langsung"
+            aria-label={tx('Mode Pratinjau Langsung')}
             aria-pressed={activeMobileView === 'preview'}
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>Pratinjau</span>
+            <span>{tx('Pratinjau')}</span>
           </button>
         </div>
 
@@ -158,7 +160,7 @@ export function EditorClient({ initialData }: EditorClientProps) {
                   : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               )}
             >
-              Tablet
+              {tx('Tablet')}
             </button>
             <button
               type="button"
@@ -170,7 +172,7 @@ export function EditorClient({ initialData }: EditorClientProps) {
                   : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               )}
             >
-              Mobile
+              {tx('Mobile')}
             </button>
           </div>
         )}

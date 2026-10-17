@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 
 export function LandingHeroCta() {
+  const { t, language } = useLanguage();
   const [isLocalOrNonHttps, setIsLocalOrNonHttps] = useState(false);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export function LandingHeroCta() {
           asChild
         >
           <Link href="/register">
-            Mulai Buat Gratis
+            {t.hero.ctaPrimary}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>
         </Button>
@@ -42,7 +44,7 @@ export function LandingHeroCta() {
             asChild
           >
             <a href="/u/alex-rivera" target="_blank" rel="noopener noreferrer">
-              Lihat Demo Akun
+              {t.hero.tryDemo}
               <ExternalLink className="w-4 h-4 ml-2 text-zinc-500" />
             </a>
           </Button>
@@ -54,7 +56,7 @@ export function LandingHeroCta() {
             asChild
           >
             <Link href="/login">
-              Masuk ke Akun
+              {t.nav.login}
             </Link>
           </Button>
         )}
@@ -67,7 +69,7 @@ export function LandingHeroCta() {
             <div className="flex items-center gap-2 shrink-0">
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
               <span className="font-semibold text-[11px] sm:text-xs">
-                Akun Demo Lokal (Testing):
+                {t.hero.demoTitle}
               </span>
             </div>
 
@@ -77,7 +79,7 @@ export function LandingHeroCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-900 border border-amber-300/80 dark:border-amber-700/80 text-zinc-800 dark:text-zinc-200 hover:bg-amber-100/60 dark:hover:bg-amber-900/40 transition-colors inline-flex items-center gap-1 font-medium text-[11px] shadow-2xs"
-                title="Buka live portfolio Alex Rivera di tab baru"
+                title={language === 'en' ? 'Open Alex Rivera live portfolio in new tab' : 'Buka live portfolio Alex Rivera di tab baru'}
               >
                 <span>👨‍💻 Alex Rivera</span>
                 <ExternalLink className="w-3 h-3 text-zinc-400" />
@@ -87,7 +89,7 @@ export function LandingHeroCta() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-900 border border-amber-300/80 dark:border-amber-700/80 text-zinc-800 dark:text-zinc-200 hover:bg-amber-100/60 dark:hover:bg-amber-900/40 transition-colors inline-flex items-center gap-1 font-medium text-[11px] shadow-2xs"
-                title="Buka live portfolio Maya Lin di tab baru"
+                title={language === 'en' ? 'Open Maya Lin live portfolio in new tab' : 'Buka live portfolio Maya Lin di tab baru'}
               >
                 <span>🎨 Maya Lin</span>
                 <ExternalLink className="w-3 h-3 text-zinc-400" />
@@ -95,9 +97,9 @@ export function LandingHeroCta() {
               <Link
                 href="/login?demo=alex"
                 className="px-2.5 py-1 rounded-md bg-amber-600 hover:bg-amber-700 text-white font-medium text-[11px] transition-colors inline-flex items-center gap-1 shadow-2xs"
-                title="1-Click Login langsung ke Dashboard Alex Rivera"
+                title={language === 'en' ? '1-Click Direct login to Alex Rivera Dashboard' : '1-Click Login langsung ke Dashboard Alex Rivera'}
               >
-                <span>Masuk Demo</span>
+                <span>{t.hero.loginDemo}</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>

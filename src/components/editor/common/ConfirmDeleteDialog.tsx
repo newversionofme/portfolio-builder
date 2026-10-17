@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, Trash2, Loader2 } from 'lucide-react';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 interface ConfirmDeleteDialogProps {
   isOpen: boolean;
@@ -30,7 +31,8 @@ export function ConfirmDeleteDialog({
   itemType = 'item',
   isDeleting = false,
 }: ConfirmDeleteDialogProps) {
-  const dialogTitle = title || `Hapus ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}?`;
+  const tx = useEditorText();
+  const dialogTitle = title || `${tx('Hapus')} ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}?`;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -43,11 +45,11 @@ export function ConfirmDeleteDialog({
             {dialogTitle}
           </DialogTitle>
           <DialogDescription className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Apakah Anda yakin ingin menghapus{' '}
+            {tx('Apakah Anda yakin ingin menghapus')}{' '}
             <span className="font-semibold text-zinc-900 dark:text-zinc-100">
               &ldquo;{itemName || itemType}&rdquo;
             </span>
-            ? Tindakan ini tidak dapat dibatalkan.
+            {tx('? Tindakan ini tidak dapat dibatalkan.')}
           </DialogDescription>
         </DialogHeader>
 
@@ -59,7 +61,7 @@ export function ConfirmDeleteDialog({
             disabled={isDeleting}
             className="w-full sm:w-auto h-10 px-4 text-xs font-medium min-h-[40px]"
           >
-            Batal
+            {tx('Batal')}
           </Button>
           <Button
             type="button"
@@ -70,12 +72,12 @@ export function ConfirmDeleteDialog({
             {isDeleting ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Menghapus...</span>
+                <span>{tx('Menghapus...')}</span>
               </>
             ) : (
               <>
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Hapus {itemType}</span>
+                <span>{tx('Hapus')} {itemType}</span>
               </>
             )}
           </Button>

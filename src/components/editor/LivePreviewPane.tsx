@@ -4,8 +4,10 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { usePortfolioStore } from '@/lib/store/portfolio-store';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 export function LivePreviewPane() {
+  const tx = useEditorText();
   const { portfolio, previewViewport } = usePortfolioStore();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const isIframeReadyRef = useRef<boolean>(false);
@@ -104,10 +106,10 @@ export function LivePreviewPane() {
             </div>
             <div className="text-center space-y-1">
               <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                {isTemplateSwitching ? 'Menerapkan Tema Baru...' : 'Memuat Pratinjau...'}
+                {tx(isTemplateSwitching ? 'Menerapkan Tema Baru...' : 'Memuat Pratinjau...')}
               </p>
               <p className="text-[11px] text-zinc-500">
-                Menyinkronkan data langsung ke tampilan
+                {tx('Menyinkronkan data langsung ke tampilan')}
               </p>
             </div>
           </div>
@@ -116,7 +118,7 @@ export function LivePreviewPane() {
         <iframe
           ref={iframeRef}
           src="/preview"
-          title="Portfolio Live Preview"
+          title={tx('Portfolio Live Preview')}
           className="w-full h-full border-0 bg-transparent flex-1"
           style={{ WebkitOverflowScrolling: 'touch' }}
           onLoad={handleIframeLoad}

@@ -11,6 +11,7 @@ import { Plus, Award } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
 import { ListItemActions } from '../common/ListItemActions';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 const emptyCert: CertificationData = {
   title: '',
@@ -23,6 +24,7 @@ const emptyCert: CertificationData = {
 };
 
 export function CertificationsTab() {
+  const tx = useEditorText();
   const {
     portfolio,
     addCertification,
@@ -71,34 +73,34 @@ export function CertificationsTab() {
     const newErrors: Record<string, string> = {};
 
     if (!localCert.title.trim()) {
-      newErrors.title = 'Nama sertifikasi wajib diisi';
+      newErrors.title = tx('Nama sertifikasi wajib diisi');
     }
     if (!localCert.issuer.trim()) {
-      newErrors.issuer = 'Organisasi penerbit wajib diisi';
+      newErrors.issuer = tx('Organisasi penerbit wajib diisi');
     }
     if (!localCert.issueDate.trim()) {
-      newErrors.issueDate = 'Tanggal terbit wajib diisi';
+      newErrors.issueDate = tx('Tanggal terbit wajib diisi');
     }
 
     if (!validation.success) {
       validation.error.issues.forEach((issue) => {
         const fieldName = String(issue.path[0] || 'title');
-        newErrors[fieldName] = issue.message;
+        newErrors[fieldName] = tx(issue.message);
       });
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error('Silakan lengkapi kolom sertifikat yang wajib diisi');
+      toast.error(tx('Silakan lengkapi kolom sertifikat yang wajib diisi'));
       return;
     }
 
     if (editingIndex !== null) {
       updateCertification(editingIndex, localCert);
-      toast.success(`Sertifikat "${localCert.title}" berhasil diperbarui!`);
+      toast.success(`${tx('Sertifikat')} "${localCert.title}" ${tx('berhasil diperbarui!')}`);
     } else {
       addCertification(localCert);
-      toast.success(`Sertifikat "${localCert.title}" berhasil ditambahkan!`);
+      toast.success(`${tx('Sertifikat')} "${localCert.title}" ${tx('berhasil ditambahkan!')}`);
     }
 
     handleCancel();
@@ -115,7 +117,7 @@ export function CertificationsTab() {
     }
 
     removeCertification(index);
-    toast.success(`Sertifikat "${title}" berhasil dihapus.`);
+    toast.success(`${tx('Sertifikat')} "${title}" ${tx('berhasil dihapus.')}`);
     setDeleteTarget(null);
   };
 
@@ -126,10 +128,10 @@ export function CertificationsTab() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-            Sertifikasi & Lisensi
+            {tx('Sertifikasi & Lisensi')}
           </h3>
           <p className="text-xs text-zinc-500">
-            Sertifikat resmi dari AWS, Google, Meta, Coursera, dll.
+            {tx('Sertifikat resmi dari AWS, Google, Meta, Coursera, dll.')}
           </p>
         </div>
 
@@ -140,7 +142,7 @@ export function CertificationsTab() {
             className="gap-1.5 h-9 min-h-[38px] text-xs bg-blue-600 hover:bg-blue-700"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Tambah Sertifikat</span>
+            <span>{tx('Tambah Sertifikat')}</span>
           </Button>
         )}
       </div>
@@ -150,7 +152,7 @@ export function CertificationsTab() {
           <CardContent className="p-4 sm:p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-zinc-200/60 dark:border-zinc-800">
               <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                {editingIndex !== null ? 'Edit Sertifikasi' : 'Tambah Sertifikasi Baru'}
+                {tx(editingIndex !== null ? 'Edit Sertifikasi' : 'Tambah Sertifikasi Baru')}
               </span>
               <Button
                 variant="ghost"
@@ -158,18 +160,18 @@ export function CertificationsTab() {
                 className="h-8 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="cert-title" className="text-xs">
-                  Nama Sertifikasi *
+                  {tx('Nama Sertifikasi *')}
                 </Label>
                 <Input
                   id="cert-title"
-                  placeholder="e.g. AWS Certified Solutions Architect"
+                  placeholder={tx('e.g. AWS Certified Solutions Architect')}
                   value={localCert.title}
                   onChange={(e) => {
                     setLocalCert({ ...localCert, title: e.target.value });
@@ -184,11 +186,11 @@ export function CertificationsTab() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="cert-issuer" className="text-xs">
-                  Organisasi Penerbit *
+                  {tx('Organisasi Penerbit *')}
                 </Label>
                 <Input
                   id="cert-issuer"
-                  placeholder="e.g. Amazon Web Services"
+                  placeholder={tx('e.g. Amazon Web Services')}
                   value={localCert.issuer}
                   onChange={(e) => {
                     setLocalCert({ ...localCert, issuer: e.target.value });
@@ -205,7 +207,7 @@ export function CertificationsTab() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="cert-issuedate" className="text-xs">
-                  Tanggal Terbit *
+                  {tx('Tanggal Terbit *')}
                 </Label>
                 <Input
                   id="cert-issuedate"
@@ -224,7 +226,7 @@ export function CertificationsTab() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="cert-expirydate" className="text-xs">
-                  Tanggal Kedaluwarsa (Opsional)
+                  {tx('Tanggal Kedaluwarsa (Opsional)')}
                 </Label>
                 <Input
                   id="cert-expirydate"
@@ -244,7 +246,7 @@ export function CertificationsTab() {
                 </Label>
                 <Input
                   id="cert-credid"
-                  placeholder="e.g. AWS-12345"
+                  placeholder={tx('e.g. AWS-12345')}
                   value={localCert.credentialId || ''}
                   onChange={(e) =>
                     setLocalCert({ ...localCert, credentialId: e.target.value })
@@ -254,11 +256,11 @@ export function CertificationsTab() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="cert-credurl" className="text-xs">
-                  Link Verifikasi Sertifikat
+                  {tx('Link Verifikasi Sertifikat')}
                 </Label>
                 <Input
                   id="cert-credurl"
-                  placeholder="https://verify.cert.com/..."
+                  placeholder={tx('https://verify.cert.com/...')}
                   value={localCert.credentialUrl || ''}
                   onChange={(e) =>
                     setLocalCert({ ...localCert, credentialUrl: e.target.value })
@@ -274,14 +276,14 @@ export function CertificationsTab() {
                 className="h-9 min-h-[38px] text-xs"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
               <Button
                 size="sm"
                 className="h-9 min-h-[38px] bg-blue-600 hover:bg-blue-700 text-xs px-5"
                 onClick={handleSave}
               >
-                {editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Sertifikat'}
+                {tx(editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Sertifikat')}
               </Button>
             </div>
           </CardContent>
@@ -292,7 +294,7 @@ export function CertificationsTab() {
       <div className="space-y-3">
         {certifications.length === 0 && !isFormOpen && (
           <div className="p-8 text-center rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 text-zinc-400 text-xs space-y-2">
-            <p>Belum ada sertifikasi yang ditambahkan.</p>
+            <p>{tx('Belum ada sertifikasi yang ditambahkan.')}</p>
             <Button
               variant="outline"
               size="sm"
@@ -300,7 +302,7 @@ export function CertificationsTab() {
               className="gap-1.5 h-8 text-xs"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Sertifikasi Pertama</span>
+              <span>{tx('Tambah Sertifikasi Pertama')}</span>
             </Button>
           </div>
         )}
@@ -350,7 +352,7 @@ export function CertificationsTab() {
         isOpen={deleteTarget !== null}
         onClose={() => setDeleteTarget(null)}
         itemName={deleteTarget?.title || ''}
-        itemType="sertifikat"
+        itemType={tx('sertifikat')}
         onConfirm={handleDeleteConfirmed}
       />
     </div>

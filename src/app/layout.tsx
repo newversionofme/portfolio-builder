@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans, Playfair_Display, JetBrains_Mono } from 'next
 import { Toaster } from 'sonner';
 import { NavigationProgressBar } from '@/components/ui/navigation-progress-bar';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { LanguageProvider } from '@/lib/i18n/LanguageProvider';
 import './globals.css';
 
 const inter = Inter({
@@ -70,9 +71,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col font-sans antialiased text-zinc-900 dark:text-zinc-50 bg-white dark:bg-zinc-950">
         <ThemeProvider>
-          <NavigationProgressBar />
-          {children}
-          <Toaster position="top-right" richColors />
+          <LanguageProvider>
+            <NavigationProgressBar />
+            {children}
+            <Toaster position="top-right" richColors />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

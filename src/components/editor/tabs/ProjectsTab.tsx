@@ -15,6 +15,7 @@ import { Plus, Upload, Loader2, Image as ImageIcon, FolderGit2, X } from 'lucide
 import { toast } from 'sonner';
 import { ConfirmDeleteDialog } from '../common/ConfirmDeleteDialog';
 import { ListItemActions } from '../common/ListItemActions';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 
 const emptyProject: ProjectData = {
   title: '',
@@ -30,6 +31,7 @@ const emptyProject: ProjectData = {
 };
 
 export function ProjectsTab() {
+  const tx = useEditorText();
   const { portfolio, addProject, updateProject, removeProject, moveItem } =
     usePortfolioStore();
   const projects = portfolio.projects || [];
@@ -86,7 +88,7 @@ export function ProjectsTab() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Ukuran gambar maksimal 2 MB');
+      toast.error(tx('Ukuran gambar maksimal 2 MB'));
       return;
     }
 
@@ -107,20 +109,20 @@ export function ProjectsTab() {
 
       const data = await res.json();
       if (!res.ok || data.error) {
-        toast.error(data.error || 'Gagal mengunggah thumbnail proyek');
+        toast.error(tx(data.error || 'Gagal mengunggah thumbnail proyek'));
       } else {
         // If editing and replacing an existing image, queue old one for cleanup
         if (editingIndex !== null && localProject.imageUrl && localProject.imageUrl !== data.data.url) {
           oldImagePendingCleanupRef.current = localProject.imageUrl;
         }
         setLocalProject((prev) => ({ ...prev, imageUrl: data.data.url }));
-        toast.success('Gambar proyek berhasil diunggah!');
+        toast.success(tx('Gambar proyek berhasil diunggah!'));
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') {
-        toast.error('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.');
+        toast.error(tx('Belum ada respons dari server. Periksa dulu sebelum mencoba lagi.'));
       } else {
-        toast.error('Terjadi kesalahan saat mengunggah gambar');
+        toast.error(tx('Terjadi kesalahan saat mengunggah gambar'));
       }
     } finally {
       clearTimeout(timeoutId);
@@ -159,29 +161,29 @@ export function ProjectsTab() {
     const newErrors: Record<string, string> = {};
 
     if (!localProject.title.trim()) {
-      newErrors.title = 'Judul proyek wajib diisi';
+      newErrors.title = tx('Judul proyek wajib diisi');
     }
     if (!localProject.description.trim()) {
-      newErrors.description = 'Deskripsi proyek wajib diisi';
+      newErrors.description = tx('Deskripsi proyek wajib diisi');
     }
 
     if (!validation.success) {
       validation.error.issues.forEach((issue) => {
         const fieldName = String(issue.path[0] || 'title');
-        newErrors[fieldName] = issue.message;
+        newErrors[fieldName] = tx(issue.message);
       });
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error('Silakan lengkapi kolom yang wajib diisi');
+      toast.error(tx('Silakan lengkapi kolom yang wajib diisi'));
       return;
     }
 
     // Save changes to Zustand Store
     if (editingIndex !== null) {
       updateProject(editingIndex, localProject);
-      toast.success(`Perubahan pada "${localProject.title}" berhasil disimpan!`);
+      toast.success(`${tx('Perubahan pada')} "${localProject.title}" ${tx('berhasil disimpan!')}`);
 
       // Cleanup old image if one was replaced
       if (oldImagePendingCleanupRef.current) {
@@ -197,7 +199,7 @@ export function ProjectsTab() {
       }
     } else {
       addProject(localProject);
-      toast.success(`Proyek "${localProject.title}" berhasil ditambahkan!`);
+      toast.success(`${tx('Proyek')} "${localProject.title}" ${tx('berhasil ditambahkan!')}`);
     }
 
     handleCancel();
@@ -230,7 +232,7 @@ export function ProjectsTab() {
       });
     }
 
-    toast.success(`Proyek "${deleteTarget.title}" telah dihapus.`);
+    toast.success(`${tx('Proyek')} "${deleteTarget.title}" ${tx('telah dihapus.')}`);
     setDeleteTarget(null);
   };
 
@@ -241,10 +243,10 @@ export function ProjectsTab() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
-            Proyek & Portofolio Karya
+            {tx('Proyek & Portofolio Karya')}
           </h3>
           <p className="text-xs text-zinc-500">
-            Tampilkan proyek terbaik, studi kasus, atau produk digital Anda ({projects.length} proyek).
+            {tx('Tampilkan proyek terbaik, studi kasus, atau produk digital Anda')} ({projects.length} {tx('proyek')}).
           </p>
         </div>
 
@@ -255,7 +257,7 @@ export function ProjectsTab() {
             className="gap-1.5 h-9 text-xs bg-blue-600 hover:bg-blue-700 min-h-[36px]"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Tambah Proyek Baru</span>
+            <span>{tx('Tambah Proyek Baru')}</span>
           </Button>
         )}
       </div>
@@ -267,7 +269,7 @@ export function ProjectsTab() {
             <div className="flex items-center justify-between border-b border-blue-100 dark:border-blue-900/60 pb-3">
               <span className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-2">
                 <FolderGit2 className="w-4 h-4" />
-                <span>{editingIndex !== null ? 'Edit Proyek' : 'Tambah Proyek Baru'}</span>
+                <span>{tx(editingIndex !== null ? 'Edit Proyek' : 'Tambah Proyek Baru')}</span>
               </span>
               <Button
                 variant="ghost"
@@ -275,26 +277,27 @@ export function ProjectsTab() {
                 className="h-8 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-white"
                 onClick={handleCancel}
               >
-                Batal
+                {tx('Batal')}
               </Button>
             </div>
 
             {/* Thumbnail Upload & Preview */}
             <div className="space-y-2">
-              <Label className="text-xs">Thumbnail / Cover Proyek</Label>
+              <Label className="text-xs">{tx('Thumbnail / Cover Proyek')}</Label>
               <div className="flex flex-wrap items-center gap-3">
                 {localProject.imageUrl ? (
                   <div className="relative w-24 h-16 rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800 shrink-0 group">
                     <Image
                       src={localProject.imageUrl}
-                      alt="Thumbnail Proyek"
+                      alt={tx('Thumbnail Proyek')}
                       fill
                       className="object-cover"
                     />
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      title="Hapus Gambar"
+                      title={tx('Hapus Gambar')}
+                      aria-label={tx('Hapus Gambar')}
                       className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity"
                     >
                       <X className="w-4 h-4" />
@@ -303,7 +306,7 @@ export function ProjectsTab() {
                 ) : (
                   <div className="w-24 h-16 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 flex flex-col items-center justify-center text-zinc-400 text-[10px] gap-1 shrink-0">
                     <ImageIcon className="w-4 h-4" />
-                    <span>Kosong</span>
+                    <span>{tx('Kosong')}</span>
                   </div>
                 )}
 
@@ -326,17 +329,17 @@ export function ProjectsTab() {
                       {uploading ? (
                         <>
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          <span>Mengunggah...</span>
+                          <span>{tx('Mengunggah...')}</span>
                         </>
                       ) : (
                         <>
                           <Upload className="w-3.5 h-3.5" />
-                          <span>{localProject.imageUrl ? 'Ganti Gambar' : 'Pilih Gambar'}</span>
+                          <span>{tx(localProject.imageUrl ? 'Ganti Gambar' : 'Pilih Gambar')}</span>
                         </>
                       )}
                     </Button>
                   </div>
-                  <span className="text-[10px] text-zinc-400">JPG, PNG, atau WebP (Maks 2 MB)</span>
+                  <span className="text-[10px] text-zinc-400">{tx('JPG, PNG, atau WebP (Maks 2 MB)')}</span>
                 </div>
               </div>
             </div>
@@ -344,10 +347,10 @@ export function ProjectsTab() {
             {/* Title & Tagline */}
             <div className="space-y-1.5">
               <Label className="text-xs">
-                Judul Proyek <span className="text-red-500">*</span>
+                {tx('Judul Proyek')} <span className="text-red-500">*</span>
               </Label>
               <Input
-                placeholder="e.g. Platform E-Commerce Fashion"
+                placeholder={tx('e.g. Platform E-Commerce Fashion')}
                 value={localProject.title}
                 onChange={(e) => {
                   setLocalProject({ ...localProject, title: e.target.value });
@@ -359,9 +362,9 @@ export function ProjectsTab() {
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs">Tagline Singkat</Label>
+              <Label className="text-xs">{tx('Tagline Singkat')}</Label>
               <Input
-                placeholder="e.g. Toko online modern dengan sistem checkout multi-payment"
+                placeholder={tx('e.g. Toko online modern dengan sistem checkout multi-payment')}
                 value={localProject.tagline || ''}
                 onChange={(e) =>
                   setLocalProject({ ...localProject, tagline: e.target.value })
@@ -372,10 +375,10 @@ export function ProjectsTab() {
             {/* Description */}
             <div className="space-y-1.5">
               <Label className="text-xs">
-                Deskripsi & Peran Anda <span className="text-red-500">*</span>
+                {tx('Deskripsi & Peran Anda')} <span className="text-red-500">*</span>
               </Label>
               <Textarea
-                placeholder="Jelaskan masalah yang diselesaikan, teknologi yang digunakan, dan dampak dari proyek ini..."
+                placeholder={tx('Jelaskan masalah yang diselesaikan, teknologi yang digunakan, dan dampak dari proyek ini...')}
                 rows={3}
                 value={localProject.description}
                 onChange={(e) => {
@@ -389,10 +392,10 @@ export function ProjectsTab() {
 
             {/* Tech Stack Tags */}
             <div className="space-y-2">
-              <Label className="text-xs">Tech Stack / Kategori Tags</Label>
+              <Label className="text-xs">{tx('Tech Stack / Kategori Tags')}</Label>
               <div className="flex items-center gap-2">
                 <Input
-                  placeholder="e.g. Next.js, PostgreSQL, Tailwind"
+                  placeholder={tx('e.g. Next.js, PostgreSQL, Tailwind')}
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -410,7 +413,7 @@ export function ProjectsTab() {
                   onClick={handleAddTag}
                   className="h-8 text-xs shrink-0"
                 >
-                  Tambah
+                  {tx('Tambah')}
                 </Button>
               </div>
 
@@ -439,9 +442,9 @@ export function ProjectsTab() {
             {/* Live URL & GitHub URL */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-xs">Tautan Live Demo</Label>
+                <Label className="text-xs">{tx('Tautan Live Demo')}</Label>
                 <Input
-                  placeholder="https://..."
+                  placeholder={tx('https://...')}
                   value={localProject.liveUrl || ''}
                   onChange={(e) =>
                     setLocalProject({ ...localProject, liveUrl: e.target.value })
@@ -450,9 +453,9 @@ export function ProjectsTab() {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs">Tautan Repositori GitHub</Label>
+                <Label className="text-xs">{tx('Tautan Repositori GitHub')}</Label>
                 <Input
-                  placeholder="https://github.com/..."
+                  placeholder={tx('https://github.com/...')}
                   value={localProject.githubUrl || ''}
                   onChange={(e) =>
                     setLocalProject({ ...localProject, githubUrl: e.target.value })
@@ -471,7 +474,7 @@ export function ProjectsTab() {
                 }
               />
               <Label htmlFor="isFeatured" className="text-xs cursor-pointer">
-                Jadikan Proyek Unggulan (Tampil menonjol dengan badge Featured)
+                {tx('Jadikan Proyek Unggulan (Tampil menonjol dengan badge Featured)')}
               </Label>
             </div>
 
@@ -484,7 +487,7 @@ export function ProjectsTab() {
                 onClick={handleCancel}
                 className="h-9 px-4 text-xs"
               >
-                Batal
+                {tx('Batal')}
               </Button>
               <Button
                 type="button"
@@ -492,7 +495,7 @@ export function ProjectsTab() {
                 className="h-9 px-4 text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-2xs"
                 onClick={handleSave}
               >
-                {editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Proyek'}
+                {tx(editingIndex !== null ? 'Simpan Perubahan' : 'Simpan Proyek')}
               </Button>
             </div>
           </CardContent>
@@ -506,10 +509,10 @@ export function ProjectsTab() {
             <FolderGit2 className="w-8 h-8 mx-auto text-zinc-300 dark:text-zinc-600" />
             <div>
               <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Belum ada proyek ditambahkan
+                {tx('Belum ada proyek ditambahkan')}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">
-                Tambahkan proyek pertama Anda untuk menunjukkannya di portofolio.
+                {tx('Tambahkan proyek pertama Anda untuk menunjukkannya di portofolio.')}
               </p>
             </div>
             <Button
@@ -518,7 +521,7 @@ export function ProjectsTab() {
               className="h-8 text-xs bg-blue-600 hover:bg-blue-700 gap-1.5"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Proyek Sekarang</span>
+              <span>{tx('Tambah Proyek Sekarang')}</span>
             </Button>
           </div>
         )}
@@ -588,8 +591,8 @@ export function ProjectsTab() {
                 onMoveDown={() => moveItem('projects', idx, 'down')}
                 isFirst={idx === 0}
                 isLast={idx === projects.length - 1}
-                editLabel="Edit"
-                deleteLabel="Hapus"
+                editLabel={tx('Edit')}
+                deleteLabel={tx('Hapus')}
               />
             </div>
           </div>
@@ -602,7 +605,7 @@ export function ProjectsTab() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
         itemName={deleteTarget?.title || 'Proyek'}
-        itemType="proyek"
+        itemType={tx('proyek')}
       />
     </div>
   );

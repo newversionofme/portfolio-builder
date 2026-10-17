@@ -1,13 +1,19 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { LanguageToggle } from '@/components/ui/LanguageToggle';
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-50 via-white to-zinc-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 flex flex-col justify-between p-3.5 sm:p-6 lg:p-8 w-full overflow-x-hidden">
       {/* Header */}
@@ -21,7 +27,10 @@ export default function AuthLayout({
           </div>
           <span>Portfolio<span className="text-blue-600">Builder</span></span>
         </Link>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
       </header>
 
       {/* Main Form Content */}
@@ -31,7 +40,7 @@ export default function AuthLayout({
 
       {/* Footer */}
       <footer className="max-w-7xl mx-auto w-full text-center text-xs text-zinc-500 py-4">
-        &copy; {new Date().getFullYear()} Portfolio Builder. Platform Portofolio Instan & Modern.
+        &copy; {new Date().getFullYear()} Portfolio Builder. {t.auth.tagline}
       </footer>
     </div>
   );

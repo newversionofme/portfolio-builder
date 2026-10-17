@@ -16,6 +16,8 @@ import { ContactTab } from './tabs/ContactTab';
 import { AppearanceTab } from './tabs/AppearanceTab';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageProvider';
+import { useEditorText } from '@/lib/i18n/editor-copy';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -105,6 +107,13 @@ export function EditorTabs() {
     manualSaveTrigger,
   } = usePortfolioStore();
 
+  const { t, language } = useLanguage();
+  const tx = useEditorText();
+  const localizedTabs = TABS.map((tab) => ({
+    ...tab,
+    label: t.editor.tabNames[tab.id as keyof typeof t.editor.tabNames] || tab.label,
+  }));
+
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(false);
   const isSavingRef = useRef(false);
@@ -141,7 +150,7 @@ export function EditorTabs() {
       setTimeout(() => {
         resolve({
           success: false,
-          error: 'Penyimpanan melebihi batas waktu (timeout 15 detik). Silakan coba lagi.',
+          error: tx('Penyimpanan melebihi batas waktu (timeout 15 detik). Silakan coba lagi.'),
         });
       }, 15000);
     });
@@ -154,16 +163,16 @@ export function EditorTabs() {
         lastSavedPayloadRef.current = targetPayload;
         markAsSaved(targetPortfolio);
       } else {
-        const errorMsg = res?.error || 'Gagal menyimpan perubahan.';
+        const errorMsg = tx(res?.error || 'Gagal menyimpan perubahan.');
         console.error('[EditorTabs Save Failed]:', errorMsg);
         setSaveStatus('error', errorMsg);
-        toast.error(`Autosave gagal: ${errorMsg}`);
+        toast.error(`${tx('Autosave gagal:')} ${errorMsg}`);
       }
     } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : 'Terjadi kendala jaringan saat menyimpan.';
+      const errorMsg = tx(err instanceof Error ? err.message : 'Terjadi kendala jaringan saat menyimpan.');
       console.error('[EditorTabs Autosave Exception]:', err);
       setSaveStatus('error', errorMsg);
-      toast.error(`Autosave error: ${errorMsg}`);
+      toast.error(`${tx('Autosave error:')} ${errorMsg}`);
     } finally {
       isSavingRef.current = false;
       const currentNewestPayload = getPortfolioComparableJson(usePortfolioStore.getState().portfolio);
@@ -273,29 +282,29 @@ export function EditorTabs() {
   const handleKeyDown = (e: React.KeyboardEvent, index: number, isVertical: boolean) => {
     let targetIndex = -1;
     if (isVertical) {
-      if (e.key === 'ArrowDown') targetIndex = (index + 1) % TABS.length;
-      else if (e.key === 'ArrowUp') targetIndex = (index - 1 + TABS.length) % TABS.length;
+      if (e.key === 'ArrowDown') targetIndex = (index + 1) % localizedTabs.length;
+      else if (e.key === 'ArrowUp') targetIndex = (index - 1 + localizedTabs.length) % localizedTabs.length;
     } else {
-      if (e.key === 'ArrowRight') targetIndex = (index + 1) % TABS.length;
-      else if (e.key === 'ArrowLeft') targetIndex = (index - 1 + TABS.length) % TABS.length;
+      if (e.key === 'ArrowRight') targetIndex = (index + 1) % localizedTabs.length;
+      else if (e.key === 'ArrowLeft') targetIndex = (index - 1 + localizedTabs.length) % localizedTabs.length;
     }
 
     if (e.key === 'Home') targetIndex = 0;
-    if (e.key === 'End') targetIndex = TABS.length - 1;
+    if (e.key === 'End') targetIndex = localizedTabs.length - 1;
 
     if (targetIndex !== -1) {
       e.preventDefault();
-      const nextTab = TABS[targetIndex];
+      const nextTab = localizedTabs[targetIndex];
       setActiveTab(nextTab.id);
     }
   };
 
   // Calculations for completeness & navigation
-  const filledCount = TABS.filter((tab) => isTabFilled(tab.id, portfolio)).length;
-  const currentIndex = TABS.findIndex((t) => t.id === activeTab);
-  const currentTab = TABS[currentIndex];
-  const prevTab = currentIndex > 0 ? TABS[currentIndex - 1] : null;
-  const nextTab = currentIndex < TABS.length - 1 ? TABS[currentIndex + 1] : null;
+  const filledCount = localizedTabs.filter((tab) => isTabFilled(tab.id, portfolio)).length;
+  const currentIndex = localizedTabs.findIndex((t) => t.id === activeTab);
+  const currentTab = localizedTabs[currentIndex];
+  const prevTab = currentIndex > 0 ? localizedTabs[currentIndex - 1] : null;
+  const nextTab = currentIndex < localizedTabs.length - 1 ? localizedTabs[currentIndex + 1] : null;
 
   return (
     <div className="w-full min-w-0 lg:min-w-[680px] xl:min-w-[740px] 2xl:min-w-[800px] lg:w-full border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col lg:flex-row h-full min-h-0 shrink-0">
@@ -304,20 +313,20 @@ export function EditorTabs() {
       {/* ============================================================ */}
       <aside
         className="hidden lg:flex lg:w-56 xl:w-60 flex-col border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/40 p-3 shrink-0 h-full overflow-y-auto"
-        aria-label="Navigasi bagian formulir portofolio"
+        aria-label={t.editor.sectionsList}
       >
         {/* Progress Summary */}
         <div className="mb-3 p-3 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 shadow-2xs space-y-2 shrink-0">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-medium text-zinc-500 dark:text-zinc-400">Kelengkapan</span>
+            <span className="font-medium text-zinc-500 dark:text-zinc-400">{t.editor.completeness}</span>
             <span className="font-semibold text-zinc-900 dark:text-white">
-              {filledCount} dari {TABS.length} terisi
+              {filledCount} / {localizedTabs.length} {t.editor.itemsFilled}
             </span>
           </div>
           <div className="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
             <div
               className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none"
-              style={{ width: `${(filledCount / TABS.length) * 100}%` }}
+              style={{ width: `${(filledCount / localizedTabs.length) * 100}%` }}
             />
           </div>
         </div>
@@ -328,7 +337,7 @@ export function EditorTabs() {
           aria-orientation="vertical"
           className="space-y-1 flex-1"
         >
-          {TABS.map((tab, idx) => {
+          {localizedTabs.map((tab, idx) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             const isComplete = isTabFilled(tab.id, portfolio);
@@ -357,13 +366,13 @@ export function EditorTabs() {
                 />
                 <span className="truncate flex-1">{tab.label}</span>
                 {isComplete ? (
-                  <span title="Bagian sudah terisi" className="shrink-0">
+                  <span title={tx('Bagian sudah terisi')} className="shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   </span>
                 ) : (
                   <span
                     className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 shrink-0"
-                    title="Belum terisi"
+                    title={tx('Belum terisi')}
                   />
                 )}
               </button>
@@ -380,12 +389,12 @@ export function EditorTabs() {
         <div className="px-3 py-2 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/30">
           <div className="flex items-center gap-2.5">
             <div className="text-xs text-zinc-600 dark:text-zinc-400">
-              <span className="font-semibold text-zinc-900 dark:text-white">{filledCount} dari {TABS.length}</span> bagian terisi
+              <span className="font-semibold text-zinc-900 dark:text-white">{filledCount} / {localizedTabs.length}</span> {t.editor.itemsFilled}
             </div>
             <div className="w-14 bg-zinc-200 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
               <div
                 className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none"
-                style={{ width: `${(filledCount / TABS.length) * 100}%` }}
+                style={{ width: `${(filledCount / localizedTabs.length) * 100}%` }}
               />
             </div>
           </div>
@@ -397,26 +406,26 @@ export function EditorTabs() {
                 variant="outline"
                 size="sm"
                 className="h-7 text-xs gap-1.5 px-2.5 font-medium border-zinc-200 dark:border-zinc-800"
-                aria-label="Buka daftar semua bagian formulir"
+                aria-label={t.editor.allSections}
               >
                 <LayoutList className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                <span>Semua Bagian</span>
+                <span>{t.editor.allSections}</span>
                 <Badge variant="secondary" className="h-4 px-1 text-[10px] ml-0.5">
-                  10
+                  {localizedTabs.length}
                 </Badge>
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-sm p-5 sm:rounded-2xl">
               <DialogHeader>
                 <DialogTitle className="text-base font-semibold">
-                  Daftar Bagian Portofolio
+                  {t.editor.sectionsList}
                 </DialogTitle>
                 <DialogDescription className="text-xs text-zinc-500">
-                  {filledCount} dari {TABS.length} bagian telah terisi. Pilih bagian untuk langsung melompat.
+                  {filledCount} / {localizedTabs.length} {t.editor.sectionsListDesc}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-1.5 mt-2 max-h-[60vh] overflow-y-auto pr-1">
-                {TABS.map((tab, idx) => {
+                {localizedTabs.map((tab, idx) => {
                   const Icon = tab.icon;
                   const isActive = activeTab === tab.id;
                   const isComplete = isTabFilled(tab.id, portfolio);
@@ -447,7 +456,7 @@ export function EditorTabs() {
                         </div>
                         <div className="truncate">
                           <p className="font-medium truncate">{tab.label}</p>
-                          <p className="text-[10px] text-zinc-400">Bagian {idx + 1}</p>
+                          <p className="text-[10px] text-zinc-400">{t.editor.sectionNumber} {idx + 1}</p>
                         </div>
                       </div>
                       {isComplete ? (
@@ -456,14 +465,14 @@ export function EditorTabs() {
                           className="text-[10px] text-emerald-600 border-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-900 shrink-0 gap-1"
                         >
                           <CheckCircle2 className="w-3 h-3" />
-                          <span>Terisi</span>
+                          <span>{tx('Terisi')}</span>
                         </Badge>
                       ) : (
                         <Badge
                           variant="outline"
                           className="text-[10px] text-zinc-400 border-zinc-200 dark:border-zinc-800 shrink-0"
                         >
-                          Kosong
+                          {tx('Kosong')}
                         </Badge>
                       )}
                     </button>
@@ -481,7 +490,7 @@ export function EditorTabs() {
             type="button"
             onClick={() => scrollTabs('left')}
             disabled={!canScrollLeft}
-            aria-label="Geser tab ke kiri"
+            aria-label={tx('Geser tab ke kiri')}
             className={cn(
               'h-8 w-8 flex items-center justify-center shrink-0 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-opacity z-20 motion-reduce:transition-none',
               canScrollLeft ? 'opacity-100 hover:bg-zinc-200/60 dark:hover:bg-zinc-800' : 'opacity-20 cursor-not-allowed'
@@ -506,7 +515,7 @@ export function EditorTabs() {
             aria-orientation="horizontal"
             className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth px-1"
           >
-            {TABS.map((tab, idx) => {
+            {localizedTabs.map((tab, idx) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               const isComplete = isTabFilled(tab.id, portfolio);
@@ -531,7 +540,7 @@ export function EditorTabs() {
                   <Icon className="w-3.5 h-3.5 shrink-0" />
                   <span>{tab.label}</span>
                   {isComplete ? (
-                    <span title="Terisi" className="shrink-0 flex items-center">
+                    <span title={tx('Terisi')} className="shrink-0 flex items-center">
                       <CheckCircle2
                         className={cn(
                           'w-3 h-3 shrink-0',
@@ -545,7 +554,7 @@ export function EditorTabs() {
                         'w-1.5 h-1.5 rounded-full shrink-0',
                         isActive ? 'bg-blue-300' : 'bg-zinc-300 dark:bg-zinc-700'
                       )}
-                      title="Belum terisi"
+                      title={tx('Belum terisi')}
                     />
                   )}
                 </button>
@@ -567,7 +576,7 @@ export function EditorTabs() {
             type="button"
             onClick={() => scrollTabs('right')}
             disabled={!canScrollRight}
-            aria-label="Geser tab ke kanan"
+            aria-label={tx('Geser tab ke kanan')}
             className={cn(
               'h-8 w-8 flex items-center justify-center shrink-0 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-opacity z-20 motion-reduce:transition-none',
               canScrollRight ? 'opacity-100 hover:bg-zinc-200/60 dark:hover:bg-zinc-800' : 'opacity-20 cursor-not-allowed'
@@ -611,11 +620,11 @@ export function EditorTabs() {
               className="text-xs h-9 gap-1.5"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Kembali</span>
+              <span>{t.editor.prev}</span>
             </Button>
 
             <div className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium hidden sm:block">
-              Bagian {currentIndex + 1} dari {TABS.length}:{' '}
+              {t.editor.sectionNumber} {currentIndex + 1} / {localizedTabs.length}:{' '}
               <span className="font-semibold text-zinc-800 dark:text-zinc-200">
                 {currentTab?.label}
               </span>
@@ -628,7 +637,7 @@ export function EditorTabs() {
                 onClick={() => setActiveTab(nextTab.id)}
                 className="text-xs h-9 gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-2xs"
               >
-                <span>Lanjut ke: {nextTab.label}</span>
+                <span>{t.editor.next} {nextTab.label}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Button>
             ) : (
@@ -637,12 +646,16 @@ export function EditorTabs() {
                 size="sm"
                 variant="outline"
                 onClick={() => {
-                  toast.success('Semua 10 bagian portofolio telah selesai dikonfigurasi!');
+                  toast.success(
+                    tx(language === 'en'
+                      ? 'All 10 portfolio sections configured!'
+                      : 'Semua 10 bagian portofolio telah selesai dikonfigurasi!')
+                  );
                 }}
                 className="text-xs h-9 gap-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Selesai (Semua Bagian Terkonfigurasi)</span>
+                <span>{t.editor.allDone}</span>
               </Button>
             )}
           </div>

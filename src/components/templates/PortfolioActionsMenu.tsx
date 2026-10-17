@@ -11,14 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Settings, Globe, Sun, Moon, Laptop, Check } from 'lucide-react';
+import type { ComponentProps } from 'react';
+import { Settings, Menu, Globe, Sun, Moon, Laptop, Check } from 'lucide-react';
 
 interface PortfolioActionsMenuProps {
   currentLanguage: 'id' | 'en';
   onLanguageChange: (lang: 'id' | 'en') => void;
   className?: string;
   variant?: 'outline' | 'ghost';
-  triggerIcon?: 'gear' | 'dots';
+  triggerIcon?: 'gear' | 'dots' | 'menu';
+  side?: ComponentProps<typeof DropdownMenuContent>['side'];
 }
 
 export function PortfolioActionsMenu({
@@ -27,8 +29,17 @@ export function PortfolioActionsMenu({
   className = '',
   variant = 'ghost',
   triggerIcon = 'gear',
+  side = 'top',
 }: PortfolioActionsMenuProps) {
   const { theme, resolvedTheme, setTheme } = useTheme();
+
+  const isEn = currentLanguage === 'en';
+  const labelSettings = isEn ? 'Language & Theme Settings' : 'Pengaturan Bahasa & Tema';
+  const labelLanguage = isEn ? 'Portfolio Language' : 'Bahasa Portofolio';
+  const labelTheme = isEn ? 'Appearance Mode' : 'Mode Tampilan';
+  const labelLight = isEn ? 'Light' : 'Terang (Light)';
+  const labelDark = isEn ? 'Dark' : 'Gelap (Dark)';
+  const labelSystem = isEn ? 'System (Device)' : 'Sistem (Device)';
 
   return (
     <DropdownMenu>
@@ -38,23 +49,27 @@ export function PortfolioActionsMenu({
           variant={variant}
           size="sm"
           className={`w-8 h-8 p-0 rounded-full shrink-0 flex items-center justify-center transition-transform hover:scale-105 focus-visible:ring-1 focus-visible:ring-blue-500 ${className}`}
-          aria-label="Pengaturan Bahasa & Tema"
-          title="Pengaturan Bahasa & Tema"
+          aria-label={labelSettings}
+          title={labelSettings}
         >
-          <Settings className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
+          {triggerIcon === 'menu' ? (
+            <Menu className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+          ) : (
+            <Settings className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
+          )}
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="end"
-        side="top"
+        side={side}
         sideOffset={8}
         className="w-52 text-xs bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 shadow-xl rounded-xl p-1.5 z-50"
       >
         {/* Language Selection */}
         <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-semibold px-2 py-1 flex items-center gap-1.5">
           <Globe className="w-3 h-3 text-zinc-500" />
-          <span>Bahasa Portofolio</span>
+          <span>{labelLanguage}</span>
         </DropdownMenuLabel>
 
         <DropdownMenuItem
@@ -88,7 +103,7 @@ export function PortfolioActionsMenu({
           ) : (
             <Sun className="w-3 h-3 text-amber-500" />
           )}
-          <span>Mode Tampilan</span>
+          <span>{labelTheme}</span>
         </DropdownMenuLabel>
 
         <DropdownMenuItem
@@ -97,7 +112,7 @@ export function PortfolioActionsMenu({
         >
           <div className="flex items-center gap-2">
             <Sun className="w-3.5 h-3.5 text-amber-500" />
-            <span>Terang (Light)</span>
+            <span>{labelLight}</span>
           </div>
           {theme === 'light' && <Check className="w-3.5 h-3.5 text-blue-600" />}
         </DropdownMenuItem>
@@ -108,7 +123,7 @@ export function PortfolioActionsMenu({
         >
           <div className="flex items-center gap-2">
             <Moon className="w-3.5 h-3.5 text-violet-400" />
-            <span>Gelap (Dark)</span>
+            <span>{labelDark}</span>
           </div>
           {theme === 'dark' && <Check className="w-3.5 h-3.5 text-blue-600" />}
         </DropdownMenuItem>
@@ -119,7 +134,7 @@ export function PortfolioActionsMenu({
         >
           <div className="flex items-center gap-2">
             <Laptop className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Ikuti Sistem</span>
+            <span>{labelSystem}</span>
           </div>
           {theme === 'system' && <Check className="w-3.5 h-3.5 text-blue-600" />}
         </DropdownMenuItem>
