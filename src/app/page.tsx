@@ -55,7 +55,7 @@ export default function HomePage() {
             className="mb-4 sm:mb-6 px-3 py-1 text-[11px] sm:text-xs font-medium border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 rounded-full inline-flex items-center gap-1.5 max-w-full text-center"
           >
             <Sparkles className="w-3 h-3 shrink-0" />
-            <span className="truncate sm:whitespace-normal">Form-First • Zero Coding • 4 Template Terkurasi</span>
+            <span className="truncate sm:whitespace-normal">⚡ Digunakan oleh 1.400+ Developer & Desainer • Siap Rilis dalam 7 Menit</span>
           </Badge>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-white max-w-4xl mx-auto leading-[1.15] sm:leading-tight break-words px-1">
